@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+{% include 'base_head.html' %}
+
+<body>
+    {% if mssg %}
+    <div class="snackbar">
+        <div class="box has-background-black animated fadeInUp">
+            <div class=" level is-mobile container" >
+                <div class="level-left" style="padding-right: 1rem;">
+                    <div class="level-item is-size-6 has-text-white">
+                        <p>{{mssg}}</p>
+
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item delete">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <section class="hero has-background-white-bis is-fullwidth is-fullheight">
+        <nav class="navbar is-spaced">
+            <div class="container">
+                <div class="navbar-brand">
+                    <div class="navbar-left">
+                        <p class="is-size-3 brand-trail">Trail</p>
+                    </div>
+                </div>
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                        <a class="navbar-item button is-black" href="{{ url_for('signup') }}">
+                            <span class="icon icon-btn-in"><i data-feather="user-plus"></i></span>Signup
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+
+        <div class="hero-body">
+            <div class="container">
+
+                <div class="columns is-centered">
+
+                    <!-- Content -->
+                    <div class="column is-one-quarter-desktop is-half-tablet">
+
+                        <h3 class="is-size-4">Log into <span class="brand-trail">Trail</span></h3>
+                        <br>
+                        <div class="form">
+                            <form method="POST" action="{{ url_for('login')}}">
+                                {{form.hidden_tag()}}
+                                <div class="field">
+                                    <label class="label">Username</label>
+                                    <div class="control">
+                                        {{form.username(class="input" , placeholder="Enter Username")}}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Password</label>
+                                    <div class="control">
+                                        {{form.password(class="input" , placeholder="Your Password")}}
+                                    </div>
+                                </div>
+
+                                <br>
+                                <div class="field level">
+                                    <div class="control">
+                                        <button class="button is-black" type="submit"><span class="icon icon-btn-in"><i
+                                                    data-feather="log-in"></i></span> Login</button>
+                                    </div>
+                                    <div class="control ">
+                                        <a class="button is-text">Forgot Password?</a>
+                                    </div>
+
+                                </div>
+
+                            </form>
+                            <br>
+                            <a href="{{ url_for('signup')}}" class=" box merriweather">New to Trail ,
+                                register here for a new account.</a>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $(".snackbar").addClass("animated fadeOutDown");
+            }, 3000);
+
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{url_for('mssg_del')}}",
+
+        }).done(function () {
+            console.log("session['mssg'] is empty")
+        });
+    </script>
+
+    <script>
+        feather.replace()
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+
+{% block head%}
+<head>
+    {% if subtitle %}
+    <title>Trail - {{subtitle}}</title>
+    {% else %}
+    <title>Trail</title>
+    {% endif %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Karla:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,700,900i&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static' , filename = 'css/main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+</head>
+
+{% endblock %}

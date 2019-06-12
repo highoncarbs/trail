@@ -1,0 +1,50 @@
+body {
+    font-family: 'Roboto';
+}
+
+.is-spaced {
+    padding: 1rem 2rem;
+}
+
+.brand-trail {
+    font-family: 'Merriweather';
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -2px;
+}
+
+a {
+    font-family: 'Roboto';
+}
+
+.merriweather {
+    font-family: 'Merriweather';
+}
+
+.icon-btn {
+    margin-right: 10px !important;
+    margin-bottom: 2px !important;
+    vertical-align: middle !important;
+}
+
+.icon-btn-in {
+    padding: 2px;
+    margin-right: 10px !important;
+}
+
+.icon-btn-in-x{
+    padding: 2px;
+    margin-right: 0;
+}
+
+/* .navbar-item {
+    margin-right:1rem;
+} */
+.snackbar {
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 49%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+  }

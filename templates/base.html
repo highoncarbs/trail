@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+{% include 'base_head.html' %}
+
+<body>
+    {% if mssg %}
+    <div class="snackbar">
+        <div class="box has-background-black animated fadeInUp">
+            <div class=" level is-mobile container">
+                <div class="level-left" style="padding-right: 1rem;">
+                    <div class="level-item is-size-6 has-text-white">
+                        <p>{{mssg}}</p>
+
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item delete">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <section class="hero has-background-white-bis is-fullwidth is-fullheight">
+        <nav class="navbar is-spaced has-shadow">
+            <div class="container">
+                <div class="navbar-brand">
+                    <div class="navbar-left">
+                        <p class="is-size-3 brand-trail">Trail</p>
+                    </div>
+                </div>
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                            <a class="navbar-item button is-text" href="" style="text-decoration: none; margin-right: 1rem;">
+                                Dashboard
+                            </a>
+                                <a class="navbar-item button is-text" href="" style="text-decoration: none; margin-right: 1rem;">
+                                        Firms
+                                    </a>
+                        <a class="navbar-item button is-text" href="" style="text-decoration: none; margin-right: 1rem;">
+                            Basic Master
+                        </a>
+                        <a class="navbar-item button is-text " href="" style="text-decoration: none; margin-right: 1rem;">
+                                Master
+                            </a>
+                            <div class="navbar-item has-dropdown is-hoverable" style="margin-right: 1rem;">
+
+                                <a class="navbar-link"><span class="icon icon-btn-in"><i data-feather="user"></i></span>{{current_user.username}}</a>
+
+                                <div class="navbar-dropdown">
+                                        <a class="navbar-item">
+                                            <span class="icon icon-btn-in"><i data-feather="settings"></i></span>
+                                          Settings
+                                        </a>
+                                        <hr class="navbar-divider">
+                                        <a class="navbar-item">
+                                                <span class="icon icon-btn-in"><i data-feather="log-out"></i></span>Logout
+                                        </a>
+                                </div>
+
+                            </div>
+                          
+                            <a class="navbar-item button is-text " href="" style="text-decoration: none;">
+                                    <span class="icon icon-btn-in-x"><i data-feather="inbox"></i></span>
+                                </a>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+        <div class="hero-body">
+            <div class="container">
+
+
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $(".snackbar").addClass("animated fadeOutDown");
+            }, 3000);
+
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{url_for('mssg_del')}}",
+
+        }).done(function () {
+            console.log("session['mssg'] is empty")
+        });
+    </script>
+
+    <script>
+        feather.replace()
+    </script>
+</body>
+
+</html>
