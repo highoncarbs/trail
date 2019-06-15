@@ -1,0 +1,86 @@
+<script>
+        $(document).ready(function () {
+            $('#tabs-inner li').on('click', function () {
+                var tab = $(this).data('tab');
+    
+                $('#tabs-inner li').removeClass('is-active');
+                $(this).addClass('is-active');
+    
+                $('#tab-content-inner div').removeClass('is-active');
+                $('#tab-content-inner div[data-content="' + tab + '"]').addClass('is-active');
+            });
+        });
+    </script>
+    <style>
+        #tab-content-inner .tab-box {
+            display: none;
+        }
+    
+        #tab-content-inner .tab-box.is-active {
+            display: block;
+        }
+    
+        .tab-box {
+            margin-top: 4rem;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+    
+        .inner-nav {
+            margin-top: 0;
+        }
+    </style>
+<div class="tabs is-fullwidth" id="tabs-inner">
+    <div class="container">
+
+        <ul>
+            <li class="is-active" data-tab="1">
+                <a>
+                    <span>Fabric Count</span>
+                </a>
+            </li>
+            <li data-tab="2">
+                <a>
+                    <span>Fabric Process</span>
+                </a>
+            </li>
+            <li data-tab="3">
+                <a>
+                    <span>Fabric Width</span>
+                </a>
+            </li>
+            <li data-tab="4">
+                <a>
+                    <span>Fabric Dye</span>
+                </a>
+            </li>
+            <li data-tab="5">
+                <a>
+                    <span>Raw Material Category</span>
+                </a>
+            </li>
+         
+        </ul>
+    </div>
+</div>
+
+<div id="tab-content-inner">
+    
+        <div class="is-active tab-box " data-content="1">
+            Pics
+        </div>
+        <div class="tab-box " data-content="2">
+
+        </div>
+        <div class="tab-box" data-content="3">
+            Videos
+        </div>
+        <div class="tab-box" data-content="4">
+        </div>
+        <div class="tab-box" data-content="5">
+                {% include 'location_master.html' %}
+
+        </div>
+     
+
+    </div>

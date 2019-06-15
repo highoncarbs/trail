@@ -21,64 +21,83 @@
     #tab-content .tab-box.is-active {
         display: block;
     }
+
+    .tab-box {
+        margin-top: 4rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .inner-nav {
+        margin-top: 0;
+    }
 </style>
-<div class="tabs" id="tabs" style="margin-top: 2rem;">
-    <ul>
-        <li class="is-active" data-tab="1">
-            <a>
-                <span>Finished Goods</span>
-            </a>
-        </li>
-        <li data-tab="2">
-            <a>
-                <span>Raw Materials</span>
-            </a>
-        </li>
-        <li data-tab="3">
-            <a>
-                <span>Other Materials</span>
-            </a>
-        </li>
-        <li data-tab="4">
-            <a>
-                <span>Unit of Measurement</span>
-            </a>
-        </li>
-        <li data-tab="5">
-            <a>
-                <span>Customer Category</span>
-            </a>
-        </li>
-        <li data-tab="6">
-            <a>
-                <span>Location</span>
-            </a>
-        </li>
-    </ul>
+<div class="tabs has-background-white-bis is-fullwidth" id="tabs" style="padding-top: 1rem;">
+    <div class="container">
+
+        <ul>
+            <li class="is-active" data-tab="1">
+                <a>
+                    <span>Finished Goods</span>
+                </a>
+            </li>
+            <li data-tab="2">
+                <a>
+                    <span>Raw Materials</span>
+                </a>
+            </li>
+            <li data-tab="3">
+                <a>
+                    <span>Other Materials</span>
+                </a>
+            </li>
+            <li data-tab="4">
+                <a>
+                    <span>Unit of Measurement</span>
+                </a>
+            </li>
+            <li data-tab="5">
+                <a>
+                    <span>Customer Category</span>
+                </a>
+            </li>
+            <li data-tab="6">
+                <a>
+                    <span>Location</span>
+                </a>
+            </li>
+
+            <li data-tab="7">
+                <a>
+                    <span>Size Chart</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 
-<div id="tab-content" style="margin-top:4rem; margin-left: 1rem; margin-right: 1rem;">
+    <div id="tab-content">
 
-    <div class="is-active tab-box" data-content="1">
-        Pictures
-    </div>
-    <div class="tab-box" data-content="2">
-        Music
-    </div>
-    <div class="tab-box" data-content="3">
-        Videos
-    </div>
-    <div class="tab-box" data-content="4">
-        Documents
-    </div>
-    <div class="tab-box" data-content="5">
-        {% include 'customer_category.html' %}        
+        <div class="is-active tab-box " data-content="1">
+            <p class="dropdown"> Pictures </p>
+        </div>
+        <div class="tab-box inner-nav" data-content="2">
+            {% include 'raw_mat_master.html' %}
+
+        </div>
+        <div class="tab-box" data-content="3">
+            Videos
+        </div>
+        <div class="tab-box" data-content="4">
+            {% include 'uom_master.html' %}
+        </div>
+        <div class="tab-box" data-content="5">
+            {% include 'customer_category.html' %}
+
+        </div>
+        <div class="tab-box" data-content="6">
+            {% include 'location_master.html' %}
+        </div>
 
     </div>
-    <div class="tab-box" data-content="6">
-        {% include 'location_master.html' %}        
-    </div>
-
-</div>
-
 {% endblock %}

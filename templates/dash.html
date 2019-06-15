@@ -1,8 +1,11 @@
 {% extends  'base.html' %}
 {% block content %}
+<div class="container">
 <div class="columns is-8 is-variable " style="margin-top: 5rem;">
     <div class="column is-4">
-        <nav class="navbar  has-shadow">
+
+        
+        <nav class="navbar is-mobile  has-shadow">
             <div class="navbar-start">
                 <p class="is-size-5 has-text-weight-bold">
                     Firms</p>
@@ -29,7 +32,7 @@
                     <br> {{firm.firm_state}} , {{firm.firm_country}}</p>
                 <br>
                 <br>
-                <div class="field level">
+                <div class="field is-grouped">
                     <div class="control">
                         <a id="firm_view" class="button is-black">
                             <span class="icon icon-btn-in"><i data-feather="edit"></i></span>Edit
@@ -144,5 +147,6 @@
 
         </script>
     </div>
+</div>
 </div>
 {% endblock %}

@@ -33,7 +33,7 @@ def country_choice():
 
 def city_choice():
     return db.session.query(City)
-    
+
 class Firms(db.Model): 
     id = db.Column(db.Integer,  primary_key=True)
     firm_name = db.Column(db.String(50))
@@ -100,4 +100,19 @@ class CityForm(FlaskForm):
     country = QuerySelectField('country', validators=[InputRequired()], query_factory=country_choice , allow_blank= False ,get_label='country')
     city_submit = SubmitField('city_submit')
     city_update = SubmitField('city_update')    
+
+# UOM Model & Form
+
+class Uom(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    measure = db.Column(db.String(30), unique=True, nullable=False)
+    desc = db.Column(db.String(50) , nullable= False)
+    decimal = db.Column(db.Integer() , nullable= False)
+    
+class UomForm(FlaskForm):
+    measure  = StringField('Measurement', validators=[InputRequired()])
+    decimal = SelectField('decimal',validators=[InputRequired()] , choices=[('0','0') ,('1','1') ,('2','2') ,('3','3')])
+    desc = StringField('Desciption')
+    uom_submit = SubmitField('uom_submit')
+    uom_update = SubmitField('uom_update') 
 

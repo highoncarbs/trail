@@ -6,7 +6,7 @@
     {% if mssg %}
     <div class="snackbar">
         <div class="box has-background-black animated fadeInUp">
-            <div class=" level is-mobile container" >
+            <div class=" level is-mobile container">
                 <div class="level-left" style="padding-right: 1rem;">
                     <div class="level-item is-size-6 has-text-white">
                         <p>{{mssg}}</p>
@@ -67,17 +67,21 @@
                                 </div>
 
                                 <br>
-                                <div class="field level">
-                                    <div class="control">
-                                        <button class="button is-black" type="submit"><span class="icon icon-btn-in"><i
-                                                    data-feather="log-in"></i></span> Login</button>
+                                <div class="level is-mobile">
+                                    <div class="level-item is-left ">
+                                        <div class="control is-left">
+                                            <button class="button is-black" type="submit"><span
+                                                    class="icon icon-btn-in"><i data-feather="log-in"></i></span>
+                                                Login</button>
+                                        </div>
                                     </div>
-                                    <div class="control ">
-                                        <a class="button is-text">Forgot Password?</a>
+                                    <div class="level-item is-right">
+                                        <div class="control ">
+                                            <a class="button is-text">Forgot Password?</a>
+                                        </div>
                                     </div>
 
                                 </div>
-
                             </form>
                             <br>
                             <a href="{{ url_for('signup')}}" class=" box">New to Trail ,

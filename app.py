@@ -12,7 +12,7 @@ app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 
 from model import Users , LoginForm , SignupForm , CustomerCategory , CustomerCategoryForm , City , State , Country ,\
-    CityForm , StateForm , CountryForm , Firms , FirmForm
+    CityForm , StateForm , CountryForm , Firms , FirmForm , Uom , UomForm
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -107,6 +107,8 @@ def home():
 @login_required
 def basic_master():
 
+    # City Master
+
     city_list = db.session.query(
         City).all()
     city_form = CityForm()
@@ -140,25 +142,6 @@ def basic_master():
                     session['mssg'] = "Something went wrong"
                     return redirect(url_for('basic_master'))
 
-        #     city_name = str(city_form.city.data).title()
-        #     check_one = db.session.query(
-        #         City).filter_by(city=city_name).first()
-        #     if check_one is None:
-        #         new_city = City(city=city_name)
-        #         db.session.add(new_city)
-        #         db.session.commit()
-        #         return redirect('/basic_master')
-
-        # elif city_form.city_update.data:
-        #     city_name = str(city_form.city.data).title()
-        #     check_one = db.session.query(
-        #         City).filter_by(city=city_name).first()
-        #     if check_one is not None:
-        #         check_one.city = city_name
-        #         db.session.add(new_city)
-        #         db.session.commit()
-        #         return redirect('/basic_master')
-
     # State
 
     state_list = db.session.query(
@@ -176,8 +159,7 @@ def basic_master():
                 db.session.commit()
                 return redirect('/basic_master')
 
-    else:
-        print(state_form.errors)
+
     # Country
 
     country_list = db.session.query(
@@ -194,15 +176,6 @@ def basic_master():
                 db.session.commit()
                 return redirect('/basic_master')
 
-        elif country_form.country_update.data:
-            country_name = str(country_form.country.data).title()
-            check_one = db.session.query(
-                Country).filter_by(country=country_name).first()
-            if check_one is None:
-                new_ccountry = Country(country=country_name)
-                db.session.add(new_country)
-                db.session.commit()
-                return redirect('/basic_master')
 
     cust_list = db.session.query(
         CustomerCategory).all()
@@ -219,15 +192,30 @@ def basic_master():
                 db.session.commit()
                 return redirect('/basic_master')
 
+    
+    
+    uom_list = db.session.query(
+        Uom).all()
+    uom_form = UomForm()
+
+    if uom_form.validate_on_submit():
+        if uom_form.uom_submit.data:
+            uom_name = str(uom_form.measure.data)
+            check_one = db.session.query(
+                Uom).filter_by(measure=uom_name).first()
+            if check_one is None:
+                new_uom = Uom(measure=uom_name , desc=  uom_form.desc.data , decimal = int(uom_form.decimal.data))
+                db.session.add(new_uom)
+                db.session.commit()
+                return redirect('/basic_master')
+
     else:
-        print(state_form.errors)
-    # else:
-    #     session['mssg'] = "Something's not right. Please check the entered data."
-    #     print(city_form.errors)
+        print(uom_form.errors)
+    
 
     return render_template('basic_master.html', subtitle="Basic Master", mssg=session['mssg'], city_form=city_form, city_list=city_list,
                            state_form=state_form, state_list=state_list, country_form=country_form, country_list=country_list,
-                           cust_list=cust_list,  cust_form= cust_form), 200
+                           cust_list=cust_list,  cust_form= cust_form , uom_list=uom_list,  uom_form= uom_form), 200
 
 
 # State Location Edits
@@ -355,7 +343,7 @@ def city_delete(id):
         session['mssg'] = "Something went wrong."
         return redirect('/basic_master')
 
-# State Location Edits
+# Health Location Edits
 
 @app.route("/basic_master/health/update/<id>", methods=['POST'])
 @login_required
@@ -396,6 +384,49 @@ def cust_delete(id):
         return redirect('/basic_master')
 
 
+
+
+# UOM  Edits
+
+@app.route("/basic_master/uom/update/<id>", methods=['POST'])
+@login_required
+def uom_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    uom_form = UomForm()
+    if uom_form.uom_update.data:
+        uom_name = str(uom_form.measure.data)
+        check_one = db.session.query(
+            Uom).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.measure = uom_name
+            check_one.desc = uom_form.desc.data
+            check_one.decimal = uom_form.decimal.data
+            db.session.commit()
+            session['mssg'] = "Measure updated successfully"
+            return redirect('/basic_master')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/basic_master')
+
+
+@app.route("/basic_master/uom/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def uom_delete(id):
+
+    check_one = db.session.query(
+        Uom).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Measure deleted successfully"
+        return redirect('/basic_master')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/basic_master')
 
 
 # Logout

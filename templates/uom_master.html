@@ -1,0 +1,199 @@
+<div class="container">
+
+<div class="columns is-variable is-8">
+    <div class="column is-5">
+        <nav class="level is-mobile">
+            <div class="level-left">
+
+                <div class="level-item">
+                    <p class="is-size-5 robo ">
+                        New Unit of Measurement</p>
+                </div>
+            </div>
+
+        </nav>
+        <hr>
+        <div class="">
+            <div class="form">
+                <form method="POST" action="{{ url_for('basic_master')}}">
+                    {{uom_form.hidden_tag()}}
+                    <div class="field">
+                        <label class="label">Measurement</label>
+                        <div class="control">
+                            {{uom_form.measure(class="input" , placeholder="Enter Unit of Measurement")}}
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="field-body">
+                        <div class="field">
+                            <label class="label">Description</label>
+                            <div class="control is-expanded is-left">
+                                {{uom_form.desc(class="input" , placeholder="Description of Measurement")}}
+
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Decimal Point</label>
+
+                            <div class="control  is-right">
+                                <div class="select">
+                                    {{uom_form.decimal()}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+
+                    <div class="field is-grouped">
+                        <div class="control is-left">
+                            {{uom_form.uom_submit(class="button is-black" , value="Add Measurement")}}
+                        </div>
+                        <div class="control is-right">
+                            <a class="button is-text">Clear Fields</a>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="xtable">
+            <nav class="level is-mobile">
+                <div class="level-left">
+
+                    <div class="level-item">
+                        <p class="is-size-5 robo ">
+                            Unit of Measurements </p>
+                    </div>
+                </div>
+
+
+            </nav>
+
+            {% if uom_list|length == 0 %}
+            <hr>
+            <div class="empty has-text-centered has-text-grey-light">
+                <span class="icon"><i data-feather="info"></i></span><br>
+                <p>No Unit of Measurements available. <br> Create a new one.</p>
+                <hr>
+            </div>
+            {% else%}
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th class="has-text-grey">Measure</th>
+                        <th class="has-text-grey">Description</th>
+                        <th class="has-text-grey">Decimal</th>
+                        <th class="has-text-grey"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for uom in uom_list %}
+
+                    <tr >
+                        <td>
+                            <p class="tag is-medium is-black">{{uom.measure}}</p>
+                        </td>
+                        <td>
+                            <p>{{uom.desc}}</p>
+                        </td>
+                        <td>
+                            <p>{{uom.decimal}}</p>
+                        </td>
+                        <td>
+                            <div class="level">
+                                <div class="level-item">
+                                    <a id="edit_uom_btn_{{loop.index}}" class="button is-small"><span
+                                            class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                    </a>
+                                </div>
+                                <div class="level-item">
+                                    <a href="{{ url_for('uom_delete' , id = uom.id)}}"
+                                        class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                data-feather="x"></i></span>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    <div class="modal " id="edit_uom_modal_{{loop.index}}">
+                        <div class="modal-background animated fadeIn"></div>
+                        <div class="modal-content animated fadeInUp">
+                            <div class="box has-background-light">
+                                <h3 class="is-size-5 robo">Edit Measurement</h3>
+                                <br>
+                                <br>
+                                <div class="form">
+                                    <form method="POST" action="{{ url_for('uom_edit' , id = uom.id)}}">
+                                        {{ uom_form.hidden_tag()}}
+
+                                        <div class="field">
+                                            <label class="label">Edit Measurement</label>
+                                            <div class="control">
+                                                {{ uom_form.measure(class="input" , placeholder=uom.measure)}}
+                                            </div>
+                                        </div>
+
+                                        <br>
+                                        <br>
+                                        <div class="field level">
+                                            <div class="control">
+                                                {{ uom_form.uom_update(class="button is-black" , value="Update Measurement")}}
+                                            </div>
+                                            <div class="control ">
+                                                <a class="button is-text">Clear Fields</a>
+                                            </div>
+
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="modal-close is-large" aria-label="close"></button>
+
+                        <script>
+                            document.querySelector('#edit_uom_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                event.preventDefault();
+                                var modal = document.querySelector('#edit_uom_modal_{{loop.index}}');  // assuming you have only 1
+                                var html = document.querySelector('html');
+                                modal.classList.add('is-active');
+                                html.classList.add('is-clipped');
+
+                                document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    modal.classList.remove('is-active');
+                                    html.classList.remove('is-clipped');
+                                });
+
+                                modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    modal.classList.remove('is-active');
+                                    html.classList.remove('is-clipped');
+
+
+                                });
+
+                            });
+
+                        </script>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+        </div>
+    </div>
+
+
+</div>
+
+</div>
