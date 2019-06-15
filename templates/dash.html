@@ -1,0 +1,148 @@
+{% extends  'base.html' %}
+{% block content %}
+<div class="columns is-8 is-variable " style="margin-top: 5rem;">
+    <div class="column is-4">
+        <nav class="navbar  has-shadow">
+            <div class="navbar-start">
+                <p class="is-size-5 has-text-weight-bold">
+                    Firms</p>
+            </div>
+            <div class="navbar-end">
+                <a id="new_firm_btn" class="button is-black is-right"><span class="icon icon-btn-in"><i
+                            data-feather="plus-circle"></i></span>
+                    New Firm</a>
+        </nav>
+
+        <br>
+        <div class="firm-list" style="height:400px ; overflow-y: auto; padding: 0px 10px 5px 2px;">
+            {% if firm_list|length == 0 %}
+            <div class="empty has-text-centered has-text-grey-light">
+                <span class="icon"><i data-feather="info"></i></span><br>
+                <p>No firms available. <br> Create a new one.</p>
+                <hr>
+            </div>
+            {% endif %}
+            {% for firm in firm_list %}
+            <div class="" style="margin-top: 1rem;">
+                <p class="is-size-4 ">{{firm.firm_name}}</p>
+                <p class="is-size-6 ">{{firm.firm_address_1}}<br>{{firm.firm_city}} - {{firm.firm_pincode}}
+                    <br> {{firm.firm_state}} , {{firm.firm_country}}</p>
+                <br>
+                <br>
+                <div class="field level">
+                    <div class="control">
+                        <a id="firm_view" class="button is-black">
+                            <span class="icon icon-btn-in"><i data-feather="edit"></i></span>Edit
+                        </a>
+                    </div>
+
+                    <div class="control">
+                        <a href="{{ url_for('firm_delete' , firm = firm.id) }}" class="button is-text">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            {% endfor%}
+
+
+        </div>
+    </div>
+    <div class="modal" id="new_firm_modal">
+        <div class="modal-background animated fadeIn"></div>
+        <div class="modal-content animated fadeInUp">
+            <div class="box has-background-light">
+                <h3 class="is-size-4 has-text-weight-bold">Create a New Firm</h3>
+                <br>
+                <br>
+
+                <div class="form">
+                    <form method="POST" action="{{ url_for('home')}}">
+                        {{firm_form.hidden_tag()}}
+                        <div class="field">
+                            <label class="label">Firm Name</label>
+                            <div class="control">
+                                {{firm_form.firm_name(class="input" , placeholder="Enter FIrm Name")}}
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Address</label>
+                            <div class="control">
+                                {{firm_form.firm_address_1(class="input" , placeholder="Enter Firm Address")}}
+                            </div>
+                        </div>
+                        <div class="field is-grouped ">
+                            <div class="control is-expanded is-fullwidth">
+                                <label class="label">City</label>
+                                <div class="control">
+                                    {{firm_form.firm_city(class="input" , placeholder="Enter City")}}
+                                </div>
+                            </div>
+                            <div class="control is-expanded is-fullwidth">
+                                <label class="label">Pincode</label>
+                                <div class="control">
+                                    {{firm_form.firm_pincode(class="input" , placeholder="Enter Pincode")}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-grouped ">
+                            <div class="control is-expanded is-fullwidth">
+                                <label class="label">State</label>
+                                <div class="control">
+                                    {{firm_form.firm_state(class="input" , placeholder="Enter State")}}
+                                </div>
+                            </div>
+                            <div class="control is-expanded is-fullwidth">
+                                <label class="label">Country</label>
+                                <div class="control">
+                                    {{firm_form.firm_country(class="input" , placeholder="Enter Country")}}
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="field level">
+                            <div class="control">
+                                {{firm_form.firm_submit(class="button is-black" , value="Create New Firm")}}
+                                <!-- <button class="button is-black" type="submit"><span class="icon icon-btn-in"><i
+                                                data-feather="plus-circle"></i></span> Create New Firm</button> -->
+                            </div>
+                            <div class="control ">
+                                <a class="button is-text">Clear Fields</a>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+        <script>
+            document.querySelector('#new_firm_btn').addEventListener('click', function (event) {
+                event.preventDefault();
+                var modal = document.querySelector('#new_firm_modal');  // assuming you have only 1
+                var html = document.querySelector('html');
+                modal.classList.add('is-active');
+                html.classList.add('is-clipped');
+
+                document.querySelector('.modal-close').addEventListener('click', function (e) {
+                    e.preventDefault();
+                    modal.classList.remove('is-active');
+                    html.classList.remove('is-clipped');
+                });
+
+                modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                    e.preventDefault();
+                    modal.classList.remove('is-active');
+                    html.classList.remove('is-clipped');
+
+
+                });
+
+            });
+
+        </script>
+    </div>
+</div>
+{% endblock %}

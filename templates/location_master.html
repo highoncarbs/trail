@@ -1,0 +1,564 @@
+<div class="columns is-variable is-8">
+    <div class="column">
+        <nav class="level is-mobile">
+            <div class="level-left">
+
+                <div class="level-item">
+                    <p class="is-size-5 robo ">
+                        City</p>
+                </div>
+            </div>
+
+            <div class="level-right">
+
+                <div class="level-item">
+                    <a id="new_city_btn" class="button is-black is-right"><span class="icon icon-btn-in"><i
+                                data-feather="plus-circle"></i></span>
+                        New City</a>
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="xtable">
+            <hr>
+            {% for city in city_list %}
+            <div class="level is-mobile">
+                <div class="level-left">
+                    <div class="level-left">
+                        <p>{{city.city}}</p>
+                    </div>
+                </div>
+                <div class="level-right">
+
+                    <div class="level-item">
+                        <a id="edit_city_btn_{{loop.index}}" class="button is-small"><span class="icon icon-btn-in-x"><i
+                                    data-feather="edit-2"></i></span>
+                        </a>
+                    </div>
+                    <div class="level-item">
+                        <a href="{{ url_for('city_delete' , id = city.id)}}" class="button is-small is-danger"><span
+                                class="icon icon-btn-in-x"><i data-feather="x"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <!-- City Edit Modal -->
+
+            <div class="modal " id="edit_city_modal_{{loop.index}}">
+                <div class="modal-background animated fadeIn"></div>
+                <div class="modal-content animated fadeInUp">
+                    <div class="box has-background-light">
+                        <h3 class="is-size-5 robo">Edit City</h3>
+                        <br>
+                        <br>
+                        <div class="form">
+                            <form method="POST" action="{{ url_for('city_edit' , id = city.id)}}">
+                                {{city_form.hidden_tag()}}
+
+                                <div class="field">
+                                    <label class="label">Edit City Name</label>
+                                    <div class="control">
+                                        {{city_form.city(class="input" , placeholder=city.city)}}
+                                    </div>
+                                </div>
+                                <div class="field-body ">
+                                        <div class="field">
+                                            <label class="label">Edit State</label>
+                                            <div class="select  is-expanded control" width="5rem">
+                                                {{city_form.state}}
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <label class="label">Edit Country</label>
+                                            <div class="select is-expanded control" width="5rem">
+                                                {{city_form.country}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                <br>
+                                <div class="field level">
+                                    <div class="control">
+                                        {{city_form.city_update(class="button is-black" , value="Update City")}}
+                                    </div>
+                                    <div class="control ">
+                                        <a class="button is-text">Clear Fields</a>
+                                    </div>
+
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <button class="modal-close is-large" aria-label="close"></button>
+
+                <script>
+                    document.querySelector('#edit_city_btn_{{loop.index}}').addEventListener('click', function (event) {
+                        event.preventDefault();
+                        var modal = document.querySelector('#edit_city_modal_{{loop.index}}');  // assuming you have only 1
+                        var html = document.querySelector('html');
+                        modal.classList.add('is-active');
+                        html.classList.add('is-clipped');
+
+                        document.querySelector('.modal-close').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            modal.classList.remove('is-active');
+                            html.classList.remove('is-clipped');
+                        });
+
+                        modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            modal.classList.remove('is-active');
+                            html.classList.remove('is-clipped');
+
+
+                        });
+
+                    });
+
+                </script>
+            </div>
+
+
+
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="column">
+        <nav class="level is-mobile">
+            <div class="level-left">
+
+                <div class="level-item">
+                    <p class="is-size-5 robo ">
+                        State </p>
+                </div>
+            </div>
+
+            <div class="level-right">
+
+                <div class="level-item">
+                    <a id="new_state_btn" class="button is-black is-right"><span class="icon icon-btn-in"><i
+                                data-feather="plus-circle"></i></span>
+                        New State</a>
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="xtable">
+            <hr>
+            {% for state in state_list %}
+            <div class="level is-mobile">
+                <div class="level-left">
+                    <div class="level-left">
+                        <p>{{state.state}}</p>
+                    </div>
+                </div>
+                <div class="level-right">
+
+                    <div class="level-item">
+                        <a id="edit_state_btn_{{loop.index}}" class="button is-small"><span
+                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                        </a>
+                    </div>
+                    <div class="level-item">
+                        <a href="{{ url_for('state_delete' , id = state.id)}}" class="button is-small is-danger"><span
+                                class="icon icon-btn-in-x"><i data-feather="x"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="modal " id="edit_state_modal_{{loop.index}}">
+                <div class="modal-background animated fadeIn"></div>
+                <div class="modal-content animated fadeInUp">
+                    <div class="box has-background-light">
+                        <h3 class="is-size-5 robo">Edit State</h3>
+                        <br>
+                        <br>
+                        <div class="form">
+                            <form method="POST" action="{{ url_for('state_edit' , id= state.id)}}">
+                                {{state_form.hidden_tag()}}
+                                <div class="field">
+                                    <label class="label">Edit State Name</label>
+                                    <div class="control">
+                                        {{state_form.state(class="input" , placeholder=state.state)}}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="field level">
+                                    <div class="control">
+                                        {{state_form.state_update(class="button is-black" , value="Update State")}}
+                                    </div>
+                                    <div class="control ">
+                                        <a class="button is-text">Clear Fields</a>
+                                    </div>
+
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <button class="modal-close is-large" aria-label="close"></button>
+
+                <script>
+                    document.querySelector('#edit_state_btn_{{loop.index}}').addEventListener('click', function (event) {
+                        event.preventDefault();
+                        var modal = document.querySelector('#edit_state_modal_{{loop.index}}');  // assuming you have only 1
+                        var html = document.querySelector('html');
+                        modal.classList.add('is-active');
+                        html.classList.add('is-clipped');
+
+                        document.querySelector('.modal-close').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            modal.classList.remove('is-active');
+                            html.classList.remove('is-clipped');
+                        });
+
+                        modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            modal.classList.remove('is-active');
+                            html.classList.remove('is-clipped');
+
+
+                        });
+
+                    });
+
+                </script>
+            </div>
+
+
+
+            <!-- City Edit Modal -->
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="column">
+        <nav class="level is-mobile">
+            <div class="level-left">
+
+                <div class="level-item">
+                    <p class="is-size-5 robo ">
+                        Country</p>
+                </div>
+            </div>
+
+            <div class="level-right">
+
+                <div class="level-item">
+                    <a id="new_country_btn" class="button is-black is-right"><span class="icon icon-btn-in"><i
+                                data-feather="plus-circle"></i></span>
+                        New Country</a>
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="xtable">
+            <hr>
+            {% for country in country_list %}
+            <div class="level is-mobile">
+                <div class="level-left">
+                    <div class="level-left">
+                        <p>{{country.country}}</p>
+                    </div>
+                </div>
+                <div class="level-right">
+
+                    <div class="level-item">
+                        <a id="edit_country_btn_{{loop.index}}" class="button is-small"><span
+                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                        </a>
+                    </div>
+                    <div class="level-item">
+                        <a href="{{ url_for('country_delete' , id = country.id)}}"
+                            class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                    data-feather="x"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="modal " id="edit_country_modal_{{loop.index}}">
+                <div class="modal-background animated fadeIn"></div>
+                <div class="modal-content animated fadeInUp">
+                    <div class="box has-background-light">
+                        <h3 class="is-size-5 robo">Edit Country</h3>
+                        <br>
+                        <br>
+                        <div class="form">
+                            <form method="POST" action="{{ url_for('basic_master')}}">
+                                {{country_form.hidden_tag()}}
+                                <div class="field">
+                                    <label class="label">Edit Country Name</label>
+                                    <div class="control">
+                                        {{country_form.country(class="input" , placeholder=country.country)}}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="field level">
+                                    <div class="control">
+                                        {{country_form.country_update(class="button is-black" , value="Update Country")}}
+                                    </div>
+                                    <div class="control ">
+                                        <a class="button is-text">Clear Fields</a>
+                                    </div>
+
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <button class="modal-close is-large" aria-label="close"></button>
+
+                <script>
+                    document.querySelector('#edit_country_btn_{{loop.index}}').addEventListener('click', function (event) {
+                        event.preventDefault();
+                        var modal = document.querySelector('#edit_country_modal_{{loop.index}}');  // assuming you have only 1
+                        var html = document.querySelector('html');
+                        modal.classList.add('is-active');
+                        html.classList.add('is-clipped');
+
+                        document.querySelector('.modal-close').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            modal.classList.remove('is-active');
+                            html.classList.remove('is-clipped');
+                        });
+
+                        modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            modal.classList.remove('is-active');
+                            html.classList.remove('is-clipped');
+
+
+                        });
+
+                    });
+
+                </script>
+            </div>
+
+
+
+            <!-- City Edit Modal -->
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- City Modals -->
+
+<div class="modal " id="new_city_modal">
+    <div class="modal-background animated fadeIn"></div>
+    <div class="modal-content animated fadeInUp">
+        <div class="box has-background-light">
+            <h3 class="is-size-5 robo">Add New CIty</h3>
+            <br>
+            <br>
+            <div class="form">
+                <form method="POST" action="{{ url_for('basic_master')}}">
+                    {{city_form.hidden_tag()}}
+
+                    <div class="field">
+                        <label class="label">City Name</label>
+                        <div class="control">
+                            {{city_form.city(class="input" , placeholder="Enter City Name")}}
+                        </div>
+                    </div>
+                    <div class="field-body ">
+                        <div class="field">
+                            <label class="label">Select State</label>
+                            <div class="select  is-expanded control" width="5rem">
+                                {{city_form.state}}
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Select Country</label>
+                            <div class="select is-expanded control" width="5rem">
+                                {{city_form.country}}
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="field level">
+                        <div class="control">
+                            {{city_form.city_submit(class="button is-black" , value="Add City")}}
+                        </div>
+                        <div class="control ">
+                            <a class="button is-text">Clear Fields</a>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+
+    <script>
+        document.querySelector('#new_city_btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            var modal = document.querySelector('#new_city_modal');  // assuming you have only 1
+            var html = document.querySelector('html');
+            modal.classList.add('is-active');
+            html.classList.add('is-clipped');
+
+            document.querySelector('.modal-close').addEventListener('click', function (e) {
+                e.preventDefault();
+                modal.classList.remove('is-active');
+                html.classList.remove('is-clipped');
+            });
+
+            modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                e.preventDefault();
+                modal.classList.remove('is-active');
+                html.classList.remove('is-clipped');
+
+
+            });
+
+        });
+
+    </script>
+</div>
+
+<!-- State Modals -->
+
+<div class="modal " id="new_state_modal">
+    <div class="modal-background animated fadeIn"></div>
+    <div class="modal-content animated fadeInUp">
+        <div class="box has-background-light">
+            <h3 class="is-size-5 robo">Add New State</h3>
+            <br>
+            <br>
+            <div class="form">
+                <form method="POST" action="{{ url_for('basic_master')}}">
+                    {{state_form.hidden_tag()}}
+                    <div class="field">
+                        <label class="label">State Name</label>
+                        <div class="control">
+                            {{state_form.state(class="input" , placeholder="Enter State Name")}}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="field level">
+                        <div class="control">
+                            {{state_form.state_submit(class="button is-black" , value="Add State")}}
+                        </div>
+                        <div class="control ">
+                            <a class="button is-text">Clear Fields</a>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+
+    <script>
+        document.querySelector('#new_state_btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            var modal = document.querySelector('#new_state_modal');  // assuming you have only 1
+            var html = document.querySelector('html');
+            modal.classList.add('is-active');
+            html.classList.add('is-clipped');
+
+            document.querySelector('.modal-close').addEventListener('click', function (e) {
+                e.preventDefault();
+                modal.classList.remove('is-active');
+                html.classList.remove('is-clipped');
+            });
+
+            modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                e.preventDefault();
+                modal.classList.remove('is-active');
+                html.classList.remove('is-clipped');
+
+
+            });
+
+        });
+
+    </script>
+</div>
+
+
+<!-- Country Modals -->
+
+<div class="modal " id="new_country_modal">
+    <div class="modal-background animated fadeIn"></div>
+    <div class="modal-content animated fadeInUp">
+        <div class="box has-background-light">
+            <h3 class="is-size-5 robo">Add New Country</h3>
+            <br>
+            <br>
+            <div class="form">
+                <form method="POST" action="{{ url_for('basic_master')}}">
+                    {{country_form.hidden_tag()}}
+                    <div class="field">
+                        <label class="label">Country Name</label>
+                        <div class="control">
+                            {{country_form.country(class="input" , placeholder="Enter Country Name")}}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="field level">
+                        <div class="control">
+                            {{country_form.country_submit(class="button is-black" , value="Add Country")}}
+                        </div>
+                        <div class="control ">
+                            <a class="button is-text">Clear Fields</a>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+
+    <script>
+        document.querySelector('#new_country_btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            var modal = document.querySelector('#new_country_modal');  // assuming you have only 1
+            var html = document.querySelector('html');
+            modal.classList.add('is-active');
+            html.classList.add('is-clipped');
+
+            document.querySelector('.modal-close').addEventListener('click', function (e) {
+                e.preventDefault();
+                modal.classList.remove('is-active');
+                html.classList.remove('is-clipped');
+            });
+
+            modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                e.preventDefault();
+                modal.classList.remove('is-active');
+                html.classList.remove('is-clipped');
+
+
+            });
+
+        });
+
+    </script>
+</div>

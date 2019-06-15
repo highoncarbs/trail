@@ -2,7 +2,7 @@
 <html>
 {% include 'base_head.html' %}
 
-<body>
+<body class="">
     {% if mssg %}
     <div class="snackbar">
         <div class="box has-background-black animated fadeInUp">
@@ -21,8 +21,8 @@
         </div>
     </div>
     {% endif %}
-    <section class="hero has-background-white-bis is-fullwidth is-fullheight">
-        <nav class="navbar is-spaced has-shadow">
+    <section class="has-background-white-bis">
+        <nav class="navbar is-spaced has-shadow has-background-white-bis">
             <div class="container">
                 <div class="navbar-brand">
                     <div class="navbar-left">
@@ -31,13 +31,13 @@
                 </div>
                 <div class="navbar-menu">
                     <div class="navbar-end">
-                            <a class="navbar-item button is-text" href="" style="text-decoration: none; margin-right: 1rem;">
+                            <a class="navbar-item button is-text" href="{{url_for('home')}}" style="text-decoration: none; margin-right: 1rem;">
                                 Dashboard
                             </a>
-                                <a class="navbar-item button is-text" href="" style="text-decoration: none; margin-right: 1rem;">
+                                <a class="navbar-item button is-text"  style="text-decoration: none; margin-right: 1rem;">
                                         Firms
                                     </a>
-                        <a class="navbar-item button is-text" href="" style="text-decoration: none; margin-right: 1rem;">
+                        <a class="navbar-item button is-text" href="{{url_for('basic_master')}}" style="text-decoration: none; margin-right: 1rem;">
                             Basic Master
                         </a>
                         <a class="navbar-item button is-text " href="" style="text-decoration: none; margin-right: 1rem;">
@@ -53,7 +53,7 @@
                                           Settings
                                         </a>
                                         <hr class="navbar-divider">
-                                        <a class="navbar-item">
+                                        <a class="navbar-item" href="{{url_for('logout')}}">
                                                 <span class="icon icon-btn-in"><i data-feather="log-out"></i></span>Logout
                                         </a>
                                 </div>
@@ -69,14 +69,15 @@
 
             </div>
         </nav>
-        <div class="hero-body">
-            <div class="container">
-
-
-            </div>
+       
+        
         </div>
     </section>
+    <div class="container" >
 
+            {% block content %}
+            {% endblock %}
+        </div>
     <script>
         $(document).ready(function () {
             setTimeout(function () {

@@ -7,9 +7,15 @@ body {
 }
 
 .brand-trail {
+    font-family: 'Karla';
+    font-weight: 700;
+    
+    letter-spacing: -3px;
+}
+
+.merri-title {
     font-family: 'Merriweather';
-    font-weight: 900;
-    font-style: italic;
+    font-weight: 700;
     letter-spacing: -2px;
 }
 
@@ -20,6 +26,12 @@ a {
 .merriweather {
     font-family: 'Merriweather';
 }
+
+.robo {
+    font-family: 'Roboto';
+    font-weight: 700;
+}
+
 
 .icon-btn {
     margin-right: 10px !important;
@@ -37,9 +49,7 @@ a {
     margin-right: 0;
 }
 
-/* .navbar-item {
-    margin-right:1rem;
-} */
+
 .snackbar {
     min-width: 250px; /* Set a default minimum width */
     margin-left: -125px; /* Divide value of min-width by 2 */
