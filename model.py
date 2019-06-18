@@ -24,6 +24,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(50))
     email = db.Column(db.String(50))
     password = db.Column(db.String(250))
+    role = db.Column(db.String(20))
 
 def state_choice():
     return db.session.query(State)
