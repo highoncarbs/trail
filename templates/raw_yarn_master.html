@@ -1,0 +1,187 @@
+<div class="container">
+
+    <div class="columns is-variable is-8">
+        <div class="column is-5">
+            <nav class="level is-mobile">
+                <div class="level-left">
+
+                    <div class="level-item">
+                        <p class="is-size-5 robo ">
+                            New Yarn</p>
+                    </div>
+                </div>
+
+            </nav>
+            <hr>
+            <div class="">
+                <div class="form">
+                    <form method="POST" action="{{ url_for('basic_master')}}">
+                        {{yarn_form.hidden_tag()}}
+                        <div class="field">
+                            <label class="label">Yarn</label>
+                            <div class="control">
+                                {{yarn_form.yarn(class="input" , placeholder="Enter Yarn Code")}}
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Description</label>
+                            <div class="control is-expanded is-left">
+                                {{yarn_form.desc(class="input" , placeholder="Description of Yarn")}}
+
+                            </div>
+                        </div>
+
+
+                        <br>
+                        <div class="field is-grouped">
+                            <div class="control is-left">
+                                {{yarn_form.yarn_submit(class="button is-black" , value="Add Yarn")}}
+                            </div>
+                            <div class="control is-right">
+                                <a class="button is-text">Clear Fields</a>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="xtable">
+                <nav class="level is-mobile">
+                    <div class="level-left">
+
+                        <div class="level-item">
+                            <p class="is-size-5 robo ">
+                                Yarn</p>
+                        </div>
+                    </div>
+
+
+                </nav>
+
+                {% if yarn_list|length == 0 %}
+                <hr>
+                <div class="empty has-text-centered has-text-grey-light">
+                    <span class="icon"><i data-feather="info"></i></span><br>
+                    <p>No Yarn available. <br> Create a new one.</p>
+                    <hr>
+                </div>
+                {% else%}
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th class="has-text-grey">Yarn</th>
+                            <th class="has-text-grey">Description</th>
+                            <th class="has-text-grey"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for yarn in yarn_list %}
+
+                        <tr>
+                            <td>
+                                <p class="tag is-medium is-black">{{yarn.yarn}}</p>
+                            </td>
+                            <td>
+                                <p>{{yarn.desc}}</p>
+                            </td>
+                           
+                            <td>
+                                <div class="level">
+                                    <div class="level-item">
+                                        <a id="edit_yarn_btn_{{loop.index}}" class="button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="level-item">
+                                        <a href="{{ url_for('yarn_delete' , id = yarn.id)}}"
+                                            class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                    data-feather="x"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        <div class="modal " id="edit_yarn_modal_{{loop.index}}">
+                            <div class="modal-background animated fadeIn"></div>
+                            <div class="modal-content animated fadeInUp">
+                                <div class="box has-background-light" style="margin-top:15rem;">
+                                    <h3 class="is-size-5 robo">Edit Yarn</h3>
+                                    <br>
+                                    <br>
+                                    <div class="form">
+                                        <form method="POST" action="{{ url_for('yarn_edit' , id = yarn.id)}}">
+                                            {{ yarn_form.hidden_tag()}}
+
+                                            <div class="field">
+                                                <label class="label">Edit Yarn</label>
+                                                <div class="control">
+                                                    {{ yarn_form.yarn(class="input" , placeholder=yarn.yarn)}}
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                    <label class="label">Edit Description</label>
+                                                    <div class="control">
+                                                        {{ yarn_form.desc(class="input" , placeholder=yarn.desc)}}
+                                                    </div>
+                                                </div>
+                                            <br>
+                                            <div class="field level">
+                                                <div class="control">
+                                                    {{ yarn_form.yarn_update(class="button is-black" , value="Update Yarn")}}
+                                                </div>
+                                                <div class="control ">
+                                                    <a class="button is-text">Clear Fields</a>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+
+                            <script>
+                                document.querySelector('#edit_yarn_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                    event.preventDefault();
+                                    var modal = document.querySelector('#edit_yarn_modal_{{loop.index}}');  // assuming you have only 1
+                                    var html = document.querySelector('html');
+                                    modal.classList.add('is-active');
+                                    html.classList.add('is-clipped');
+
+                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+                                    });
+
+                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+
+
+                                    });
+
+                                });
+
+                            </script>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

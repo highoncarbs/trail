@@ -116,3 +116,74 @@ class UomForm(FlaskForm):
     uom_submit = SubmitField('uom_submit')
     uom_update = SubmitField('uom_update') 
 
+# Raw Material Master - Yarn Model & Form
+
+class Yarn(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    yarn = db.Column(db.String(30), unique=True, nullable=False)
+    desc = db.Column(db.String(50) , nullable= False)
+
+class YarnForm(FlaskForm):
+    yarn  = StringField('Yarn', validators=[InputRequired()])
+    desc = StringField('Desciption')
+    yarn_submit = SubmitField('yarn_submit')
+    yarn_update = SubmitField('yarn_update') 
+
+# Fabric Construction Master
+class FabConst(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    const = db.Column(db.String(30), unique=True, nullable=False)
+
+class FabConstForm(FlaskForm):
+    const  = StringField('Construction', validators=[InputRequired()])
+    const_submit = SubmitField('const_submit')
+    const_update = SubmitField('const_update') 
+
+# Fabric Process Model & Form
+
+class FabProc(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    process = db.Column(db.String(30), unique=True, nullable=False)
+    desc = db.Column(db.String(50) , nullable= False)
+
+class FabProcForm(FlaskForm):
+    proc  = StringField('Process', validators=[InputRequired()])
+    desc = StringField('Desciption')
+    proc_submit = SubmitField('proc_submit')
+    proc_update = SubmitField('proc_update') 
+
+# Fabric Width Master
+
+class FabWidth(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    width = db.Column(db.String(30), unique=True, nullable=False)
+
+class FabWidthForm(FlaskForm):
+    width  = StringField('Width', validators=[InputRequired()])
+    width_submit = SubmitField('width_submit')
+    width_update = SubmitField('width_update') 
+
+# Fabric Dye Master
+
+class FabDye(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    dye = db.Column(db.String(30), unique=True, nullable=False)
+
+class FabDyeForm(FlaskForm):
+    dye  = StringField('Dye', validators=[InputRequired()])
+    dye_submit = SubmitField('dye_submit')
+    dye_update = SubmitField('dye_update') 
+
+
+# Raw Material Category Model & Form
+
+class RawCat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cat = db.Column(db.String(30), unique=True, nullable=False)
+    desc = db.Column(db.String(50) , nullable= False)
+
+class RawCatForm(FlaskForm):
+    cat  = StringField('Category', validators=[InputRequired()])
+    desc = StringField('Desciption')
+    cat_submit = SubmitField('cat_submit')
+    cat_update = SubmitField('cat_update') 

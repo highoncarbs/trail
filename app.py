@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import logging
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -12,7 +13,10 @@ app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 
 from model import Users , LoginForm , SignupForm , CustomerCategory , CustomerCategoryForm , City , State , Country ,\
-    CityForm , StateForm , CountryForm , Firms , FirmForm , Uom , UomForm
+    CityForm , StateForm , CountryForm , Firms , FirmForm , Uom , UomForm , Yarn , YarnForm ,FabConst , FabConstForm , \
+    FabProc , FabProcForm ,  FabWidth , FabWidthForm ,FabDye , FabDyeForm ,RawCat , RawCatForm
+
+migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -23,7 +27,6 @@ login_manager.login_view = 'login'
 #     level=logging.DEBUG,
 #     format='[TRAIL] %(levelname)-7.7s %(message)s'
 # )
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -44,6 +47,8 @@ def login():
         else:
             session['mssg'] = "Invalid Username or Password"
             return render_template('login.html', subtitle="Login", form=form, mssg=session['mssg'])
+    if not hasattr(session , "mssg"):
+        session['mssg'] = ""
     return render_template('login.html', subtitle="Login", form=form, mssg=session['mssg']), 200
 
 
@@ -123,7 +128,6 @@ def basic_master():
                 return redirect(url_for('basic_master'))
 
             else:
-                print(city_form.state.data)
                 state = city_form.state.data.state
                 country = city_form.country.data.country
                 new_city = City(city=city_name, state=state,
@@ -153,10 +157,13 @@ def basic_master():
             state_name = str(state_form.state.data).title()
             check_one = db.session.query(
                 State).filter_by(state=state_name).first()
-            if check_one is None:
+            if check_one is not None:
+                session['mssg'] = "State already exists "
+            else:
                 new_state = State(state=state_name)
                 db.session.add(new_state)
                 db.session.commit()
+                session['mssg'] = "State - "+state_name+" successfully added. "
                 return redirect('/basic_master')
 
 
@@ -209,13 +216,141 @@ def basic_master():
                 db.session.commit()
                 return redirect('/basic_master')
 
-    else:
-        print(uom_form.errors)
+    # Yarn Form 
+
+    yarn_list = db.session.query(
+        Yarn).all()
+    yarn_form = YarnForm()
+
+    if yarn_form.validate_on_submit():
+            if yarn_form.yarn_submit.data:
+                yarn_name = str(yarn_form.yarn.data)
+                check_one = db.session.query(
+                    Yarn).filter_by(yarn=yarn_name).first()
+                if check_one is not None:
+                    session['mssg'] = "Yarn already exists "
+                else:
+                    new_yarn = Yarn(yarn=yarn_name , desc=  yarn_form.desc.data )
+                    db.session.add(new_yarn)
+                    db.session.commit()
+                    session['mssg'] = "Yarn - "+yarn_name+" successfully added."
+                    return redirect('/basic_master')
+
+    # Fabric Construction Form 
+
+     
+    const_list = db.session.query(
+        FabConst).all()
+    const_form = FabConstForm()
+
+    if const_form.validate_on_submit():
+            if const_form.const_submit.data:
+                const_name = str(const_form.const.data)
+                check_one = db.session.query(
+                    FabConst).filter_by(const=const_name).first()
+                if check_one is not None:
+                    session['mssg'] = "Construction already exists "
+                else:
+                    new_const = FabConst(const=const_name )
+                    db.session.add(new_const)
+                    db.session.commit()
+                    session['mssg'] = "Construction - "+const_name+" successfully added."
+                    return redirect('/basic_master')
+
+    # Fabric process Form 
+
     
 
+    process_list = db.session.query(
+        FabProc).all()
+    process_form = FabProcForm()
+
+    if process_form.validate_on_submit():
+            if process_form.proc_submit.data:
+                process_name = str(process_form.proc.data)
+                check_one = db.session.query(
+                    FabProc).filter_by(process=process_name).first()
+                if check_one is not None:
+                    session['mssg'] = "Fabric Process already exists "
+                else:
+                    new_process = FabProc(process=process_name , desc= process_form.desc.data )
+                    db.session.add(new_process)
+                    db.session.commit()
+                    session['mssg'] = "Fabric Process - "+process_name+"  successfully added."
+                    return redirect('/basic_master')
+    
+    # Fabric Width Form 
+
+    
+
+    width_list = db.session.query(
+        FabWidth).all()
+    width_form = FabWidthForm()
+
+    if width_form.validate_on_submit():
+            if width_form.width_submit.data:
+                width_name = str(width_form.width.data)
+                check_one = db.session.query(
+                    FabWidth).filter_by(width=width_name).first()
+                if check_one is not None:
+                    session['mssg'] = "Fabric Width already exists "
+                else:
+                    new_width = FabWidth(width=width_name )
+                    db.session.add(new_width)
+                    db.session.commit()
+                    session['mssg'] = "Fabric Width - "+width_name+"  successfully added."
+                    return redirect('/basic_master')
+    
+    # Fabric Dye Form 
+
+     
+
+    dye_list = db.session.query(
+        FabDye).all()
+    dye_form = FabDyeForm()
+
+    if dye_form.validate_on_submit():
+            if dye_form.dye_submit.data:
+                dye_name = str(dye_form.dye.data)
+                check_one = db.session.query(
+                    FabDye).filter_by(dye=dye_name).first()
+                if check_one is not None:
+                    session['mssg'] = "Fabric Dye already exists "
+                else:
+                    new_dye = FabDye(dye=dye_name )
+                    db.session.add(new_dye)
+                    db.session.commit()
+                    session['mssg'] = "Fabric Dye - "+dye_name+"  successfully added."
+                    return redirect('/basic_master')
+    
+    # Raw Mat Cateogry Form 
+
+     
+
+    cat_list = db.session.query(
+        RawCat).all()
+    cat_form = RawCatForm()
+
+    if cat_form.validate_on_submit():
+            if cat_form.cat_submit.data:
+                cat_name = str(cat_form.cat.data)
+                check_one = db.session.query(
+                    RawCat).filter_by(cat=cat_name).first()
+                if check_one is not None:
+                    session['mssg'] = "Raw Material Category already exists "
+                else:
+                    new_cat = RawCat(cat=cat_name , desc = cat_form.desc.data )
+                    db.session.add(new_cat)
+                    db.session.commit()
+                    session['mssg'] = "Category - "+cat_name+"  successfully added."
+                    return redirect('/basic_master')
+    
     return render_template('basic_master.html', subtitle="Basic Master", mssg=session['mssg'], city_form=city_form, city_list=city_list,
-                           state_form=state_form, state_list=state_list, country_form=country_form, country_list=country_list,
-                           cust_list=cust_list,  cust_form= cust_form , uom_list=uom_list,  uom_form= uom_form), 200
+                            state_form=state_form, state_list=state_list, country_form=country_form, country_list=country_list,
+                            cust_list=cust_list,  cust_form= cust_form , uom_list=uom_list,  uom_form= uom_form , \
+                            yarn_list=yarn_list,  yarn_form= yarn_form ,  const_list=const_list, const_form= const_form , \
+                            width_list=width_list, width_form= width_form,  process_list=process_list, process_form= process_form ,\
+                            dye_list=dye_list, dye_form= dye_form , cat_list=cat_list, cat_form= cat_form), 200
 
 
 # State Location Edits
@@ -428,6 +563,254 @@ def uom_delete(id):
         session['mssg'] = "Something went wrong."
         return redirect('/basic_master')
 
+
+# Raw MAterial Yarn  Edits
+
+@app.route("/basic_master/yarn/update/<id>", methods=['POST'])
+@login_required
+def yarn_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    yarn_form = YarnForm()
+    if yarn_form.yarn_update.data:
+        yarn_name = str(yarn_form.yarn.data)
+        check_one = db.session.query(
+            Yarn).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.yarn = yarn_name
+            check_one.desc = yarn_form.desc.data
+            db.session.commit()
+            session['mssg'] = "Yarn updated successfully"
+            return redirect('/basic_master')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/basic_master')
+
+
+@app.route("/basic_master/yarn/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def yarn_delete(id):
+
+    check_one = db.session.query(
+        Yarn).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Yarn deleted successfully"
+        return redirect('/basic_master')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/basic_master')
+
+# Raw MAterial Process
+
+@app.route("/basic_master/process/update/<id>", methods=['POST'])
+@login_required
+def process_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    process_form = FabProcForm()
+    if process_form.proc_update.data:
+        process_name = str(process_form.proc.data)
+        check_one = db.session.query(
+            FabProc).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.process = process_name
+            check_one.desc = process_form.desc.data
+            db.session.commit()
+            session['mssg'] = "Process updated successfully"
+            return redirect('/basic_master')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/basic_master')
+
+
+@app.route("/basic_master/process/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def process_delete(id):
+
+    check_one = db.session.query(
+        FabProc).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Process deleted successfully"
+        return redirect('/basic_master')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/basic_master')
+
+
+# Raw Material Category  Edits
+
+@app.route("/basic_master/cat/update/<id>", methods=['POST'])
+@login_required
+def cat_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    cat_form = RawCatForm()
+    if cat_form.cat_update.data:
+        cat_name = str(cat_form.cat.data)
+        check_one = db.session.query(
+            RawCat).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.cat = cat_name
+            check_one.desc = cat_form.desc.data
+            db.session.commit()
+            session['mssg'] = "Category updated successfully"
+            return redirect('/basic_master')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/basic_master')
+
+
+@app.route("/basic_master/cat/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def cat_delete(id):
+
+    check_one = db.session.query(
+        RawCat).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Category deleted successfully"
+        return redirect('/basic_master')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/basic_master')
+
+
+# Raw Material Width  Edits
+
+@app.route("/basic_master/width/update/<id>", methods=['POST'])
+@login_required
+def width_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    width_form = FabWidthForm()
+    if width_form.width_update.data:
+        width_name = str(width_form.width.data)
+        check_one = db.session.query(
+            FabWidth).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.width = width_name
+            db.session.commit()
+            session['mssg'] = "Width updated successfully"
+            return redirect('/basic_master')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/basic_master')
+
+
+@app.route("/basic_master/width/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def width_delete(id):
+
+    check_one = db.session.query(
+        FabWidth).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Width deleted successfully"
+        return redirect('/basic_master')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/basic_master')
+
+
+
+
+# Raw Material Dye  Edits
+
+@app.route("/basic_master/dye/update/<id>", methods=['POST'])
+@login_required
+def dye_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    dye_form = FabDyeForm()
+    if dye_form.dye_update.data:
+        dye_name = str(dye_form.dye.data)
+        check_one = db.session.query(
+            FabDye).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.dye = dye_name
+            db.session.commit()
+            session['mssg'] = "Dye updated successfully"
+            return redirect('/basic_master')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/basic_master')
+
+
+@app.route("/basic_master/dye/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def dye_delete(id):
+
+    check_one = db.session.query(
+        FabDye).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Dye deleted successfully"
+        return redirect('/basic_master')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/basic_master')
+
+# Raw Material Construction  Edits
+
+@app.route("/basic_master/const/update/<id>", methods=['POST'])
+@login_required
+def const_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    const_form = FabConstForm()
+    if const_form.const_update.data:
+        const_name = str(const_form.const.data)
+        check_one = db.session.query(
+            FabConst).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.const = const_name
+            db.session.commit()
+            session['mssg'] = "Construction updated successfully"
+            return redirect('/basic_master')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/basic_master')
+
+
+@app.route("/basic_master/const/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def const_delete(id):
+
+    check_one = db.session.query(
+        FabConst).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Construction deleted successfully"
+        return redirect('/basic_master')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/basic_master')
 
 # Logout
 
