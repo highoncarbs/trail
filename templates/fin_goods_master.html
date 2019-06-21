@@ -1,0 +1,101 @@
+<div class="container">
+
+    <div class="columns is-mobile is-centered" id="data_entry">
+        <div class="column ">
+            <nav class="level is-mobile">
+                <div class="level-left">
+
+                    <div class="level-item">
+                        <p class="is-size-5 robo ">
+                            Finished Goods Master</p>
+                    </div>
+                </div>
+
+            </nav>
+            <hr>
+            <div class="">
+                <div class="form ">
+                    <form method="POST" action="{{ url_for('fin_goods')}}">
+                        {{fin_form.hidden_tag()}}
+                        <div class="field-body is-horizontal">
+                            <div class="field">
+                                <label class="label">Product Cateogry</label>
+                                <div class="control select is-fullwidth">
+                                    {{fin_form.product_category()}}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Fabric Combo</label>
+                                <div class="control select is-fullwidth">
+                                    {{fin_form.fabric_combo()}}
+
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Print Technique</label>
+                                <div class="control select is-fullwidth">
+                                    {{fin_form.print_tech()}}
+
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Design</label>
+                                <div class="control select is-fullwidth">
+                                    {{fin_form.design()}}
+
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">U.O.M</label>
+                                <div class="control select is-fullwidth">
+                                    {{fin_form.uom()}}
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="field">
+                            <label class="label">Alternate Product Name</label>
+                            <div class="control is-expanded">
+                                {{fin_form.alt_name(class="input")}}
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="field">
+                        <label class="label">Generated Product Name</label>
+                        <div class="notification">
+                            <p class="robo">Product Name</p>
+                        </div>
+                        </div>
+                        <br>
+                        <div class="field is-grouped">
+                            <div class="control ">
+                                {{fin_form.fin_submit(class="button is-black" , value="Add")}}
+                            </div>
+                            <div class="control">
+                                <a class="button is-info" id="fin_view"><span class="icon icon-btn-in"><i
+                                            data-feather="eye"></i></span>View </a>
+                            </div>
+                            <div class="control">
+                                <a class="button is-text">Clear Fields</a>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script>
+        $("#fin_view").click(function () {
+            $('#data_view').toggle();
+            $('#data_entry').toggle("hide");
+
+        });
+    </script> -->
+</div>

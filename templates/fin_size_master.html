@@ -7,7 +7,7 @@
 
                     <div class="level-item">
                         <p class="is-size-5 robo ">
-                            New Yarn</p>
+                            New Fabric Size</p>
                     </div>
                 </div>
 
@@ -15,30 +15,23 @@
             <hr>
             <div class="">
                 <div class="form">
-                    <form method="POST" action="{{ url_for('basic_master')}}">
-                        {{yarn_form.hidden_tag()}}
+                    <form method="POST" action="{{ url_for('fin_goods')}}">
+                        {{size_form.hidden_tag()}}
                         <div class="field">
-                            <label class="label">Yarn</label>
+                            <label class="label">Fabric Size</label>
                             <div class="control">
-                                {{yarn_form.yarn(class="input" , placeholder="Enter Yarn Code")}}
+                                {{size_form.size(class="input" , placeholder="Enter Fabric Size Code")}}
                             </div>
                         </div>
-                        <div class="field">
-                            <label class="label">Description</label>
-                            <div class="control is-expanded is-left">
-                                {{yarn_form.desc(class="input" , placeholder="Description of Yarn")}}
-
-                            </div>
-                        </div>
-
+                       
 
                         <br>
                         <div class="field is-grouped">
                             <div class="control ">
-                                {{yarn_form.yarn_submit(class="button is-black" , value="Add Yarn")}}
+                                {{size_form.size_submit(class="button is-black" , value="Add Fabric Size")}}
                             </div>
                             <div class="control">
-                                <a class="button is-info" id="yarn_view"><span class="icon icon-btn-in"><i
+                                <a class="button is-info" id="size_view"><span class="icon icon-btn-in"><i
                                             data-feather="eye"></i></span>View </a>
                             </div>
                             <div class="control">
@@ -53,7 +46,7 @@
         </div>
     </div>
     <!-- <script>
-        $("#yarn_view").click(function () {
+        $("#size_view").click(function () {
             $('#data_view').toggle();
             $('#data_entry').toggle("hide");
 
@@ -67,49 +60,48 @@
 
                         <div class="level-item">
                             <p class="is-size-5 robo ">
-                                Yarn</p>
+                                Fabric Size</p>
                         </div>
                     </div>
 
 
                 </nav>
 
-                {% if yarn_list|length == 0 %}
+                {% if size_list|length == 0 %}
                 <hr>
                 <div class="empty has-text-centered has-text-grey-light">
                     <span class="icon"><i data-feather="info"></i></span><br>
-                    <p>No Yarn available. <br> Create a new one.</p>
+                    <p>No Fabric Size available. <br> Create a new one.</p>
                     <hr>
                 </div>
                 {% else%}
                 <table class="table is-fullwidth">
                     <thead>
                         <tr>
-                            <th class="has-text-grey">Yarn</th>
-                            <th class="has-text-grey">Description</th>
+                            <th class="has-text-grey">Fabric Size</th>
                             <th class="has-text-grey"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for yarn in yarn_list %}
+                        {% for size in size_list %}
 
                         <tr>
                             <td>
-                                <p class="tag is-medium is-black">{{yarn.yarn}}</p>
+                                <p class="tag is-medium is-black">{{size.size}}</p>
                             </td>
                             <td>
-                                <p>{{yarn.desc}}</p>
+                                <p>{{size.size}}</p>
                             </td>
 
                             <td>
                                 <div class="level">
                                     <div class="level-item">
-                                        <a id="edit_yarn_btn_{{loop.index}}" class="button is-small"><span
+                                        <a id="edit_size_btn_{{loop.index}}" class="button is-small"><span
                                                 class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
                                         </a>
                                     </div>
                                     <div class="level-item">
-                                        <a href="{{ url_for('yarn_delete' , id = yarn.id)}}"
+                                        <a href="{{ url_for('size_delete' , id = size.id)}}"
                                             class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
                                                     data-feather="x"></i></span>
                                         </a>
@@ -120,33 +112,28 @@
 
                         </tr>
 
-                        <div class="modal " id="edit_yarn_modal_{{loop.index}}">
+                        <div class="modal " id="edit_size_modal_{{loop.index}}">
                             <div class="modal-background animated fadeIn"></div>
                             <div class="modal-content animated fadeInUp">
                                 <div class="box has-background-light" style="margin-top:15rem;">
-                                    <h3 class="is-size-5 robo">Edit Yarn</h3>
+                                    <h3 class="is-size-5 robo">Edit Fabric Size</h3>
                                     <br>
                                     <br>
                                     <div class="form">
-                                        <form method="POST" action="{{ url_for('yarn_edit' , id = yarn.id)}}">
-                                            {{ yarn_form.hidden_tag()}}
+                                        <form method="POST" action="{{ url_for('size_edit' , id = size.id)}}">
+                                            {{ size_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Edit Yarn</label>
+                                                <label class="label">Edit Fabric Size</label>
                                                 <div class="control">
-                                                    {{ yarn_form.yarn(class="input" , placeholder=yarn.yarn)}}
+                                                    {{ size_form.size(class="input" , placeholder=size.size)}}
                                                 </div>
                                             </div>
-                                            <div class="field">
-                                                <label class="label">Edit Description</label>
-                                                <div class="control">
-                                                    {{ yarn_form.desc(class="input" , placeholder=yarn.desc)}}
-                                                </div>
-                                            </div>
+                                            
                                             <br>
                                             <div class="field level">
                                                 <div class="control">
-                                                    {{ yarn_form.yarn_update(class="button is-black" , value="Update Yarn")}}
+                                                    {{ size_form.size_update(class="button is-black" , value="Update Fabric Size")}}
                                                 </div>
                                                 <div class="control ">
                                                     <a class="button is-text">Clear Fields</a>
@@ -161,9 +148,9 @@
                             <button class="modal-close is-large" aria-label="close"></button>
 
                             <script>
-                                document.querySelector('#edit_yarn_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                document.querySelector('#edit_size_btn_{{loop.index}}').addEventListener('click', function (event) {
                                     event.preventDefault();
-                                    var modal = document.querySelector('#edit_yarn_modal_{{loop.index}}');  // assuming you have only 1
+                                    var modal = document.querySelector('#edit_size_modal_{{loop.index}}');  // assuming you have only 1
                                     var html = document.querySelector('html');
                                     modal.classList.add('is-active');
                                     html.classList.add('is-clipped');

@@ -1,0 +1,197 @@
+<div class="container">
+
+        <div class="columns is-mobile is-centered" id="data_entry">
+            <div class="column is-half">
+                <nav class="level is-mobile">
+                    <div class="level-left">
+    
+                        <div class="level-item">
+                            <p class="is-size-5 robo ">
+                                New Fabric Combination</p>
+                        </div>
+                    </div>
+    
+                </nav>
+                <hr>
+                <div class="">
+                    <div class="form">
+                        <form method="POST" action="{{ url_for('fin_goods')}}">
+                            {{comb_form.hidden_tag()}}
+                            <div class="field">
+                                <label class="label">Fabric Combination</label>
+                                <div class="control">
+                                    {{comb_form.comb(class="input" , placeholder="Enter Fabric Combination Code")}}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Description</label>
+                                <div class="control is-expanded is-left">
+                                    {{comb_form.comb(class="input" , placeholder="Description of Fabric Combination")}}
+    
+                                </div>
+                            </div>
+    
+    
+                            <br>
+                            <div class="field is-grouped">
+                                <div class="control ">
+                                    {{comb_form.comb_submit(class="button is-black" , value="Add Fabric Combination")}}
+                                </div>
+                                <div class="control">
+                                    <a class="button is-info" id="comb_view"><span class="icon icon-btn-in"><i
+                                                data-feather="eye"></i></span>View </a>
+                                </div>
+                                <div class="control">
+                                    <a class="button is-text">Clear Fields</a>
+                                </div>
+    
+                            </div>
+    
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <script>
+            $("#comb_view").click(function () {
+                $('#data_view').toggle();
+                $('#data_entry').toggle("hide");
+    
+            });
+        </script> -->
+        <div class="columns is-mobile is-centered"  id="data_view" hidden>
+            <div class="column is-half">
+                <div class="xtable">
+                    <nav class="level is-mobile">
+                        <div class="level-left">
+    
+                            <div class="level-item">
+                                <p class="is-size-5 robo ">
+                                    Fabric Combination</p>
+                            </div>
+                        </div>
+    
+    
+                    </nav>
+    
+                    {% if comb_list|length == 0 %}
+                    <hr>
+                    <div class="empty has-text-centered has-text-grey-light">
+                        <span class="icon"><i data-feather="info"></i></span><br>
+                        <p>No Fabric Combination available. <br> Create a new one.</p>
+                        <hr>
+                    </div>
+                    {% else%}
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th class="has-text-grey">Fabric Combination</th>
+                                <th class="has-text-grey">Description</th>
+                                <th class="has-text-grey"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for comb in comb_list %}
+    
+                            <tr>
+                                <td>
+                                    <p class="tag is-medium is-black">{{comb.comb}}</p>
+                                </td>
+                                <td>
+                                    <p>{{comb.comb}}</p>
+                                </td>
+    
+                                <td>
+                                    <div class="level">
+                                        <div class="level-item">
+                                            <a id="edit_comb_btn_{{loop.index}}" class="button is-small"><span
+                                                    class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                            </a>
+                                        </div>
+                                        <div class="level-item">
+                                            <a href="{{ url_for('comb_delete' , id = comb.id)}}"
+                                                class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                        data-feather="x"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
+    
+                                </td>
+    
+                            </tr>
+    
+                            <div class="modal " id="edit_comb_modal_{{loop.index}}">
+                                <div class="modal-background animated fadeIn"></div>
+                                <div class="modal-content animated fadeInUp">
+                                    <div class="box has-background-light" style="margin-top:15rem;">
+                                        <h3 class="is-size-5 robo">Edit Fabric Combination</h3>
+                                        <br>
+                                        <br>
+                                        <div class="form">
+                                            <form method="POST" action="{{ url_for('comb_edit' , id = comb.id)}}">
+                                                {{ comb_form.hidden_tag()}}
+    
+                                                <div class="field">
+                                                    <label class="label">Edit Fabric Combination</label>
+                                                    <div class="control">
+                                                        {{ comb_form.comb(class="input" , placeholder=comb.comb)}}
+                                                    </div>
+                                                </div>
+                                                <div class="field">
+                                                    <label class="label">Edit Description</label>
+                                                    <div class="control">
+                                                        {{ comb_form.comb(class="input" , placeholder=comb.comb)}}
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="field level">
+                                                    <div class="control">
+                                                        {{ comb_form.comb_update(class="button is-black" , value="Update Fabric Combination")}}
+                                                    </div>
+                                                    <div class="control ">
+                                                        <a class="button is-text">Clear Fields</a>
+                                                    </div>
+    
+                                                </div>
+    
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="modal-close is-large" aria-label="close"></button>
+    
+                                <script>
+                                    document.querySelector('#edit_comb_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                        event.preventDefault();
+                                        var modal = document.querySelector('#edit_comb_modal_{{loop.index}}');  // assuming you have only 1
+                                        var html = document.querySelector('html');
+                                        modal.classList.add('is-active');
+                                        html.classList.add('is-clipped');
+    
+                                        document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                            e.preventDefault();
+                                            modal.classList.remove('is-active');
+                                            html.classList.remove('is-clipped');
+                                        });
+    
+                                        modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                            e.preventDefault();
+                                            modal.classList.remove('is-active');
+                                            html.classList.remove('is-clipped');
+    
+    
+                                        });
+    
+                                    });
+    
+                                </script>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+    
+                </div>
+            </div>
+        </div>
+    </div>

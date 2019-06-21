@@ -1,0 +1,63 @@
+{% extends  'base.html' %}
+{% block content %}
+<script>
+    $(document).ready(function () {
+        $('#tabs li').on('click', function () {
+            var tab = $(this).data('tab');
+
+            $('#tabs li').removeClass('is-active');
+            $(this).addClass('is-active');
+
+            $('#tab-content div').removeClass('is-active');
+            $('div[data-content="' + tab + '"]').addClass('is-active');
+        });
+    });
+</script>
+<style>
+    #tab-content .tab-box {
+        display: none;
+    }
+
+    #tab-content .tab-box.is-active {
+        display: block;
+    }
+
+    .tab-box {
+        margin-top: 4rem;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .inner-nav {
+        margin-top: 0;
+    }
+</style>
+<div class="tabs has-background-white-bis is-fullwidth" id="tabs" style="padding-top: 1rem;">
+    <div class="container">
+
+        <ul>
+            <li class="is-active" data-tab="13">
+                <a>
+                    <span>Finished Goods Item</span>
+                </a>
+            </li>
+            <li data-tab="14">
+                <a>
+                    <span>Raw Material Fabric</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="tab-content">
+    <div class="tab-box is-active " data-content="13">
+        {% include 'fin_goods_master.html' %}
+    </div>
+    <div class="tab-box " data-content="14">
+        {% include 'raw_mat_fabric_master.html' %}
+
+    </div>
+
+</div>
+{% endblock %}

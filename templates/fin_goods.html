@@ -38,65 +38,53 @@
         <ul>
             <li class="is-active" data-tab="1">
                 <a>
-                    <span>Finished Goods</span>
+                    <span>Product Category</span>
                 </a>
             </li>
             <li data-tab="2">
                 <a>
-                    <span>Raw Materials</span>
+                    <span>Fabric Combination</span>
                 </a>
             </li>
             <li data-tab="3">
                 <a>
-                    <span>Other Materials</span>
+                    <span>Print Technique</span>
                 </a>
             </li>
             <li data-tab="4">
                 <a>
-                    <span>Unit of Measurement</span>
+                    <span>Design Number</span>
                 </a>
             </li>
             <li data-tab="5">
                 <a>
-                    <span>Customer Category</span>
-                </a>
-            </li>
-            <li data-tab="6">
-                <a>
-                    <span>Location</span>
-                </a>
-            </li>
-
-            <li data-tab="7">
-                <a>
+                    <span>Size Master</span>
                 </a>
             </li>
         </ul>
     </div>
 </div>
 
-    <div id="tab-content">
-
-        <div class="is-active tab-box " data-content="1">
-            <p class="dropdown"> Pictures </p>
-        </div>
-        <div class="tab-box inner-nav" data-content="2">
-            {% include 'raw_mat_master.html' %}
-
-        </div>
-        <div class="tab-box" data-content="3">
-            Videos
-        </div>
-        <div class="tab-box" data-content="4">
-            {% include 'uom_master.html' %}
-        </div>
-        <div class="tab-box" data-content="5">
-            {% include 'customer_category.html' %}
-
-        </div>
-        <div class="tab-box" data-content="6">
-            {% include 'location_master.html' %}
-        </div>
+<div id="tab-content">
+    <div class="tab-box is-active " data-content="1">
+        {% include 'fin_cat_master.html' %}
+    </div>
+    <div class="tab-box " data-content="2">
+        {% include 'fin_comb_master.html' %}
 
     </div>
+    <div class="tab-box" data-content="3">
+        {% include 'fin_print_master.html' %}
+
+    </div>
+    <div class="tab-box" data-content="4">
+        {% include 'fin_des_master.html' %}
+
+    </div>
+    <div class="tab-box" data-content="5">
+        {% include 'fin_size_master.html' %}
+
+    </div>
+
+</div>
 {% endblock %}

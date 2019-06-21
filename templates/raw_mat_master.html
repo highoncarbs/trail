@@ -1,26 +1,28 @@
+{% extends  'base.html' %}
+{% block content %}
 <script>
     $(document).ready(function () {
-        $('#tabs-inner li').on('click', function () {
+        $('#tabs li').on('click', function () {
             var tab = $(this).data('tab');
 
-            $('#tabs-inner li').removeClass('is-active');
+            $('#tabs li').removeClass('is-active');
             $(this).addClass('is-active');
 
-            $('#tab-content-inner div').removeClass('is-active');
-            $('#tab-content-inner div[data-content="' + tab + '"]').addClass('is-active');
+            $('#tab-content div').removeClass('is-active');
+            $('div[data-content="' + tab + '"]').addClass('is-active');
         });
     });
 </script>
 <style>
-    #tab-content-inner .tab-box {
+    #tab-content .tab-box {
         display: none;
     }
 
-    #tab-content-inner .tab-box .is-active {
+    #tab-content .tab-box.is-active {
         display: block;
     }
 
-    .tab-box-inner {
+    .tab-box {
         margin-top: 4rem;
         margin-left: 1rem;
         margin-right: 1rem;
@@ -30,7 +32,7 @@
         margin-top: 0;
     }
 </style>
-<div class="tabs is-fullwidth" id="tabs-inner">
+<div class="tabs has-background-white-bis is-fullwidth" id="tabs" style="padding-top: 1rem;">
     <div class="container">
 
         <ul>
@@ -64,13 +66,11 @@
                     <span>Fabric Construction</span>
                 </a>
             </li>
-
         </ul>
     </div>
 </div>
 
-<div id="tab-content-inner">
-
+<div id="tab-content">
     <div class="tab-box is-active " data-content="8">
         {% include 'raw_yarn_master.html' %}
     </div>
@@ -95,4 +95,6 @@
 
     </div>
 
-</div>`2
+
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" style="margin-top: 5rem;">
+        <div class="columns is-mobile is-centered">
+                <div class="column is-half">
+
+                <div class="xtable">
+                        <nav class="level is-mobile">
+                                <div class="level-left">
+                    
+                                    <div class="level-item">
+                                        <p class="is-size-5 robo ">
+                                            Customer Categories</p>
+                                    </div>
+                                </div>
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        <a class="button is-black" href="{{ url_for('customer_category')}}"><span class="icon icon-btn-in"><i data-feather="plus"></i></span>    Add
+                                        </a>
+                                    </div>
+                                </div>
+                    
+                               
+                            </nav>
+                    <hr>
+                    {% if cust_list|length == 0 %}
+                    <div class="empty has-text-centered has-text-grey-light">
+                        <span class="icon"><i data-feather="info"></i></span><br>
+                        <p>No Customer Categories available. <br> Create a new one.</p>
+                        <hr>
+                    </div>
+                    {% endif %}
+                    {% for health in cust_list %}
+                    <div class="level is-mobile">
+                        <div class="level-left">
+                            <div class="level-left">
+                                <p>{{health.health}}</p>
+                            </div>
+                        </div>
+                        <div class="level-right">
+        
+                            <div class="level-item">
+                                <a id="edit_cust_btn_{{loop.index}}" class="button is-small"><span class="icon icon-btn-in-x"><i
+                                            data-feather="edit-2"></i></span>
+                                </a>
+                            </div>
+                            <div class="level-item">
+                                <a href="{{ url_for('cust_delete' , id = health.id)}}" class="button is-small is-danger"><span
+                                        class="icon icon-btn-in-x"><i data-feather="x"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+        
+                    <!-- City Edit Modal -->
+        
+                    <div class="modal " id="edit_cust_modal_{{loop.index}}">
+                        <div class="modal-background animated fadeIn"></div>
+                        <div class="modal-content animated fadeInUp">
+                            <div class="box has-background-light">
+                                <h3 class="is-size-5 robo">Edit Customer Category</h3>
+                                <br>
+                                <br>
+                                <div class="form">
+                                    <form method="POST" action="{{ url_for('cust_edit' , id = health.id)}}">
+                                        {{ cust_form.hidden_tag()}}
+        
+                                        <div class="field">
+                                            <label class="label">Edit City Name</label>
+                                            <div class="control">
+                                                {{ cust_form.health(class="input" , placeholder=health.health)}}
+                                            </div>
+                                        </div>
+                                       
+                                        <br>
+                                        <br>
+                                        <div class="field level">
+                                            <div class="control">
+                                                {{ cust_form.health_update(class="button is-black" , value="Update Customer Category")}}
+                                            </div>
+                                            <div class="control ">
+                                                <a class="button is-text">Clear Fields</a>
+                                            </div>
+        
+                                        </div>
+        
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="modal-close is-large" aria-label="close"></button>
+        
+                        <script>
+                            document.querySelector('#edit_cust_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                event.preventDefault();
+                                var modal = document.querySelector('#edit_cust_modal_{{loop.index}}');  // assuming you have only 1
+                                var html = document.querySelector('html');
+                                modal.classList.add('is-active');
+                                html.classList.add('is-clipped');
+        
+                                document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    modal.classList.remove('is-active');
+                                    html.classList.remove('is-clipped');
+                                });
+        
+                                modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    modal.classList.remove('is-active');
+                                    html.classList.remove('is-clipped');
+        
+        
+                                });
+        
+                            });
+        
+                        </script>
+                    </div>
+        
+        
+        
+        
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock %}

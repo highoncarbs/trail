@@ -1,0 +1,108 @@
+<div class="container">
+
+    <div class="columns is-mobile is-centered" id="data_entry">
+        <div class="column ">
+            <nav class="level is-mobile">
+                <div class="level-left">
+
+                    <div class="level-item">
+                        <p class="is-size-5 robo ">
+                            Raw Material Fabric Master</p>
+                    </div>
+                </div>
+
+            </nav>
+            <hr>
+            <div class="">
+                <div class="form ">
+                    <form method="POST" action="{{ url_for('fin_goods')}}">
+                        {{raw_form.hidden_tag()}}
+                        <div class="field-body is-horizontal">
+                            <div class="field">
+                                <label class="label">Product Cateogry</label>
+                                <div class="control select is-fullwidth">
+                                    {{raw_form.product_category()}}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Yarn</label>
+                                <div class="control select is-fullwidth">
+                                    {{raw_form.yarn()}}
+
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Print Technique</label>
+                                <div class="control select is-fullwidth">
+                                    {{raw_form.fab_const()}}
+
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Design</label>
+                                <div class="control select is-fullwidth">
+                                    {{raw_form.proc()}}
+
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Width</label>
+                                <div class="control select is-fullwidth">
+                                    {{raw_form.width()}}
+
+                                </div>
+                            </div><div class="field">
+                                <label class="label">Dye</label>
+                                <div class="control select is-fullwidth">
+                                    {{raw_form.dye()}}
+
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">U.O.M</label>
+                                <div class="control select is-fullwidth">
+                                    {{raw_form.uom()}}
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <br>
+                        <div class="field">
+                            <label class="label">Alternate Product Name</label>
+                            <div class="control is-expanded">
+                                {{raw_form.alt_name(class="input")}}
+
+                            </div>
+                        </div>
+                        <br>
+                        
+                        <br>
+                        <div class="field is-grouped">
+                            <div class="control ">
+                                {{raw_form.raw_submit(class="button is-black" , value="Add")}}
+                            </div>
+                            <div class="control">
+                                <a class="button is-info" id="raw_view"><span class="icon icon-btn-in"><i
+                                            data-feather="eye"></i></span>View </a>
+                            </div>
+                            <div class="control">
+                                <a class="button is-text">Clear Fields</a>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script>
+        $("#raw_view").click(function () {
+            $('#data_view').toggle();
+            $('#data_entry').toggle("hide");
+
+        });
+    </script> -->
+</div>

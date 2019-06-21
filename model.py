@@ -24,7 +24,20 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(50))
     email = db.Column(db.String(50))
     password = db.Column(db.String(250))
-    role = db.Column(db.String(20))
+    roles = db.relationship('Role', secondary='user_roles')
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+
+
+# Define the UserRoles association table
+class UserRoles(db.Model):
+    __tablename__ = 'user_roles'
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer(), db.ForeignKey('roles.id', ondelete='CASCADE'))
 
 def state_choice():
     return db.session.query(State)
@@ -188,3 +201,205 @@ class RawCatForm(FlaskForm):
     desc = StringField('Desciption')
     cat_submit = SubmitField('cat_submit')
     cat_update = SubmitField('cat_update') 
+
+############################################
+############################################
+
+# Fin Goods Product Category Model & Form
+
+class FinCat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cat = db.Column(db.String(30), unique=True, nullable=False)
+    desc = db.Column(db.String(50) , nullable= False)
+
+class FinCatForm(FlaskForm):
+    cat  = StringField('Category', validators=[InputRequired()])
+    desc = StringField('Desciption')
+    cat_submit = SubmitField('cat_submit')
+    cat_update = SubmitField('cat_update') 
+
+# Raw Material Category Model & Form
+
+class FabComb(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comb = db.Column(db.String(30), unique=True, nullable=False)
+    desc = db.Column(db.String(50) , nullable= False)
+
+class FabCombForm(FlaskForm):
+    comb  = StringField('Combination', validators=[InputRequired()])
+    desc = StringField('Desciption')
+    comb_submit = SubmitField('comb_submit')
+    comb_update = SubmitField('comb_update') 
+
+# Raw Material Category Model & Form
+
+class PrintTech(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tech = db.Column(db.String(30), unique=True, nullable=False)
+    desc = db.Column(db.String(50) , nullable= False)
+
+class PrintTechForm(FlaskForm):
+    tech  = StringField('Technique', validators=[InputRequired()])
+    desc = StringField('Desciption')
+    tech_submit = SubmitField('tech_submit')
+    tech_update = SubmitField('tech_update') 
+
+# Fin Design Master
+
+class FinDes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    des = db.Column(db.String(30), unique=True, nullable=False)
+
+class FinDesForm(FlaskForm):
+    des  = StringField('Dye', validators=[InputRequired()])
+    des_submit = SubmitField('des_submit')
+    des_update = SubmitField('des_update') 
+
+
+# Fin Size Master
+
+class FinSize(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    size = db.Column(db.String(30), unique=True, nullable=False)
+
+class FinSizeForm(FlaskForm):
+    size  = StringField('Dye', validators=[InputRequired()])
+    size_submit = SubmitField('size_submit')
+    size_update = SubmitField('size_update') 
+
+# Main Master
+
+# Finished Goods Choices 
+
+def yarn_choice():
+    return db.session.query(Yarn)
+
+def fab_const_choice():
+    return db.session.query(FabConst)
+
+def fab_proc_choice():
+    return db.session.query(FabProc)
+
+def width_choice():
+    return db.session.query(FabWidth)
+
+def dye_choice():
+    return db.session.query(FabDye)
+
+def raw_cat_choice():
+    return db.session.query(RawCat)
+
+# Raw Material Fabric Choice 
+
+def prod_cat_choice():
+    return db.session.query(FinCat)
+
+def fab_comb_choice():
+    return db.session.query(FabComb)
+
+def print_tech_choice():
+    return db.session.query(PrintTech)
+
+def design_choice():
+    return db.session.query(FinDes)
+
+def uom_choice():
+    return db.session.query(Uom)
+
+
+# Finished Goods Master
+
+class FinGoodsForm(FlaskForm):
+    product_category = QuerySelectField('product_category',validators=[InputRequired()] , query_factory= prod_cat_choice , allow_blank= False  , get_label='cat')
+    fabric_combo = QuerySelectField('fabric_combo',validators=[InputRequired()] , query_factory= fab_comb_choice , allow_blank= False  , get_label='comb')
+    print_tech  = QuerySelectField('print_tech',validators=[InputRequired()] , query_factory= print_tech_choice , allow_blank= False  , get_label='tech')
+    design = QuerySelectField('design',validators=[InputRequired()] , query_factory= design_choice , allow_blank= False  , get_label='des')
+    uom = QuerySelectField('uom',validators=[InputRequired()] , query_factory= uom_choice , allow_blank= False  , get_label='measure')
+    alt_name = StringField('alt_name')
+    fin_submit = SubmitField('fin_submit')
+
+class FinGoods(db.Model):
+    id = db.Column(db.Integer , primary_key = True)
+    product_category = db.relationship('FinCat' ,cascade="all,delete", secondary='cat_goods' , backref='cat_goods' , lazy = 'joined')
+    fabric_combo = db.relationship('FabComb' ,cascade="all,delete", secondary='comb_goods' , backref='comb_goods' , lazy = 'joined')
+    print_tech = db.relationship('PrintTech' ,cascade="all,delete", secondary='tech_goods' , backref='print_goods' , lazy = 'joined')
+    design = db.relationship('FinDes' ,cascade="all,delete", secondary='des_goods' , backref='des_goods' , lazy = 'joined')
+    uom = db.relationship('Uom' ,cascade="all,delete", secondary='uom_goods' , backref='uom_goods' , lazy = 'joined')
+    alt_name = db.Column(db.String(20))
+
+db.Table('cat_goods',
+    db.Column('cat_id' , db.Integer , db.ForeignKey('fin_cat.id' , ondelete='SET NULL' )),
+    db.Column('goods_id' , db.Integer , db.ForeignKey('fin_goods.id' , ondelete='SET NULL'))
+)
+
+db.Table('comb_goods',
+    db.Column('comb_id' , db.Integer , db.ForeignKey('fab_comb.id' , ondelete='SET NULL' )),
+    db.Column('goods_id' , db.Integer , db.ForeignKey('fin_goods.id' , ondelete='SET NULL'))
+)
+db.Table('tech_goods',
+    db.Column('tech_id' , db.Integer , db.ForeignKey('print_tech.id' , ondelete='SET NULL' )),
+    db.Column('goods_id' , db.Integer , db.ForeignKey('fin_goods.id' , ondelete='SET NULL'))
+)
+db.Table('des_goods',
+    db.Column('des_id' , db.Integer , db.ForeignKey('fin_des.id' , ondelete='SET NULL' )),
+    db.Column('goods_id' , db.Integer , db.ForeignKey('fin_goods.id' , ondelete='SET NULL'))
+)
+db.Table('uom_goods',
+    db.Column('uom_id' , db.Integer , db.ForeignKey('uom.id' , ondelete='SET NULL' )),
+    db.Column('goods_id' , db.Integer , db.ForeignKey('fin_goods.id' , ondelete='SET NULL'))
+)
+
+class RawFabMainForm(FlaskForm):
+    product_category = QuerySelectField('product_category',validators=[InputRequired()] , query_factory= raw_cat_choice , allow_blank= False  , get_label='cat')
+    yarn = QuerySelectField('yarn',validators=[InputRequired()] , query_factory= yarn_choice , allow_blank= False  , get_label='yarn')
+    fab_const  = QuerySelectField('fab_const',validators=[InputRequired()] , query_factory= fab_const_choice , allow_blank= False  , get_label='const')
+    proc = QuerySelectField('process',validators=[InputRequired()] , query_factory= fab_proc_choice , allow_blank= False  , get_label='proc')
+    uom = QuerySelectField('uom',validators=[InputRequired()] , query_factory= uom_choice , allow_blank= False  , get_label='measure')
+    width = QuerySelectField('width',validators=[InputRequired()] , query_factory= width_choice , allow_blank= False  , get_label='width')
+    dye = QuerySelectField('dye',validators=[InputRequired()] , query_factory= dye_choice , allow_blank= False  , get_label='dye')
+    alt_name = StringField('alt_name')
+    raw_submit = SubmitField('raw_submit')
+
+class RawFabMain(db.Model):
+    id = db.Column(db.Integer , primary_key = True)
+    product_category = db.relationship('RawCat' ,cascade="all,delete", secondary='cat_fab_goods' , backref='cat_fab_goods' , lazy = 'joined')
+    yarn = db.relationship('Yarn' ,cascade="all,delete", secondary='yarn_goods' , backref='yarn_goods' , lazy = 'joined')
+    fab_const = db.relationship('FabConst' ,cascade="all,delete", secondary='const_goods' , backref='const_goods' , lazy = 'joined')
+    proc = db.relationship('FabProc' ,cascade="all,delete", secondary='proc_goods' , backref='proc_goods' , lazy = 'joined')
+    uom = db.relationship('Uom' ,cascade="all,delete", secondary='uom_raw_goods' , backref='uom_raw_goods' , lazy = 'joined')
+    width = db.relationship('FabWidth' ,cascade="all,delete", secondary='width_goods' , backref='width_goods' , lazy = 'joined')
+    dye = db.relationship('FabDye' ,cascade="all,delete", secondary='dye_goods' , backref='dye_goods' , lazy = 'joined')
+
+    alt_name = db.Column(db.String(20))
+
+db.Table('cat_fab_goods',
+    db.Column('cat_id' , db.Integer , db.ForeignKey('raw_cat.id' , ondelete='SET NULL' )),
+    db.Column('raw_fab_id' , db.Integer , db.ForeignKey('raw_fab_main.id' , ondelete='SET NULL'))
+)
+
+db.Table('yarn_goods',
+    db.Column('comb_id' , db.Integer , db.ForeignKey('yarn.id' , ondelete='SET NULL' )),
+    db.Column('raw_fab_id' , db.Integer , db.ForeignKey('raw_fab_main.id' , ondelete='SET NULL'))
+)
+db.Table('const_goods',
+    db.Column('const_id' , db.Integer , db.ForeignKey('fab_const.id' , ondelete='SET NULL' )),
+    db.Column('raw_fab_id' , db.Integer , db.ForeignKey('raw_fab_main.id' , ondelete='SET NULL'))
+)
+db.Table('proc_goods',
+    db.Column('proc_id' , db.Integer , db.ForeignKey('fab_proc.id' , ondelete='SET NULL' )),
+    db.Column('raw_fab_id' , db.Integer , db.ForeignKey('raw_fab_main.id' , ondelete='SET NULL'))
+)
+db.Table('uom_raw_goods',
+    db.Column('uom_id' , db.Integer , db.ForeignKey('uom.id' , ondelete='SET NULL' )),
+    db.Column('raw_fab_id' , db.Integer , db.ForeignKey('raw_fab_main.id' , ondelete='SET NULL'))
+)
+
+db.Table('width_goods',
+    db.Column('width_id' , db.Integer , db.ForeignKey('fab_width.id' , ondelete='SET NULL' )),
+    db.Column('raw_fab_id' , db.Integer , db.ForeignKey('raw_fab_main.id' , ondelete='SET NULL'))
+)
+
+db.Table('dye_goods',
+    db.Column('dye_id' , db.Integer , db.ForeignKey('fab_dye.id' , ondelete='SET NULL' )),
+    db.Column('raw_fab_id' , db.Integer , db.ForeignKey('raw_fab_main.id' , ondelete='SET NULL'))
+)

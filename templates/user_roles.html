@@ -1,0 +1,71 @@
+{% extends  'base.html' %}
+{% block content %}
+<div class="container">
+
+    <div class="columns is-variable is-8" style="margin-top: 5rem;">
+        <div class="column is-5">
+            <nav class="level is-mobile">
+                <div class="level-left">
+
+                    <div class="level-item">
+                        <p class="is-size-5 robo ">
+                            Create New User</p>
+                    </div>
+                </div>
+
+            </nav>
+            <hr>
+            <div class="">
+                <div class="form">
+                    <form method="POST" action="{{ url_for('basic_master')}}">
+                        {{form.hidden_tag()}}
+                        <div class="field">
+                            <label class="label">Username</label>
+                            <div class="control">
+                                {{form.username(class="input" , placeholder="Enter Username")}}
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Password</label>
+                            <div class="control">
+                                {{form.username(class="input" , placeholder="Enter Password")}}
+                            </div>
+                        </div>
+                        <br>
+                        <div class="field is-grouped">
+                            <div class="control is-left">
+                                <a class="button is-black">Create User</a>
+                            </div>
+                            <div class="control is-right">
+                                <a class="button is-text">Clear Fields</a>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="xtable">
+                <nav class="level is-mobile">
+                    <div class="level-left">
+
+                        <div class="level-item">
+                            <p class="is-size-5 robo ">
+                                Current Users</p>
+                        </div>
+                    </div>
+
+
+                </nav>
+                <hr>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+{% endblock %}

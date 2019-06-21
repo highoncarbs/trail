@@ -1,0 +1,197 @@
+<div class="container">
+
+        <div class="columns is-mobile is-centered" id="data_entry">
+            <div class="column is-half">
+                <nav class="level is-mobile">
+                    <div class="level-left">
+    
+                        <div class="level-item">
+                            <p class="is-size-5 robo ">
+                                New Print Technique</p>
+                        </div>
+                    </div>
+    
+                </nav>
+                <hr>
+                <div class="">
+                    <div class="form">
+                        <form method="POST" action="{{ url_for('fin_goods')}}">
+                            {{tech_form.hidden_tag()}}
+                            <div class="field">
+                                <label class="label">Print Technique</label>
+                                <div class="control">
+                                    {{tech_form.tech(class="input" , placeholder="Enter Print Technique Code")}}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Description</label>
+                                <div class="control is-expanded is-left">
+                                    {{tech_form.desc(class="input" , placeholder="Description of Print Technique")}}
+    
+                                </div>
+                            </div>
+    
+    
+                            <br>
+                            <div class="field is-grouped">
+                                <div class="control ">
+                                    {{tech_form.tech_submit(class="button is-black" , value="Add Print Technique")}}
+                                </div>
+                                <div class="control">
+                                    <a class="button is-info" id="tech_view"><span class="icon icon-btn-in"><i
+                                                data-feather="eye"></i></span>View </a>
+                                </div>
+                                <div class="control">
+                                    <a class="button is-text">Clear Fields</a>
+                                </div>
+    
+                            </div>
+    
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <script>
+            $("#tech_view").click(function () {
+                $('#data_view').toggle();
+                $('#data_entry').toggle("hide");
+    
+            });
+        </script> -->
+        <div class="columns is-mobile is-centered"  id="data_view" hidden>
+            <div class="column is-half">
+                <div class="xtable">
+                    <nav class="level is-mobile">
+                        <div class="level-left">
+    
+                            <div class="level-item">
+                                <p class="is-size-5 robo ">
+                                    Print Technique</p>
+                            </div>
+                        </div>
+    
+    
+                    </nav>
+    
+                    {% if tech_list|length == 0 %}
+                    <hr>
+                    <div class="empty has-text-centered has-text-grey-light">
+                        <span class="icon"><i data-feather="info"></i></span><br>
+                        <p>No Print Technique available. <br> Create a new one.</p>
+                        <hr>
+                    </div>
+                    {% else%}
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th class="has-text-grey">Print Technique</th>
+                                <th class="has-text-grey">Description</th>
+                                <th class="has-text-grey"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tech in tech_list %}
+    
+                            <tr>
+                                <td>
+                                    <p class="tag is-medium is-black">{{tech.tech}}</p>
+                                </td>
+                                <td>
+                                    <p>{{tech.desc}}</p>
+                                </td>
+    
+                                <td>
+                                    <div class="level">
+                                        <div class="level-item">
+                                            <a id="edit_teche_btn_{{loop.index}}" class="button is-small"><span
+                                                    class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                            </a>
+                                        </div>
+                                        <div class="level-item">
+                                            <a href="{{ url_for('tech_delete' , id = tech.id)}}"
+                                                class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                        data-feather="x"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
+    
+                                </td>
+    
+                            </tr>
+    
+                            <div class="modal " id="edit_teche_modal_{{loop.index}}">
+                                <div class="modal-background animated fadeIn"></div>
+                                <div class="modal-content animated fadeInUp">
+                                    <div class="box has-background-light" style="margin-top:15rem;">
+                                        <h3 class="is-size-5 robo">Edit Print Technique</h3>
+                                        <br>
+                                        <br>
+                                        <div class="form">
+                                            <form method="POST" action="{{ url_for('tech_edit' , id = tech.id)}}">
+                                                {{ tech_form.hidden_tag()}}
+    
+                                                <div class="field">
+                                                    <label class="label">Edit Print Technique</label>
+                                                    <div class="control">
+                                                        {{ tech_form.tech(class="input" , placeholder=tech.tech)}}
+                                                    </div>
+                                                </div>
+                                                <div class="field">
+                                                    <label class="label">Edit Description</label>
+                                                    <div class="control">
+                                                        {{ tech_form.desc(class="input" , placeholder=tech.desc)}}
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="field level">
+                                                    <div class="control">
+                                                        {{ tech_form.tech_update(class="button is-black" , value="Update Print Technique")}}
+                                                    </div>
+                                                    <div class="control ">
+                                                        <a class="button is-text">Clear Fields</a>
+                                                    </div>
+    
+                                                </div>
+    
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="modal-close is-large" aria-label="close"></button>
+    
+                                <script>
+                                    document.querySelector('#edit_teche_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                        event.preventDefault();
+                                        var modal = document.querySelector('#edit_teche_modal_{{loop.index}}');  // assuming you have only 1
+                                        var html = document.querySelector('html');
+                                        modal.classList.add('is-active');
+                                        html.classList.add('is-clipped');
+    
+                                        document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                            e.preventDefault();
+                                            modal.classList.remove('is-active');
+                                            html.classList.remove('is-clipped');
+                                        });
+    
+                                        modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                            e.preventDefault();
+                                            modal.classList.remove('is-active');
+                                            html.classList.remove('is-clipped');
+    
+    
+                                        });
+    
+                                    });
+    
+                                </script>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+    
+                </div>
+            </div>
+        </div>
+    </div>
