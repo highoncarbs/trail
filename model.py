@@ -326,6 +326,7 @@ class FinGoods(db.Model):
     design = db.relationship('FinDes' ,cascade="all,delete", secondary='des_goods' , backref='des_goods' , lazy = 'joined')
     uom = db.relationship('Uom' ,cascade="all,delete", secondary='uom_goods' , backref='uom_goods' , lazy = 'joined')
     alt_name = db.Column(db.String(20))
+    gen_name = db.Column(db.String(50))
 
 db.Table('cat_goods',
     db.Column('cat_id' , db.Integer , db.ForeignKey('fin_cat.id' , ondelete='SET NULL' )),
@@ -353,7 +354,7 @@ class RawFabMainForm(FlaskForm):
     product_category = QuerySelectField('product_category',validators=[InputRequired()] , query_factory= raw_cat_choice , allow_blank= False  , get_label='cat')
     yarn = QuerySelectField('yarn',validators=[InputRequired()] , query_factory= yarn_choice , allow_blank= False  , get_label='yarn')
     fab_const  = QuerySelectField('fab_const',validators=[InputRequired()] , query_factory= fab_const_choice , allow_blank= False  , get_label='const')
-    proc = QuerySelectField('process',validators=[InputRequired()] , query_factory= fab_proc_choice , allow_blank= False  , get_label='proc')
+    proc = QuerySelectField('proc',validators=[InputRequired()] , query_factory= fab_proc_choice , allow_blank= False  , get_label='process')
     uom = QuerySelectField('uom',validators=[InputRequired()] , query_factory= uom_choice , allow_blank= False  , get_label='measure')
     width = QuerySelectField('width',validators=[InputRequired()] , query_factory= width_choice , allow_blank= False  , get_label='width')
     dye = QuerySelectField('dye',validators=[InputRequired()] , query_factory= dye_choice , allow_blank= False  , get_label='dye')
@@ -369,8 +370,8 @@ class RawFabMain(db.Model):
     uom = db.relationship('Uom' ,cascade="all,delete", secondary='uom_raw_goods' , backref='uom_raw_goods' , lazy = 'joined')
     width = db.relationship('FabWidth' ,cascade="all,delete", secondary='width_goods' , backref='width_goods' , lazy = 'joined')
     dye = db.relationship('FabDye' ,cascade="all,delete", secondary='dye_goods' , backref='dye_goods' , lazy = 'joined')
-
     alt_name = db.Column(db.String(20))
+    gen_name = db.Column(db.String(50))
 
 db.Table('cat_fab_goods',
     db.Column('cat_id' , db.Integer , db.ForeignKey('raw_cat.id' , ondelete='SET NULL' )),

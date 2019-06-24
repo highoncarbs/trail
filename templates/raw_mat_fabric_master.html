@@ -15,7 +15,7 @@
             <hr>
             <div class="">
                 <div class="form ">
-                    <form method="POST" action="{{ url_for('fin_goods')}}">
+                    <form method="POST" action="{{ url_for('main_master')}}">
                         {{raw_form.hidden_tag()}}
                         <div class="field-body is-horizontal">
                             <div class="field">
@@ -32,7 +32,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label">Print Technique</label>
+                                <label class="label">Fabric Construction</label>
                                 <div class="control select is-fullwidth">
                                     {{raw_form.fab_const()}}
 
@@ -40,7 +40,7 @@
                             </div>
 
                             <div class="field">
-                                <label class="label">Design</label>
+                                <label class="label">Fabric Process</label>
                                 <div class="control select is-fullwidth">
                                     {{raw_form.proc()}}
 

@@ -35,7 +35,19 @@
                             style="text-decoration: none; margin-right: 1rem;">
                             Dashboard
                         </a>
-                                               
+                        <div class="navbar-item has-dropdown is-hoverable" style="margin-right: 1rem;">
+
+                            <a class="navbar-link">Transactions</a>
+
+                            <div class="navbar-dropdown">
+                                <a class="navbar-item" href="{{url_for('trans_a')}}">
+                                    Part A
+                                </a>
+                                <a class="navbar-item" href="{{url_for('trans_b')}}">
+                                    Part B
+                                </a>
+                            </div>
+                        </div>
                         <div class="navbar-item has-dropdown is-hoverable" style="margin-right: 1rem;">
 
                             <a class="navbar-link">Basic Master</a>
@@ -54,7 +66,7 @@
                                 <a class="navbar-item" href="{{url_for('uom')}}">
                                     Unit of Measurement
                                 </a>
-                                <a class="navbar-item"  href="{{url_for('customer_category')}}">
+                                <a class="navbar-item" href="{{url_for('customer_category')}}">
                                     Customer Category
                                 </a>
                                 <a class="navbar-item" href="{{url_for('location')}}">

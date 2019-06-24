@@ -136,6 +136,28 @@ def user_roles():
 
     return render_template('user_roles.html', subtitle="User Roles", mssg=session['mssg'], form=form), 200
 
+# Transaction Views 
+# 
+import json 
+@app.route('/trans_a', methods=['GET', 'POST'])
+@login_required
+def trans_a():
+    raw_main_res = db.session.query(RawFabMain).all()
+    
+    return render_template('trans_a.html' , raw_main = raw_main_res) ,200
+
+
+
+@app.route('/trans_b', methods=['GET', 'POST'])
+@login_required
+def trans_b():
+    
+
+    return render_template('trans_b.html') ,200
+
+
+    
+
 # Basic Master Views
 #
 #
@@ -143,7 +165,7 @@ def user_roles():
 # Customer Category MAster
 
 
-@app.route('/basic_master/customer_category', methods=['GET', 'POST'])
+@app.route('/raw_materials/customer_category', methods=['GET', 'POST'])
 @login_required
 def customer_category():
     cust_list = db.session.query(
@@ -163,7 +185,7 @@ def customer_category():
     return render_template('customer_Category.html', subtitle="Customer Category", mssg=session['mssg'], cust_form=cust_form), 200
 
 
-@app.route('/basic_master/customer_category_view', methods=['GET', 'POST'])
+@app.route('/raw_materials/customer_category_view', methods=['GET', 'POST'])
 @login_required
 def customer_category_view():
     cust_list = db.session.query(
@@ -175,7 +197,7 @@ def customer_category_view():
 # UOM Master
 
 
-@app.route('/basic_master/uom', methods=['GET', 'POST'])
+@app.route('/raw_materials/uom', methods=['GET', 'POST'])
 @login_required
 def uom():
     uom_list = db.session.query(
@@ -199,7 +221,7 @@ def uom():
 # Location Master
 
 
-@app.route('/basic_master/location', methods=['GET', 'POST'])
+@app.route('/raw_materials/location', methods=['GET', 'POST'])
 @login_required
 def location():
     city_list = db.session.query(
@@ -273,7 +295,7 @@ def location():
     return render_template('location_master.html', subtitle="Location", mssg=session['mssg'], city_form=city_form, city_list=city_list,
                            state_form=state_form, state_list=state_list, country_form=country_form, country_list=country_list), 200
 
-@app.route('/basic_master/uom_view', methods=['GET', 'POST'])
+@app.route('/raw_materials/uom_view', methods=['GET', 'POST'])
 @login_required
 def uom_master_view():
     uom_list = db.session.query(
@@ -603,19 +625,73 @@ def other_materials():
 def firms():
     pass
 
-@app.route('/basic_master', methods=['GET', 'POST'])
-@login_required
-def basic_master():
-    pass
 
+from model import FinGoodsForm , RawFabMainForm , FinGoods ,RawFabMain
 
-from model import FinGoodsForm , RawFabMainForm
 @app.route('/main_master', methods=['GET', 'POST'])
 @login_required
 def main_master():
     fin_goods_form = FinGoodsForm()
-    raw_form = RawFabMainForm()
-    return render_template('main_master.html' , fin_form = fin_goods_form , raw_form = raw_form) ,200
+
+    raw_goods_form = RawFabMainForm()
+
+    raw_goods = RawFabMain()
+    
+    if fin_goods_form.fin_submit.data :
+        # print(fin_goods_form.product_category.data)
+        # prod_cat = FinCat.query.filter_by(id = int(fin_goods_form.product_category.data)).first()
+        # fab_combo = FabComb.query.filter_by(id = int(fin_goods_form.fabric_combo.data)).first()
+        # print_tech = PrintTech.query.filter_by(id = int(fin_goods_form.print_tech.data)).first()
+        # design = FinDes.query.filter_by(id = int(fin_goods_form.design.data)).first()
+        # uom = Uom.query.filter_by(id = int(fin_goods_form.uom.data)).first()
+        new_fin_good = FinGoods(alt_name = fin_goods_form.alt_name.data , gen_name = "XXX")
+        try:
+            db.session.add(new_fin_good)
+            # new_fin_good.cat_goods.append(prod_cat)
+            # new_fin_good.comb_goods.append(fab_combo)
+            # new_fin_good.tech_goods.append(print_tech)
+            # new_fin_good.des_goods.append(design)
+            # new_fin_good.uom_goods.append(uom)
+            new_fin_good.product_category.append(fin_goods_form.product_category.data)
+            new_fin_good.fabric_combo.append(fin_goods_form.fabric_combo.data)
+            new_fin_good.print_tech.append(fin_goods_form.print_tech.data)
+            new_fin_good.design.append(fin_goods_form.design.data)
+            new_fin_good.uom.append(fin_goods_form.uom.data)
+            db.session.commit()
+            db.session.close()
+            return redirect(url_for('main_master'))
+        except Exception as e:
+            print(e)
+            return redirect(url_for('main_master'))
+    
+    if raw_goods_form.raw_submit.data :
+        new_raw_good = RawFabMain(alt_name = raw_goods_form.alt_name.data , gen_name = "XXX")
+        try:
+            print('trying')
+            db.session.add(new_raw_good)
+            # new_fin_good.cat_goods.append(prod_cat)
+            # new_fin_good.comb_goods.append(fab_combo)
+            # new_fin_good.tech_goods.append(print_tech)
+            # new_fin_good.des_goods.append(design)
+            # new_fin_good.uom_goods.append(uom)
+            new_raw_good.product_category.append(raw_goods_form.product_category.data)
+            new_raw_good.yarn.append(raw_goods_form.yarn.data)
+            new_raw_good.fab_const.append(raw_goods_form.fab_const.data)
+            new_raw_good.proc.append(raw_goods_form.proc.data)
+            new_raw_good.uom.append(raw_goods_form.uom.data)
+            new_raw_good.width.append(raw_goods_form.width.data)
+            new_raw_good.dye.append(raw_goods_form.dye.data)
+
+            db.session.commit()
+            db.session.close()
+            return redirect(url_for('main_master'))
+        except Exception as e:
+            print(e)
+            return redirect(url_for('main_master'))
+    else:
+        print(raw_goods_form.errors)
+
+    return render_template('main_master.html' , fin_form = fin_goods_form , raw_form = raw_goods_form) ,200
 
 
 @app.route('/raw_materials', methods=['GET', 'POST'])
@@ -636,6 +712,8 @@ def raw_materials():
                 Yarn).filter_by(yarn=yarn_name).first()
             if check_one is not None:
                 session['mssg'] = "Yarn already exists "
+                return redirect('/raw_materials')
+
             else:
                 new_yarn = Yarn(yarn=yarn_name, desc=yarn_form.desc.data)
                 db.session.add(new_yarn)
@@ -759,7 +837,7 @@ def raw_materials():
 
 # State Location Edits
 
-@app.route("/basic_master/state/update/<id>", methods=['POST'])
+@app.route("/raw_materials/state/update/<id>", methods=['POST'])
 @login_required
 def state_edit(id):
     '''
@@ -782,7 +860,7 @@ def state_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/state/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/state/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def state_delete(id):
 
@@ -800,7 +878,7 @@ def state_delete(id):
 # Country Location Edits
 
 
-@app.route("/basic_master/country/update/<id>", methods=['POST'])
+@app.route("/raw_materials/country/update/<id>", methods=['POST'])
 @login_required
 def country_edit(id):
     '''
@@ -823,7 +901,7 @@ def country_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/country/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/country/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def country_delete(id):
 
@@ -842,7 +920,7 @@ def country_delete(id):
 # City Location Edit
 
 
-@app.route("/basic_master/city/update/<id>", methods=['POST'])
+@app.route("/raw_materials/city/update/<id>", methods=['POST'])
 @login_required
 def city_edit(id):
     '''
@@ -867,7 +945,7 @@ def city_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/city/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/city/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def city_delete(id):
 
@@ -885,7 +963,7 @@ def city_delete(id):
 # Health Location Edits
 
 
-@app.route("/basic_master/health/update/<id>", methods=['POST'])
+@app.route("/raw_materials/health/update/<id>", methods=['POST'])
 @login_required
 def cust_edit(id):
     '''
@@ -908,7 +986,7 @@ def cust_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/health/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/health/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def cust_delete(id):
 
@@ -926,7 +1004,7 @@ def cust_delete(id):
 
 # UOM  Edits
 
-@app.route("/basic_master/uom/update/<id>", methods=['POST'])
+@app.route("/raw_materials/uom/update/<id>", methods=['POST'])
 @login_required
 def uom_edit(id):
     '''
@@ -951,7 +1029,7 @@ def uom_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/uom/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/uom/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def uom_delete(id):
 
@@ -969,7 +1047,7 @@ def uom_delete(id):
 
 # Raw MAterial Yarn  Edits
 
-@app.route("/basic_master/yarn/update/<id>", methods=['POST'])
+@app.route("/raw_materials/yarn/update/<id>", methods=['POST'])
 @login_required
 def yarn_edit(id):
     '''
@@ -993,7 +1071,7 @@ def yarn_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/yarn/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/yarn/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def yarn_delete(id):
 
@@ -1011,7 +1089,7 @@ def yarn_delete(id):
 # Raw MAterial Process
 
 
-@app.route("/basic_master/process/update/<id>", methods=['POST'])
+@app.route("/raw_materials/process/update/<id>", methods=['POST'])
 @login_required
 def process_edit(id):
     '''
@@ -1035,7 +1113,7 @@ def process_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/process/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/process/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def process_delete(id):
 
@@ -1053,7 +1131,7 @@ def process_delete(id):
 
 # Raw Material Category  Edits
 
-@app.route("/basic_master/cat/update/<id>", methods=['POST'])
+@app.route("/raw_materials/cat/update/<id>", methods=['POST'])
 @login_required
 def cat_edit(id):
     '''
@@ -1077,7 +1155,7 @@ def cat_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/cat/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/cat/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def cat_delete(id):
 
@@ -1095,7 +1173,7 @@ def cat_delete(id):
 
 # Raw Material Width  Edits
 
-@app.route("/basic_master/width/update/<id>", methods=['POST'])
+@app.route("/raw_materials/width/update/<id>", methods=['POST'])
 @login_required
 def width_edit(id):
     '''
@@ -1118,7 +1196,7 @@ def width_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/width/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/width/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def width_delete(id):
 
@@ -1136,7 +1214,7 @@ def width_delete(id):
 
 # Raw Material Dye  Edits
 
-@app.route("/basic_master/dye/update/<id>", methods=['POST'])
+@app.route("/raw_materials/dye/update/<id>", methods=['POST'])
 @login_required
 def dye_edit(id):
     '''
@@ -1159,7 +1237,7 @@ def dye_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/dye/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/dye/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def dye_delete(id):
 
@@ -1177,7 +1255,7 @@ def dye_delete(id):
 # Raw Material Construction  Edits
 
 
-@app.route("/basic_master/const/update/<id>", methods=['POST'])
+@app.route("/raw_materials/const/update/<id>", methods=['POST'])
 @login_required
 def const_edit(id):
     '''
@@ -1200,7 +1278,7 @@ def const_edit(id):
             return redirect('/raw_materials')
 
 
-@app.route("/basic_master/const/delete/<id>", methods=['POST', 'GET'])
+@app.route("/raw_materials/const/delete/<id>", methods=['POST', 'GET'])
 @login_required
 def const_delete(id):
 
