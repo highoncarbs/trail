@@ -1331,3 +1331,45 @@ def firm_delete(firm):
         logging.error('Error deleting Firm : ' + str(e))
         session["mssg"] = "Couldn't delete firm."
         return redirect('/')
+
+
+# APIs for Transaction Masters
+
+@app.route('/get/raw_product/' , methods=["GET"])
+@login_required 
+def get_raw_prod():
+    res = db.session.query(RawFabMain).all()
+    data = []
+    for r in res:
+        p_id = str(r.id)
+        p_name = str(r.gen_name)
+        temp_tup = (p_id , p_name)
+        data.append(temp_tup)
+    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
+    return obj
+
+@app.route('/get/fin_product/' , methods=["GET"])
+@login_required 
+def get_fin_prod():
+    res = db.session.query(FinGoods).all()
+    data = []
+    for r in res:
+        p_id = str(r.id)
+        p_name = str(r.gen_name)
+        temp_tup = (p_id , p_name)
+        data.append(temp_tup)
+    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
+    return obj
+
+@app.route('/get/uom/' , methods=["GET"])
+@login_required 
+def get_uom():
+    res = db.session.query(Uom).all()
+    data = []
+    for r in res:
+        p_id = str(r.id)
+        p_name = str(r.measure)
+        temp_tup = (p_id , p_name)
+        data.append(temp_tup)
+    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
+    return obj

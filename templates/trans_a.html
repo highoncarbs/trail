@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <!-- Date picker Script -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<script src="{{ url_for('static' , filename='css/dynamic-form.js')}}"></script>
 <!-- End imports -->
 
 <div class="container" style="margin-top: 5rem;">
@@ -51,14 +49,29 @@
                             <div class="field">
                                 <label class="label">Product</label>
                                 <div class="control is-fullwidth select">
-                                    <select></select>
+                                    <select id="prod_sel" name="prod_sel"></select>
                                 </div>
                             </div>
-
+                            <script>
+                                $(document).ready(function () {
+                                    var options = [];
+                                    $.getJSON("{{url_for('get_raw_prod')}}", function (result) {
+                                        console.log(result)
+                                        var leng = Object.keys(result).length
+                                        for (var i = 1; i <= leng; i++) {
+                                            console.log(result[i])
+                                            options.push('<option value="',
+                                                result[i], '">',
+                                                result[i], '</option>');
+                                        }
+                                        $("#prod_sel").html(options.join(''));
+                                    });
+                                })
+                            </script>
                             <div class="field">
                                 <label class="label">Prog. Qty</label>
                                 <div class="control">
-                                    <input class="input " value="14411">
+                                    <input class="input" name="prog_qty">
 
                                 </div>
                             </div>
@@ -66,19 +79,36 @@
                             <div class="field">
                                 <label class="label">U.O.M</label>
                                 <div class="control">
-                                    <input class="input " value="14411">
-
+                                    <div class="control is-fullwidth select">
+                                        <select id="prod_uom" name="prod_uom"></select>
+                                    </div>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_uom')}}", function (result) {
+                                                console.log(result)
+                                                var leng = Object.keys(result).length
+                                                for (var i = 1; i <= leng; i++) {
+                                                    console.log(result[i])
+                                                    options.push('<option value="',
+                                                        result[i], '">',
+                                                        result[i], '</option>');
+                                                }
+                                                $("#prod_uom").html(options.join(''));
+                                            });
+                                        })
+                                    </script>
                                 </div>
                             </div>
                             <div class="field">
                                 <label class="label">Original Sample</label>
                                 <div class="control">
                                     <label class="radio">
-                                        <input type="radio" name="answer">
+                                        <input type="radio" name="samp_iss" value="yes">
                                         Yes
                                     </label>
                                     <label class="radio">
-                                        <input type="radio" name="answer">
+                                        <input type="radio" name="samp_iss" value="no">
                                         No
                                     </label>
 
@@ -107,7 +137,7 @@
                             <div class="field-label is-normal">
                                 <label class="label">Size/Design </label>
                             </div>
-                            <div class="field-body">
+                            <div class="field-body" id="size_fld">
                                 <div class="field">
                                     <p class="control is-expanded">
                                         <input class="input" type="text" placeholder="Size">
@@ -144,7 +174,7 @@
                             <div class="field-label is-normal">
                                 <label class="label">Qty </label>
                             </div>
-                            <div class="field-body">
+                            <div class="field-body" id="qty_fld">
                                 <div class="field">
                                     <p class="control is-expanded">
                                         <input class="input" type="text" placeholder="Qty">
@@ -196,10 +226,9 @@
                             <tbody class="input_fields_wrap_fab">
                                 <tr>
                                     <td>
-                                        <div class="select"><select id="fab_selector" name="fab_sel_0">
-                                            {% for x in raw_main %}
-                                            <option value='{{x.id}}'>{{x.alt_name}}</option>
-                                            {% endfor %}
+                                        <div class="select"><select id="fab_selector" class="fab_sel_cls"
+                                                name="fab_sel_0">
+
                                             </select>
                                         </div>
                                     </td>
@@ -210,6 +239,22 @@
                                     <td><input type="text" class="input" name="fab_net_con_0" /></td>
                                     <td><a class="button is-text remove_field">Remove</a></td>
                                 </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var options = [];
+                                        $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
+                                            console.log(result)
+                                            var leng = Object.keys(result).length
+                                            for (var i = 1; i <= leng; i++) {
+                                                console.log(result[i])
+                                                options.push('<option value="',
+                                                    result[i], '">',
+                                                    result[i], '</option>');
+                                            }
+                                            $(".fab_sel_cls").html(options.join(''));
+                                        });
+                                    })
+                                </script>
                             </tbody>
                         </table>
                         <button id="add_field_button_fab" class=" button is-primary"><span class="icon icon-btn-in"><i
@@ -220,78 +265,78 @@
 
                         <br>
                         <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Accessories</th>
-                                        <th>Per Pc. Consum.</th>
-                                        <th>Qty Required</th>
-                                        <th>Qty Issued</th>
-                                        <th>Qty Return</th>
-                                        <th>Net Consum.</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="input_fields_wrap_acc">
-                                    <tr>
-                                        <td>
-                                            <div class="select"><select id="acc_selector" name="acc_sel_0">
+                            <thead>
+                                <tr>
+                                    <th>Accessories</th>
+                                    <th>Per Pc. Consum.</th>
+                                    <th>Qty Required</th>
+                                    <th>Qty Issued</th>
+                                    <th>Qty Return</th>
+                                    <th>Net Consum.</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_acc">
+                                <tr>
+                                    <td>
+                                        <div class="select"><select id="acc_selector" name="acc_sel_0">
                                                 {% for x in raw_main %}
                                                 <option value='{{x.id}}'>{{x.alt_name}}</option>
                                                 {% endfor %}
-                                                </select>
-                                            </div>
-                                        </td>
-                                        <td><input type="text" class="input" name="acc_pr_pc_0" /></td>
-                                        <td><input type="text" class="input" name="acc_qty_req_0" /></td>
-                                        <td><input type="text" class="input" name="acc_qty_iss_0" /></td>
-                                        <td><input type="text" class="input" name="acc_qty_ret_0" /></td>
-                                        <td><input type="text" class="input" name="acc_net_con_0" /></td>
-                                        <td><a class="button is-text remove_field">Remove</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <button id="add_field_button_acc" class=" button is-primary"><span class="icon icon-btn-in"><i
-                                        data-feather="plus"></i></span>Add More</button>
-    
-    
-                            <br>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td><input type="text" class="input" name="acc_pr_pc_0" /></td>
+                                    <td><input type="text" class="input" name="acc_qty_req_0" /></td>
+                                    <td><input type="text" class="input" name="acc_qty_iss_0" /></td>
+                                    <td><input type="text" class="input" name="acc_qty_ret_0" /></td>
+                                    <td><input type="text" class="input" name="acc_net_con_0" /></td>
+                                    <td><a class="button is-text remove_field">Remove</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button id="add_field_button_acc" class=" button is-primary"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</button>
+
+
+                        <br>
                         <br>
                         <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Other Materials</th>
-                                        <th>Per Pc. Consum.</th>
-                                        <th>Qty Required</th>
-                                        <th>Qty Issued</th>
-                                        <th>Qty Return</th>
-                                        <th>Net Consum.</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="input_fields_wrap_oth">
-                                    <tr>
-                                        <td>
-                                            <div class="select"><select id="oth_selector" name="oth_sel_0">
+                            <thead>
+                                <tr>
+                                    <th>Other Materials</th>
+                                    <th>Per Pc. Consum.</th>
+                                    <th>Qty Required</th>
+                                    <th>Qty Issued</th>
+                                    <th>Qty Return</th>
+                                    <th>Net Consum.</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_oth">
+                                <tr>
+                                    <td>
+                                        <div class="select"><select id="oth_selector" name="oth_sel_0">
                                                 {% for x in raw_main %}
                                                 <option value='{{x.id}}'>{{x.alt_name}}</option>
                                                 {% endfor %}
-                                                </select>
-                                            </div>
-                                        </td>
-                                        <td><input type="text" class="input" name="oth_pr_pc_0" /></td>
-                                        <td><input type="text" class="input" name="oth_qty_req_0" /></td>
-                                        <td><input type="text" class="input" name="oth_qty_iss_0" /></td>
-                                        <td><input type="text" class="input" name="oth_qty_ret_0" /></td>
-                                        <td><input type="text" class="input" name="oth_net_con_0" /></td>
-                                        <td><a class="button is-text remove_field">Remove</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <button id="add_field_button_oth" class=" button is-primary"><span class="icon icon-btn-in"><i
-                                        data-feather="plus"></i></span>Add More</button>
-    
-    
-                            <br>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td><input type="text" class="input" name="oth_pr_pc_0" /></td>
+                                    <td><input type="text" class="input" name="oth_qty_req_0" /></td>
+                                    <td><input type="text" class="input" name="oth_qty_iss_0" /></td>
+                                    <td><input type="text" class="input" name="oth_qty_ret_0" /></td>
+                                    <td><input type="text" class="input" name="oth_net_con_0" /></td>
+                                    <td><a class="button is-text remove_field">Remove</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button id="add_field_button_oth" class=" button is-primary"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</button>
+
+
+                        <br>
                         <br>
                         <div class="field is-grouped">
                             <div class="control">
@@ -321,7 +366,7 @@
 </script>
 <script>
 
-    $('input[name="dates"]').daterangepicker();
+    $('input[name="dates"]').daterangepicker({ buttonClasses: 'button', applyButtonClasses: 'is-primary', cancelButtonClasses: 'is-text' });
 
     $(document).ready(function () {
         var max_fields = 10; //maximum input boxes allowed
@@ -335,7 +380,7 @@
             if (x < max_fields) { //max input box allowed
                 x++; //text box increment
                 $(wrapper_fab).append('<tr> \
-                    <td><div class="select"><select id="fab_selector" name="fab_sel_'+ x + '"></select></div></td>\
+                    <td><div class="select"><select id="fab_selector" class="fab_sel_cls" name="fab_sel_'+ x + '"></select></div></td>\
                     <td><input type="text" class="input" name="fab_pr_pc'+ x + '"/></td>\
                     <td><input type="text" class="input" name="fab_qty_req'+ x + '"/></td> \
                     <td><input type = "text" class= "input" name = "fab_qty_iss'+ x + '" /></td>\
@@ -343,6 +388,19 @@
                     <td><input type="text" class="input" name="fab_net_con'+ x + '" /></td>\
                     <td><a href="#" class="button is-text remove_field">Remove</a></td></tr> ');
             }
+
+            var options = [];
+            $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
+                console.log(result)
+                var leng = Object.keys(result).length
+                for (var i = 1; i <= leng; i++) {
+                    console.log(result[i])
+                    options.push('<option value="',
+                        result[i], '">',
+                        result[i], '</option>');
+                }
+                $(".fab_sel_cls").html(options.join(''));
+            });
         });
 
         $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text

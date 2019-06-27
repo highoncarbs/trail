@@ -1,0 +1,353 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Date picker Script -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<!-- End imports -->
+
+<div class="container" style="margin-top: 5rem;">
+
+    <div class="columns is-mobile is-centered">
+        <div class="column is-three-quarters">
+            <nav class="level is-mobile">
+                <div class="level-left">
+
+                    <div class="level-item">
+                        <p class="is-size-5 ">
+                            <span class="robo ">Transaction - </span> Part B - <span class="robo "> Tracking for -
+                            </span> </p>
+                    </div>
+
+                    <div class="level-item">
+                        <p class=" control select  ">
+                            <select></select>
+                        </p>
+                    </div>
+
+                    <div class="level-item">
+                        <p class=" control">
+                            <button class="button is-black"><span class="icon icon-btn-in ">
+                                    <i data-feather="check"></i>
+                                </span>Submit</button>
+                        </p>
+                    </div>
+                </div>
+
+            </nav>
+            <hr>
+            <div class="tracking_data">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Particulars</th>
+                                <th>Date</th>
+                                <th>Qty</th>
+                                <th>Location</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="robo">Cutting</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="cut_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="cut_qty"></td>
+                                <td><input class="input" id="cut_loc"></td>
+
+                                <td><input class="input" id="cut_rem"></td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="robo">Stitching</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="sth_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="sth_qty"></td>
+                                <td><input class="input" id="sth_loc"></td>
+
+                                <td><input class="input" id="sth_rem"></td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="robo">Value Addition</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="val_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="val_qty"></td>
+                                <td><input class="input" id="val_loc"></td>
+
+                                <td><input class="input" id="val_rem"></td>
+
+                            </tr>
+                            <tr>
+                                <td class="robo">Kaj - Button</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="kaj_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="kaj_qty"></td>
+                                <td><input class="input" id="kaj_loc"></td>
+
+                                <td><input class="input" id="kaj_rem"></td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="robo">Test Checking by HOD</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="tes_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="tes_qty"></td>
+                                <td><input class="input" id="tes_loc"></td>
+
+                                <td><input class="input" id="tes_rem"></td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="robo">Thread Cutting</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="thr_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="thr_qty"></td>
+                                <td><input class="input" id="thr_loc"></td>
+
+                                <td><input class="input" id="thr_rem"></td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="robo">Q.C / Measurement</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="qc_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="qc_qty"></td>
+                                <td><input class="input" id="qc_loc"></td>
+
+                                <td><input class="input" id="qc_rem"></td>
+
+                            </tr>
+                            <tr>
+                                <td class="robo">Press</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="pre_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="pre_qty"></td>
+                                <td><input class="input" id="pre_loc"></td>
+
+                                <td><input class="input" id="pre_rem"></td>
+
+                            </tr>
+                            <tr>
+                                <td class="robo">Tagging / Packing</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="tag_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="tag_qty"></td>
+                                <td><input class="input" id="tag_loc"></td>
+
+                                <td><input class="input" id="tag_rem"></td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="robo">Transfer to F.G Dept.</td>
+                                <td>
+                                    <div class="control has-icons-left">
+                                        <input class="input" id="tra_dat" name="dates">
+                                        <span class="icon is-small is-left">
+                                            <i data-feather="calendar"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td><input class="input" id="tra_qty"></td>
+                                <td><input class="input" id="tra_loc"></td>
+
+                                <td><input class="input" id="tra_rem"></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <p class="robo is-size-5">Details of goods transferred to F.G Dept</p>
+                    <hr>
+                    <div class="input_fields_wrap_fg">
+                        <div id="fg-form-0" class="notification">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Date </label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="control has-icons-left">
+                                            <input class="input" name="dates">
+                                            <span class="icon is-small is-left">
+                                                <i data-feather="calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Size/Design </label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Size">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Qty </label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <button class="is-primary button" id="add_field_button_fg"><span class="icon icon-btn-in">
+                            <i data-feather="plus"></i>
+                        </span>Add More</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('input[name="dates"]').daterangepicker({singleDatePicker: true});
+</script>
+<script>
+    $(document).ready(function () {
+        var max_fields = 10; //maximum input boxes allowed
+        var wrapper_fg = $(".input_fields_wrap_fg"); //Fields wrapper
+        var add_button_fg = $("#add_field_button_fg"); //Add button ID
+
+        var x = 1; //initlal text box count
+        $(add_button_fg).click(function (e) { //on add input button click
+            console.log("clicked")
+            e.preventDefault();
+            if (x < max_fields) { //max input box allowed
+                x++; //text box increment
+                $(wrapper_fg).append('<div id="fg-form-'+x+'" class="notification"><div class="field is-horizontal"><div class="field-label is-normal"> <label class="label">Date </label></div><div class="field-body"><div class="field"><div class="control has-icons-left"> <input class="input" name="dates"> <span class="icon is-small is-left"> <i data-feather="calendar"></i> </span></div></div></div></div><div class="field is-horizontal"><div class="field-label is-normal"> <label class="label">Size/Design </label></div><div class="field-body"><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Size"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Size"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Size"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Size"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Size"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Size"></p></div></div></div><div class="field is-horizontal"><div class="field-label is-normal"> <label class="label">Qty </label></div><div class="field-body"><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Qty"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Qty"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Qty"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Qty"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Qty"></p></div><div class="field"><p class="control is-expanded"> <input class="input" type="text" placeholder="Qty"></p></div></div></div></div>');
+                
+                }
+                $('input[name="dates"]').daterangepicker({singleDatePicker: true , buttonClasses: 'button'});
+                feather.replace();
+        });
+
+        // $(wrapper_fg).on("click", ".remove_field", function (e) { //user click on remove text
+        //     e.preventDefault();
+        //     $(this).parent('td').parent('tr').remove(); x--;
+        // })
+    });
+</script>
+{% endblock %}
