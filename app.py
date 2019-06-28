@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import logging
+import json
 from flask_migrate import Migrate
 
 app = Flask(__name__)
@@ -138,13 +139,26 @@ def user_roles():
 
 # Transaction Views 
 # 
-import json 
+from model import Trans 
+
 @app.route('/trans_a', methods=['GET', 'POST'])
 @login_required
 def trans_a():
-    raw_main_res = db.session.query(RawFabMain).all()
-    
-    return render_template('trans_a.html' , raw_main = raw_main_res) ,200
+    pp_num = db.session.query(Trans).all()
+    print(pp_num)
+    if len(pp_num) is 0:
+        pp_new = int(1)
+    else:
+        pp_new = int(pp_num[-1].id) + 1
+
+    if request.method == "POST":
+        payload = json.dumps(request.json)
+        new_trans = Trans(part_a = payload , part_b = "{}")
+        db.session.add(new_trans)
+        db.session.commit()
+        session['mssg'] = "Transaction - Part A with PP No. " + str(new_trans.id)+ " has been added."
+        return jsonify("success")
+    return render_template('trans_a.html' , pp_num = pp_new , mssg = session['mssg']) ,200
 
 
 
@@ -193,6 +207,75 @@ def customer_category_view():
     cust_form = CustomerCategoryForm()
 
     return render_template('customer_category_view.html', subtitle="Customer Category", mssg=session['mssg'], cust_list=cust_list, cust_form=cust_form), 200
+
+from model import Accessories , AccessoriesForm
+
+@app.route('/raw_materials/accessories', methods=['GET', 'POST'])
+@login_required
+def accessories():
+    acc_list = db.session.query(
+        Accessories).all()
+    acc_form = AccessoriesForm()
+
+    if acc_form.validate_on_submit():
+        if acc_form.acc_submit.data:
+            acc_name = str(acc_form.acc.data).title()
+            check_one = db.session.query(
+                Accessories).filter_by(acc=acc_name).first()
+            if check_one is None:
+                new_acc = Accessories(acc=acc_name)
+                db.session.add(new_acc)
+                db.session.commit()
+                return redirect(url_for('accessories'))
+    return render_template('accessories.html', subtitle="Accessories", mssg=session['mssg'], acc_form=acc_form), 200
+
+
+@app.route('/raw_materials/accessories_view', methods=['GET', 'POST'])
+@login_required
+def accessories_view():
+    acc_list = db.session.query(
+        Accessories).all()
+    acc_form = AccessoriesForm()
+
+    return render_template('accessories_view.html', subtitle="Accessories", mssg=session['mssg'], acc_list=acc_list, acc_form=acc_form), 200
+
+
+
+from model import OtherMat , OtherMatForm
+
+@app.route('/raw_materials/OtherMat', methods=['GET', 'POST'])
+@login_required
+def other_mat():
+    mat_list = db.session.query(
+        OtherMat).all()
+    mat_form = OtherMatForm()
+
+    if mat_form.validate_on_submit():
+        if mat_form.mat_submit.data:
+            mat_name = str(mat_form.mat.data).title()
+            check_one = db.session.query(
+                OtherMat).filter_by(mat=mat_name).first()
+            if check_one is None:
+                new_mat = OtherMat(mat=mat_name)
+                db.session.add(new_mat)
+                db.session.commit()
+                return redirect(url_for('other_mat'))
+    return render_template('othermat.html', subtitle="Other Materials", mssg=session['mssg'], mat_form=mat_form), 200
+
+
+@app.route('/raw_materials/other_mat_view', methods=['GET', 'POST'])
+@login_required
+def other_mat_view():
+    mat_list = db.session.query(
+        OtherMat).all()
+    mat_form = OtherMatForm()
+
+    return render_template('othermat_view.html', subtitle="Other Materials", mssg=session['mssg'], mat_list=mat_list, mat_form=mat_form), 200
+
+
+
+
+
 
 # UOM Master
 
@@ -638,25 +721,15 @@ def main_master():
     raw_goods = RawFabMain()
     
     if fin_goods_form.fin_submit.data :
-        # print(fin_goods_form.product_category.data)
-        # prod_cat = FinCat.query.filter_by(id = int(fin_goods_form.product_category.data)).first()
-        # fab_combo = FabComb.query.filter_by(id = int(fin_goods_form.fabric_combo.data)).first()
-        # print_tech = PrintTech.query.filter_by(id = int(fin_goods_form.print_tech.data)).first()
-        # design = FinDes.query.filter_by(id = int(fin_goods_form.design.data)).first()
-        # uom = Uom.query.filter_by(id = int(fin_goods_form.uom.data)).first()
-        new_fin_good = FinGoods(alt_name = fin_goods_form.alt_name.data , gen_name = "XXX")
+        new_fin_good = FinGoods(alt_name = fin_goods_form.alt_name.data , gen_name = "")
         try:
             db.session.add(new_fin_good)
-            # new_fin_good.cat_goods.append(prod_cat)
-            # new_fin_good.comb_goods.append(fab_combo)
-            # new_fin_good.tech_goods.append(print_tech)
-            # new_fin_good.des_goods.append(design)
-            # new_fin_good.uom_goods.append(uom)
             new_fin_good.product_category.append(fin_goods_form.product_category.data)
             new_fin_good.fabric_combo.append(fin_goods_form.fabric_combo.data)
             new_fin_good.print_tech.append(fin_goods_form.print_tech.data)
             new_fin_good.design.append(fin_goods_form.design.data)
             new_fin_good.uom.append(fin_goods_form.uom.data)
+            new_fin_good.gen_name = str( '-'.join([ str(fin_goods_form.product_category.data.id) , str(fin_goods_form.fabric_combo.data.id) , str(fin_goods_form.print_tech.data.id) , str(fin_goods_form.design.data.id)]))
             db.session.commit()
             db.session.close()
             return redirect(url_for('main_master'))
@@ -669,11 +742,6 @@ def main_master():
         try:
             print('trying')
             db.session.add(new_raw_good)
-            # new_fin_good.cat_goods.append(prod_cat)
-            # new_fin_good.comb_goods.append(fab_combo)
-            # new_fin_good.tech_goods.append(print_tech)
-            # new_fin_good.des_goods.append(design)
-            # new_fin_good.uom_goods.append(uom)
             new_raw_good.product_category.append(raw_goods_form.product_category.data)
             new_raw_good.yarn.append(raw_goods_form.yarn.data)
             new_raw_good.fab_const.append(raw_goods_form.fab_const.data)
@@ -1001,6 +1069,88 @@ def cust_delete(id):
         session['mssg'] = "Something went wrong."
         return redirect('/raw_materials')
 
+# Accessories  Edits
+
+
+@app.route("/raw_materials/acc/update/<id>", methods=['POST'])
+@login_required
+def acc_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    acc_form = AccessoriesForm()
+    if acc_form.acc_update.data:
+        acc_name = str(acc_form.acc.data).title()
+        check_one = db.session.query(
+            Accessories).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.acc = acc_name
+            db.session.commit()
+            session['mssg'] = "Accessories updated successfully"
+            return redirect('/raw_materials/accessories_view')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/raw_materials/accessories_view')
+
+
+@app.route("/raw_materials/acc/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def acc_delete(id):
+
+    check_one = db.session.query(
+        Accessories).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Accessories deleted successfully"
+        return redirect('/raw_materials/accessories_view')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/raw_materials/accessories_view')
+
+
+# Other Materials  Edits
+
+
+@app.route("/raw_materials/mat/update/<id>", methods=['POST'])
+@login_required
+def mat_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    mat_form = OtherMatForm()
+    if mat_form.mat_update.data:
+        mat_name = str(mat_form.mat.data).title()
+        check_one = db.session.query(
+            OtherMat).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.mat = mat_name
+            db.session.commit()
+            session['mssg'] = "Accessories updated successfully"
+            return redirect('/raw_materials/other_mat_view')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/raw_materials/other_mat_view')
+
+
+@app.route("/raw_materials/mat/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def mat_delete(id):
+
+    check_one = db.session.query(
+        OtherMat).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Customer Category deleted successfully"
+        return redirect('/raw_materials')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/raw_materials')
 
 # UOM  Edits
 
@@ -1358,7 +1508,7 @@ def get_fin_prod():
         p_name = str(r.gen_name)
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
-    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
+    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
     return obj
 
 @app.route('/get/uom/' , methods=["GET"])
@@ -1371,5 +1521,32 @@ def get_uom():
         p_name = str(r.measure)
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
-    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
+    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
+    return obj
+
+@app.route('/get/acc/' , methods=["GET"])
+@login_required 
+def get_acc():
+    res = db.session.query(Accessories).all()
+    data = []
+    for r in res:
+        p_id = str(r.id)
+        p_name = str(r.acc)
+        temp_tup = (p_id , p_name)
+        data.append(temp_tup)
+    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
+    print(obj)
+    return obj
+
+@app.route('/get/oth_mat/' , methods=["GET"])
+@login_required 
+def get_oth_mat():
+    res = db.session.query(OtherMat).all()
+    data = []
+    for r in res:
+        p_id = str(r.id)
+        p_name = str(r.mat)
+        temp_tup = (p_id , p_name)
+        data.append(temp_tup)
+    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
     return obj

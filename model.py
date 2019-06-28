@@ -77,6 +77,27 @@ class CustomerCategoryForm(FlaskForm):
     health_submit = SubmitField('health_submit')
     health_update = SubmitField('health_update')
 
+#  Accessories & Form
+
+class Accessories(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    acc = db.Column(db.String(50), unique=True, nullable=False)
+
+class AccessoriesForm(FlaskForm):
+    acc = StringField('acc', validators=[InputRequired()])
+    acc_submit = SubmitField('acc_submit')
+    acc_update = SubmitField('acc_update')
+
+#  Customer Category & Form
+
+class OtherMat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    mat = db.Column(db.String(50), unique=True, nullable=False)
+
+class OtherMatForm(FlaskForm):
+    mat = StringField('mat', validators=[InputRequired()])
+    mat_submit = SubmitField('mat_submit')
+    mat_update = SubmitField('mat_update')
 
 # State Model & Form
 
@@ -404,3 +425,8 @@ db.Table('dye_goods',
     db.Column('dye_id' , db.Integer , db.ForeignKey('fab_dye.id' , ondelete='SET NULL' )),
     db.Column('raw_fab_id' , db.Integer , db.ForeignKey('raw_fab_main.id' , ondelete='SET NULL'))
 )
+
+class Trans(db.Model):
+    id = db.Column(db.Integer , primary_key= True)
+    part_a = db.Column( db.JSON ,nullable =False , default = [] )
+    part_b = db.Column( db.JSON ,nullable =False , default = [] )

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <!-- Date picker Script -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -23,12 +24,12 @@
             <hr>
             <div class="">
                 <div class="form">
-                    <form action="">
+                    <form id="trans_a_form">
                         <div class="field-body is-horizontal">
                             <div class="field">
                                 <label class="label">Product Order No.</label>
                                 <div class="control has-icons-left">
-                                    <input class="input " value="14411" disabled>
+                                    <input class="input robo" name="PP_no" value="{{pp_num}}" disabled>
                                     <span class="icon icon-btn-in is-left">
                                         <i data-feather="hash"></i>
                                     </span>
@@ -86,13 +87,10 @@
                                         $(document).ready(function () {
                                             var options = [];
                                             $.getJSON("{{url_for('get_uom')}}", function (result) {
-                                                console.log(result)
-                                                var leng = Object.keys(result).length
-                                                for (var i = 1; i <= leng; i++) {
-                                                    console.log(result[i])
+                                                for (var j = 0; j < Object.keys(result).length; j++) {
                                                     options.push('<option value="',
-                                                        result[i], '">',
-                                                        result[i], '</option>');
+                                                        Object.keys(result)[j], '">',
+                                                        Object.keys(result)[j], '</option>');
                                                 }
                                                 $("#prod_uom").html(options.join(''));
                                             });
@@ -124,7 +122,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <p class="control is-expanded has-icons-left">
-                                        <input class="input" type="text" placeholder="Name">
+                                        <input class="input" type="text" placeholder="Name" name="prog_by">
                                         <span class="icon  is-left">
                                             <i data-feather="user"></i>
                                         </span>
@@ -140,32 +138,32 @@
                             <div class="field-body" id="size_fld">
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Size">
+                                        <input class="input" type="text" name="s_0" placeholder="Size">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Size">
+                                        <input class="input" type="text" name="s_1" placeholder="Size">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Size">
+                                        <input class="input" type="text" name="s_2" placeholder="Size">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Size">
+                                        <input class="input" type="text" name="s_3" placeholder="Size">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Size">
+                                        <input class="input" type="text" name="s_4" placeholder="Size">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Size">
+                                        <input class="input" type="text" name="s_5" placeholder="Size">
                                     </p>
                                 </div>
                             </div>
@@ -177,32 +175,32 @@
                             <div class="field-body" id="qty_fld">
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Qty">
+                                        <input class="input" type="text" name="q_0" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Qty">
+                                        <input class="input" type="text" name="q_1" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Qty">
+                                        <input class="input" type="text" name="q_2" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Qty">
+                                        <input class="input" type="text" name="q_3" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Qty">
+                                        <input class="input" type="text" name="q_4" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" placeholder="Qty">
+                                        <input class="input" type="text" name="q_5" placeholder="Qty">
                                     </p>
                                 </div>
                             </div>
@@ -243,13 +241,11 @@
                                     $(document).ready(function () {
                                         var options = [];
                                         $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
-                                            console.log(result)
                                             var leng = Object.keys(result).length
-                                            for (var i = 1; i <= leng; i++) {
-                                                console.log(result[i])
+                                            for (var i = 0; i < leng; i++) {
                                                 options.push('<option value="',
-                                                    result[i], '">',
-                                                    result[i], '</option>');
+                                                    Object.keys(result)[i], '">',
+                                                    Object.keys(result)[i], '</option>');
                                             }
                                             $(".fab_sel_cls").html(options.join(''));
                                         });
@@ -279,10 +275,9 @@
                             <tbody class="input_fields_wrap_acc">
                                 <tr>
                                     <td>
-                                        <div class="select"><select id="acc_selector" name="acc_sel_0">
-                                                {% for x in raw_main %}
-                                                <option value='{{x.id}}'>{{x.alt_name}}</option>
-                                                {% endfor %}
+                                        <div class="select"><select id="acc_seletion" class="acc_selector"
+                                                name="acc_sel_0">
+
                                             </select>
                                         </div>
                                     </td>
@@ -293,6 +288,20 @@
                                     <td><input type="text" class="input" name="acc_net_con_0" /></td>
                                     <td><a class="button is-text remove_field">Remove</a></td>
                                 </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var options = [];
+                                        $.getJSON("{{url_for('get_acc')}}", function (result) {
+                                            for (var j = 0; j < Object.keys(result).length; j++) {
+                                                options.push('<option value="',
+                                                    Object.keys(result)[j], '">',
+                                                    Object.keys(result)[j], '</option>');
+                                            }
+                                            $(".acc_selector").html(options.join(''));
+                                        });
+
+                                    })
+                                </script>
                             </tbody>
                         </table>
                         <button id="add_field_button_acc" class=" button is-primary"><span class="icon icon-btn-in"><i
@@ -316,10 +325,8 @@
                             <tbody class="input_fields_wrap_oth">
                                 <tr>
                                     <td>
-                                        <div class="select"><select id="oth_selector" name="oth_sel_0">
-                                                {% for x in raw_main %}
-                                                <option value='{{x.id}}'>{{x.alt_name}}</option>
-                                                {% endfor %}
+                                        <div class="select"><select class="oth_selector" name="oth_sel_0">
+
                                             </select>
                                         </div>
                                     </td>
@@ -330,6 +337,19 @@
                                     <td><input type="text" class="input" name="oth_net_con_0" /></td>
                                     <td><a class="button is-text remove_field">Remove</a></td>
                                 </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var options = [];
+                                        $.getJSON("{{url_for('get_oth_mat')}}", function (result) {
+                                            for (var j = 0; j < Object.keys(result).length; j++) {
+                                                options.push('<option value="',
+                                                    Object.keys(result)[j], '">',
+                                                    Object.keys(result)[j], '</option>');
+                                            }
+                                            $(".oth_selector").html(options.join(''));
+                                        });
+                                    })
+                                </script>
                             </tbody>
                         </table>
                         <button id="add_field_button_oth" class=" button is-primary"><span class="icon icon-btn-in"><i
@@ -338,9 +358,11 @@
 
                         <br>
                         <br>
+                        <hr>
                         <div class="field is-grouped">
                             <div class="control">
-                                <button type="submit" class="button is-black">Submit</button>
+                                <button id="submit_btn_trans_a" class="button is-black robo"><span
+                                        class="icon icon-btn-in"><i data-feather="check"></i></span>Submit</button>
                             </div>
                             <div class="control">
                             </div>
@@ -359,10 +381,35 @@
     </div>
 
 </div>
+
+<br>
+<br>
+
 <script>
 
+    $('#submit_btn_trans_a').click(function (e) {
+        e.preventDefault();
 
+        var data = $("#trans_a_form").serialize().split("&");
+        console.log(data);
+        var obj = {};
+        for (var key in data) {
+            obj[data[key].split("=")[0]] = data[key].split("=")[1];
+        }
 
+        $.ajax({
+            url: "{{url_for('trans_a')}}",
+            type: 'POST',
+            data: JSON.stringify(obj),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (msg) {
+                window.location.href = "{{url_for('trans_a')}}";
+            }
+        });
+        
+    });
 </script>
 <script>
 
@@ -380,24 +427,21 @@
             if (x < max_fields) { //max input box allowed
                 x++; //text box increment
                 $(wrapper_fab).append('<tr> \
-                    <td><div class="select"><select id="fab_selector" class="fab_sel_cls" name="fab_sel_'+ x + '"></select></div></td>\
-                    <td><input type="text" class="input" name="fab_pr_pc'+ x + '"/></td>\
-                    <td><input type="text" class="input" name="fab_qty_req'+ x + '"/></td> \
-                    <td><input type = "text" class= "input" name = "fab_qty_iss'+ x + '" /></td>\
-                    <td><input type="text" class="input" name="fab_qty_ret'+ x + '" /></td>\
-                    <td><input type="text" class="input" name="fab_net_con'+ x + '" /></td>\
+                    <td><div class="select"><select  class="fab_sel_cls" name="fab_sel_'+ x + '"></select></div></td>\
+                    <td><input type="text" class="input" name="fab_pr_pc_'+ x + '"/></td>\
+                    <td><input type="text" class="input" name="fab_qty_req_'+ x + '"/></td> \
+                    <td><input type = "text" class= "input" name = "fab_qty_iss_'+ x + '" /></td>\
+                    <td><input type="text" class="input" name="fab_qty_ret_'+ x + '" /></td>\
+                    <td><input type="text" class="input" name="fab_net_con_'+ x + '" /></td>\
                     <td><a href="#" class="button is-text remove_field">Remove</a></td></tr> ');
             }
 
             var options = [];
             $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
-                console.log(result)
-                var leng = Object.keys(result).length
-                for (var i = 1; i <= leng; i++) {
-                    console.log(result[i])
+                for (var j = 0; j < Object.keys(result).length; j++) {
                     options.push('<option value="',
-                        result[i], '">',
-                        result[i], '</option>');
+                        Object.keys(result)[j], '">',
+                        Object.keys(result)[j], '</option>');
                 }
                 $(".fab_sel_cls").html(options.join(''));
             });
@@ -422,14 +466,26 @@
             if (x < max_fields) { //max input box allowed
                 x++; //text box increment
                 $(wrapper_acc).append('<tr> \
-                    <td><div class="select"><select id="acc_selector" name="acc_sel_'+ x + '"></select></div></td>\
-                    <td><input type="text" class="input" name="acc_pr_pc'+ x + '"/></td>\
-                    <td><input type="text" class="input" name="acc_qty_req'+ x + '"/></td> \
-                    <td><input type = "text" class= "input" name = "acc_qty_iss'+ x + '" /></td>\
-                    <td><input type="text" class="input" name="acc_qty_ret'+ x + '" /></td>\
-                    <td><input type="text" class="input" name="acc_net_con'+ x + '" /></td>\
+                    <td><div class="select"><select class="acc_selector" name="acc_sel_'+ x + '"></select></div></td>\
+                    <td><input type="text" class="input" name="acc_pr_pc_'+ x + '"/></td>\
+                    <td><input type="text" class="input" name="acc_qty_req_'+ x + '"/></td> \
+                    <td><input type = "text" class= "input" name = "acc_qty_iss_'+ x + '" /></td>\
+                    <td><input type="text" class="input" name="acc_qty_ret_'+ x + '" /></td>\
+                    <td><input type="text" class="input" name="acc_net_con_'+ x + '" /></td>\
                     <td><a href="#" class="button is-text remove_field">Remove</a></td></tr> ');
             }
+
+
+            var options = [];
+            $.getJSON("{{url_for('get_acc')}}", function (result) {
+                for (var j = 0; j < Object.keys(result).length; j++) {
+                    options.push('<option value="',
+                        Object.keys(result)[j], '">',
+                        Object.keys(result)[j], '</option>');
+                }
+                $(".acc_selector").html(options.join(''));
+            });
+
         });
 
         $(wrapper_acc).on("click", ".remove_field", function (e) { //user click on remove text
@@ -451,14 +507,23 @@
             if (x < max_fields) { //max input box allowed
                 x++; //text box increment
                 $(wrapper_oth).append('<tr> \
-                    <td><div class="select"><select id="oth_selector" name="oth_sel_'+ x + '"></select></div></td>\
-                    <td><input type="text" class="input" name="oth_pr_pc'+ x + '"/></td>\
-                    <td><input type="text" class="input" name="oth_qty_req'+ x + '"/></td> \
-                    <td><input type = "text" class= "input" name = "oth_qty_iss'+ x + '" /></td>\
-                    <td><input type="text" class="input" name="oth_qty_ret'+ x + '" /></td>\
-                    <td><input type="text" class="input" name="oth_net_con'+ x + '" /></td>\
+                    <td><div class="select"><select class="oth_selector" name="oth_sel_'+ x + '"></select></div></td>\
+                    <td><input type="text" class="input" name="oth_pr_pc_'+ x + '"/></td>\
+                    <td><input type="text" class="input" name="oth_qty_req_'+ x + '"/></td> \
+                    <td><input type = "text" class= "input" name = "oth_qty_iss_'+ x + '" /></td>\
+                    <td><input type="text" class="input" name="oth_qty_ret_'+ x + '" /></td>\
+                    <td><input type="text" class="input" name="oth_net_con_'+ x + '" /></td>\
                     <td><a href="#" class="button is-text remove_field">Remove</a></td></tr> ');
             }
+            var options = [];
+            $.getJSON("{{url_for('get_oth_mat')}}", function (result) {
+                for (var j = 0; j < Object.keys(result).length; j++) {
+                    options.push('<option value="',
+                        Object.keys(result)[j], '">',
+                        Object.keys(result)[j], '</option>');
+                }
+                $(".oth_selector").html(options.join(''));
+            });
         });
 
         $(wrapper_oth).on("click", ".remove_field", function (e) { //user click on remove text

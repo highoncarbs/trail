@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" style="margin-top: 5rem;">
+
+<div class="columns is-mobile is-centered">
+    <div class="column is-half">
+        <nav class="level is-mobile">
+            <div class="level-left">
+
+                <div class="level-item">
+                    <p class="is-size-5 robo ">
+                        New Other Materials</p>
+                </div>
+            </div>
+
+        </nav>
+        <hr>
+        <div class="">
+                <div class="form">
+                        <form method="POST" action="{{ url_for('other_mat')}}">
+                            {{mat_form.hidden_tag()}}
+                            <div class="field">
+                                <label class="label">Other Materials</label>
+                                <div class="control">
+                                    {{mat_form.mat(class="input" , placeholder="Enter Other Materials")}}
+                                </div>
+                            </div>
+                            <br>
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    {{mat_form.mat_submit(class="button is-black" , value="Add Other Materials")}}
+                                </div>
+                                <div class="control">
+                                        <a class="button is-info" href="{{ url_for('other_mat_view') }}"><span class="icon icon-btn-in"><i data-feather="eye"></i></span>View </a>
+                                    </div>
+                                <div class="control ">
+                                    <a class="button is-text">Clear Fields</a>
+                                </div>
+        
+                            </div>
+        
+                        </form>
+                    </div>
+        </div>
+    </div>
+    
+
+</div>  
+
+</div>
+{% endblock %}
