@@ -390,17 +390,13 @@
     $('#submit_btn_trans_a').click(function (e) {
         e.preventDefault();
 
-        var data = $("#trans_a_form").serialize().split("&");
-        console.log(data);
-        var obj = {};
-        for (var key in data) {
-            obj[data[key].split("=")[0]] = data[key].split("=")[1];
-        }
+        var data = $("#trans_a_form").serializeJSON();
+       
 
         $.ajax({
             url: "{{url_for('trans_a')}}",
             type: 'POST',
-            data: JSON.stringify(obj),
+            data: JSON.stringify(data),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             async: false,
