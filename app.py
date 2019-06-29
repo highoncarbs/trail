@@ -145,13 +145,13 @@ from model import Trans
 @login_required
 def trans_a():
     pp_num = db.session.query(Trans).all()
-    print(pp_num)
     if len(pp_num) is 0:
         pp_new = int(1)
     else:
         pp_new = int(pp_num[-1].id) + 1
 
     if request.method == "POST":
+        print(request.json)
         payload = json.dumps(request.json)
         new_trans = Trans(part_a = payload , part_b = "{}")
         db.session.add(new_trans)
@@ -166,8 +166,17 @@ def trans_a():
 @login_required
 def trans_b():
     
-
-    return render_template('trans_b.html') ,200
+    pp_num = db.session.query(Trans).all()
+    if request.method == "POST":
+        print(request.json)
+        payload = request.json
+        pp_num = db.session.query(Trans).filter_by(id = int(payload['pp_num'])).first()
+        dump = json.dumps(payload['data'])
+        pp_num.part_b = dump  
+        db.session.commit()
+        session['mssg'] = "Transaction - Part B with PP No. " + str( pp_num.id) + " has been added."
+        return jsonify("success")
+    return render_template('trans_b.html' , mssg = session['mssg']) ,200
 
 
     
@@ -1550,3 +1559,26 @@ def get_oth_mat():
         data.append(temp_tup)
     obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
     return obj
+
+@app.route('/get/trans_pp/' , methods=["GET"])
+@login_required 
+def get_trans_pp():
+    res = db.session.query(Trans).all()
+    data = []
+    for r in res:
+        p_id = str(r.id)
+        temp_tup = (str(p_id) , str(p_id))
+        data.append(temp_tup)
+    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
+    return obj
+
+
+@app.route('/get/trans_pp_b' , methods=["GET"])
+@login_required 
+def get_detail_pp():
+    pp_num = request.args.get('pp_num')
+    res = db.session.query(Trans).filter_by(id = str(pp_num)).first()
+
+    payload = json.loads(res.part_b)
+    return jsonify(payload)
+   
