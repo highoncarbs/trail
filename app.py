@@ -25,6 +25,7 @@ from model import Users, LoginForm, SignupForm, CustomerCategory, CustomerCatego
     CityForm, StateForm, CountryForm, Firms, FirmForm, Uom, UomForm, Yarn, YarnForm, FabConst, FabConstForm, \
     FabProc, FabProcForm,  FabWidth, FabWidthForm, FabDye, FabDyeForm, RawCat, RawCatForm , FinCat , FinCatForm ,\
     FabComb , FabCombForm , PrintTech , PrintTechForm , FinDes , FinDesForm , FinSize , FinSizeForm
+
 # logging.basicConfig(
 #     filename='trail.log',
 #     level=logging.DEBUG,
@@ -39,11 +40,20 @@ def login():
         user = Users.query.filter_by(username=form.username.data).first()
         if user:
             if check_password_hash(user.password, form.password.data):
-                login_user(user)
-                session['mssg'] = "Hey ! " + \
-                    str(current_user.username) + " . Welcome."
+                
+                if user.roles[0].name == 'ADMIN' :
+                    login_user(user)
+                    session['mssg'] = "Hey ! " + \
+                        str(current_user.username) + " . Welcome."
 
-                return redirect(url_for('home'))
+                    return redirect(url_for('home'))    
+                
+                elif user.roles[0].name == 'USER':
+                    login_user(user)
+                    session['mssg'] = "Hey ! " + \
+                        str(current_user.username) + " . Welcome."
+
+                    return redirect(url_for('user_home'))
             else:
                 session['mssg'] = "Invalid Username or Password"
                 return render_template('login.html', subtitle="Login", form=form, mssg=session['mssg'])
@@ -86,56 +96,94 @@ def forgot():
     return render_template('login.html', subtitle="Forgot", mssg=session['mssg']), 200
 
 
+@app.route('/user_home' , methods = ['GET' , 'POST'])
+@login_required
+def user_home():
+    return render_template('base_user.html') , 200
+
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    firm_form = FirmForm()
-    firm_list = db.session.query(Firms).all()
-    if firm_form.validate_on_submit():
-        firm_name = str(firm_form.firm_name.data).title()
-        check_one = db.session.query(Firms).filter_by(
-            firm_name=firm_name).first()
-        if check_one is None:
-            new_firm = Firms(firm_name=firm_form.firm_name.data, firm_city=firm_form.firm_city.data, firm_address_1=firm_form.firm_address_1.data,
-                             firm_state=firm_form.firm_state.data, firm_country=firm_form.firm_country.data, firm_pincode=firm_form.firm_pincode.data)
-            db.session.add(new_firm)
-            db.session.commit()
-            session['mssg'] = "Firm '" + \
-                str(firm_form.firm_name.data) + "' has been created."
+    return render_template('dash.html') , 200
 
-            return redirect('/home')
-        else:
-            session['mssg'] = "Firm '" + \
-                str(firm_form.firm_name.data) + "' already exists."
-            return redirect('/home')
-    return render_template('dash.html', subtitle="Home", mssg=session['mssg'], firm_form=firm_form, firm_list=firm_list), 200
-
+from model import Role , UserForm
 
 @app.route('/user-roles', methods=['GET', 'POST'])
 @login_required
 def user_roles():
-    form = SignupForm()
+
+    user_list = Users.query.filter(Users.roles.any(Role.name.like('USER'))).all()
+    form = UserForm()
     if form.validate_on_submit():
-        user = Users.query.filter_by(username=form.username.data).first()
-        if user is None:
-            hashed_pass = generate_password_hash(
-                form.password.data, method='sha256')
-            new_user = Users(username=form.username.data,
-                             password=hashed_pass)
-            # user_table = UserTableCreator(form.email.data)
-            # Base.metadata.create_all(engine)
-            db.session.add(new_user)
-            db.session.commit()
-            db.session.close()
-            session['mssg'] = "You're all set. Please Login. "
+        print('Somethig up here')
+        if form.submit.data:
+            print('Somethign')
+            user = Users.query.filter_by(username=form.username.data).first()
+            if user is None:
+                hashed_pass = generate_password_hash(
+                    form.password.data, method='sha256')
+                new_user = Users(username=form.username.data,
+                                password=hashed_pass)
+                role = Role.query.filter_by(name= 'USER').first()
+                db.session.add(new_user)
+                new_user.roles.append(role)
+                db.session.commit()
+                db.session.close()
+                session['mssg'] = "You're all set. Please Login. "
 
-            return redirect(url_for('login'))
-        else:
-            session['mssg'] = "Email ID already in use. Please login"
+                return redirect(url_for('user_roles'))
+            else:
+                session['mssg'] = "Username already in use. Please login"
 
-            return render_template('register.html', form=form, subtitle="Signup", mssg=session['mssg'])
+                return redirect('/user-roles')
 
-    return render_template('user_roles.html', subtitle="User Roles", mssg=session['mssg'], form=form), 200
+    return render_template('user_roles.html', subtitle="User Roles", mssg=session['mssg'], user_form=form , user_list = user_list), 200
+
+
+# USER Roles Edit
+
+
+# Raw MAterial Yarn  Edits
+
+@app.route("/user-roles/update/<id>", methods=['POST'])
+@login_required
+def user_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    user_form = UserForm()
+    if user_form.validate_on_submit():
+        if user_form.update_submit.data:
+            user_name = str(user_form.username.data)
+            check_one = db.session.query(
+                Users).filter_by(id=id).first()
+            if check_one is not None:
+                check_one.username = user_name
+                db.session.commit()
+                session['mssg'] = "User updated successfully"
+                return redirect('/user-roles')
+            else:
+                session['mssg'] = "Something went wrong."
+                return redirect('/user-roles')
+
+
+@app.route("/user-roles/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def user_delete(id):
+
+    check_one = db.session.query(
+        Users).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "User deleted successfully"
+        return redirect('/user-roles')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/user-roles')
+
 
 # Transaction Views 
 # 
@@ -166,7 +214,7 @@ def trans_a():
 @login_required
 def trans_b():
     
-    pp_num = db.session.query(Trans).all()
+    pp_num = db.session.query(Trans).filter_by(flag = 0 ).all()
     if request.method == "POST":
         print(request.json)
         payload = request.json
@@ -179,7 +227,46 @@ def trans_b():
     return render_template('trans_b.html' , mssg = session['mssg']) ,200
 
 
+
+# Transaction User Views 
+
+
+@app.route('/trans_a_user', methods=['GET', 'POST'])
+@login_required
+def trans_a_user():
+    pp_num = db.session.query(Trans).all()
+    if len(pp_num) is 0:
+        pp_new = int(1)
+    else:
+        pp_new = int(pp_num[-1].id) + 1
+
+    if request.method == "POST":
+        print(request.json)
+        payload = json.dumps(request.json)
+        new_trans = Trans(part_a = payload , part_b = "{}")
+        db.session.add(new_trans)
+        db.session.commit()
+        session['mssg'] = "Transaction - Part A with PP No. " + str(new_trans.id)+ " has been added."
+        return jsonify("success")
+    return render_template('trans_a_user.html' , pp_num = pp_new , mssg = session['mssg']) ,200
+
+
+
+@app.route('/trans_b_user', methods=['GET', 'POST'])
+@login_required
+def trans_b_user():
     
+    pp_num = db.session.query(Trans).all()
+    if request.method == "POST":
+        print(request.json)
+        payload = request.json
+        pp_num = db.session.query(Trans).filter_by(id = int(payload['pp_num'])).first()
+        dump = json.dumps(payload['data'])
+        pp_num.part_b = dump  
+        db.session.commit()
+        session['mssg'] = "Transaction - Part B with PP No. " + str( pp_num.id) + " has been added."
+        return jsonify("success")
+    return render_template('trans_b_user.html' , mssg = session['mssg']) ,200    
 
 # Basic Master Views
 #
@@ -715,7 +802,26 @@ def other_materials():
 @app.route('/firms', methods=['GET', 'POST'])
 @login_required
 def firms():
-    pass
+    firm_form = FirmForm()
+    firm_list = db.session.query(Firms).all()
+    if firm_form.validate_on_submit():
+        firm_name = str(firm_form.firm_name.data).title()
+        check_one = db.session.query(Firms).filter_by(
+            firm_name=firm_name).first()
+        if check_one is None:
+            new_firm = Firms(firm_name=firm_form.firm_name.data, firm_city=firm_form.firm_city.data, firm_address_1=firm_form.firm_address_1.data,
+                             firm_state=firm_form.firm_state.data, firm_country=firm_form.firm_country.data, firm_pincode=firm_form.firm_pincode.data)
+            db.session.add(new_firm)
+            db.session.commit()
+            session['mssg'] = "Firm '" + \
+                str(firm_form.firm_name.data) + "' has been created."
+
+            return redirect('/firms')
+        else:
+            session['mssg'] = "Firm '" + \
+                str(firm_form.firm_name.data) + "' already exists."
+            return redirect('/firms')
+    return render_template('firms.html', subtitle="Home", mssg=session['mssg'], firm_form=firm_form, firm_list=firm_list), 200
 
 
 from model import FinGoodsForm , RawFabMainForm , FinGoods ,RawFabMain
@@ -1563,7 +1669,7 @@ def get_oth_mat():
 @app.route('/get/trans_pp/' , methods=["GET"])
 @login_required 
 def get_trans_pp():
-    res = db.session.query(Trans).all()
+    res =   db.session.query(Trans).filter_by(flag = 0 ).all()
     data = []
     for r in res:
         p_id = str(r.id)
@@ -1582,3 +1688,13 @@ def get_detail_pp():
     payload = json.loads(res.part_b)
     return jsonify(payload)
    
+@app.route('/close_trans' , methods = ['POST'])
+@login_required
+def close_trans():
+    payload = request.json
+    print(payload)
+    pp_num = db.session.query(Trans).filter_by(id = str(payload['pp_num'])).first()
+    pp_num.flag = 1
+    db.session.commit()
+    session['mssg'] = "Transaction - "+str(payload['pp_num'])+" has been closed."
+    return jsonify("success")

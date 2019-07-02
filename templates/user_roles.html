@@ -17,24 +17,24 @@
             <hr>
             <div class="">
                 <div class="form">
-                    <form method="POST" action="{{ url_for('raw_materials')}}">
-                        {{form.hidden_tag()}}
+                    <form method="POST" action="{{ url_for('user_roles')}}">
+                        {{user_form.hidden_tag()}}
                         <div class="field">
                             <label class="label">Username</label>
                             <div class="control">
-                                {{form.username(class="input" , placeholder="Enter Username")}}
+                                {{user_form.username(class="input" , placeholder="Enter Username")}}
                             </div>
                         </div>
                         <div class="field">
                             <label class="label">Password</label>
                             <div class="control">
-                                {{form.username(class="input" , placeholder="Enter Password")}}
+                                {{user_form.password(class="input" , placeholder="Enter Password")}}
                             </div>
                         </div>
                         <br>
                         <div class="field is-grouped">
                             <div class="control is-left">
-                                <a class="button is-black">Create User</a>
+                                {{user_form.submit(class="button is-black" , value="Add User")}}
                             </div>
                             <div class="control is-right">
                                 <a class="button is-text">Clear Fields</a>
@@ -46,26 +46,138 @@
                 </div>
             </div>
         </div>
-        <div class="column">
+        <div class="column ">
             <div class="xtable">
                 <nav class="level is-mobile">
                     <div class="level-left">
 
                         <div class="level-item">
                             <p class="is-size-5 robo ">
-                                Current Users</p>
+                                Users</p>
                         </div>
                     </div>
 
 
                 </nav>
+
+                {% if user_list|length == 0 %}
                 <hr>
+                <div class="empty has-text-centered has-text-grey-light">
+                    <span class="icon"><i data-feather="info"></i></span><br>
+                    <p>No Users available. <br> Create a new one.</p>
+                    <hr>
+                </div>
+                {% else%}
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th class="has-text-grey">Users</th>
+                            <th class="has-text-grey">Level</th>
+                            <th class="has-text-grey"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in user_list %}
+
+                        <tr>
+                            <td>
+                                <p class="robo">{{user.username}}</p>
+                            </td>
+                            <td>
+                                <p class="tag is-black">{{user.roles[0].name}}</p>
+                            </td>
+
+                            <td>
+                                <div class="level">
+                                    <div class="level-item">
+                                        <a id="edit_user_btn_{{loop.index}}" class="button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="level-item">
+                                        <a href="{{ url_for('user_delete' , id = user.id)}}"
+                                            class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                    data-feather="x"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        <div class="modal " id="edit_user_modal_{{loop.index}}">
+                            <div class="modal-background animated fadeIn"></div>
+                            <div class="modal-content animated fadeInUp">
+                                <div class="box has-background-light" style="margin-top:15rem;">
+                                    <h3 class="is-size-5 robo">Edit Users</h3>
+                                    <br>
+                                    <br>
+                                    <div class="form">
+                                        <form method="POST" action="{{ url_for('user_edit' , id = user.id)}}">
+                                            {{ user_form.hidden_tag()}}
+
+                                            <div class="field">
+                                                <label class="label">Edit Users</label>
+                                                <div class="control">
+                                                    {{ user_form.username(class="input" , placeholder=user.username)}}
+                                                </div>
+                                            </div>
+                                           
+                                            <br>
+                                            <div class="field level">
+                                                <div class="control">
+                                                    {{ user_form.update_submit(class="button is-black" , value="Update Users")}}
+                                                </div>
+                                                <div class="control ">
+                                                    <a class="button is-text">Clear Fields</a>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+
+                            <script>
+                                document.querySelector('#edit_user_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                    event.preventDefault();
+                                    var modal = document.querySelector('#edit_user_modal_{{loop.index}}');  // assuming you have only 1
+                                    var html = document.querySelector('html');
+                                    modal.classList.add('is-active');
+                                    html.classList.add('is-clipped');
+
+                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+                                    });
+
+                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+
+
+                                    });
+
+                                });
+
+                            </script>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
 
             </div>
         </div>
+ 
 
 
-    </div>
+</div>
 
 </div>
 {% endblock %}

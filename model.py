@@ -18,6 +18,11 @@ class SignupForm(FlaskForm):
     password = PasswordField('password')
     email = StringField('email')
 
+class UserForm(FlaskForm):
+    username = StringField('username')
+    password = PasswordField('password')
+    submit = SubmitField('user_submit')
+    update_submit = SubmitField('update_submit')
 
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer,  primary_key=True)
@@ -430,3 +435,5 @@ class Trans(db.Model):
     id = db.Column(db.Integer , primary_key= True)
     part_a = db.Column( db.JSON ,nullable =False , default = [] )
     part_b = db.Column( db.JSON ,nullable =False , default = [] )
+    flag = db.Column( db.Integer , default = 0)
+    meta=  db.Column( db.JSON , default = [])

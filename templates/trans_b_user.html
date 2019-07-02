@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_user.html' %}
 {% block content %}
 <!-- Date picker Script -->
 
@@ -50,7 +50,6 @@
                         $('#pp_update').click(function (e) {
                             e.preventDefault();
                             var pp_num = $('#pp_sel').val();
-                            
 
                             $.getJSON("/get/trans_pp_b?pp_num=" + pp_num, function (result) {
                                 var extra_fld = Object.keys(result['datefilter']).length;
@@ -90,7 +89,7 @@
 
             </nav>
             <hr>
-            <div class="tracking_data" >
+            <div class="tracking_data">
                 <form id="trans_b_form">
                     <div class="table-container">
                         <table class="table">
@@ -380,38 +379,13 @@
                             <button id="submit_btn_trans_b" class="button is-black robo"><span
                                     class="icon icon-btn-in"><i data-feather="check"></i></span>Submit</button>
                         </div>
-
+                        <div class="control">
+                        </div>
                         <div class="control ">
                             <a class="button is-text">Clear Fields</a>
                         </div>
 
-                        <div class="control">
-                            <button class="button is-danger robo" id="close_btn_trans_b"><span
-                                    class="icon icon-btn-in"><i data-feather="x"></i></span>Close Report</button>
-                        </div>
-                        <script>
-                            $('#close_btn_trans_b').click(function (e) {
-                                e.preventDefault();
-
-                                var payload = { 'pp_num': $('#pp_sel').val() };
-
-                                $.ajax({
-                                    url: "{{url_for('close_trans')}}",
-                                    type: 'POST',
-                                    data: JSON.stringify(payload),
-                                    contentType: 'application/json; charset=utf-8',
-                                    dataType: 'json',
-                                    async: true,
-                                    success: function (msg) {
-                                        window.location.href = "{{url_for('trans_b')}}";
-                                    }
-                                });
-
-                            });
-                        </script>
                     </div>
-                    <hr>
-
                 </form>
             </div>
 
@@ -599,7 +573,7 @@
         var payload = { 'pp_num': $('#pp_sel').val(), 'data': formdata };
 
         $.ajax({
-            url: "{{url_for('trans_b')}}",
+            url: "{{url_for('trans_b_user')}}",
             type: 'POST',
             data: JSON.stringify(payload),
             contentType: 'application/json; charset=utf-8',
