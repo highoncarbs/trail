@@ -67,9 +67,9 @@
                                         {{ cust_form.hidden_tag()}}
         
                                         <div class="field">
-                                            <label class="label">Edit City Name</label>
+                                            <label class="label">Edit Customer Category</label>
                                             <div class="control">
-                                                {{ cust_form.health(class="input" , placeholder=health.health)}}
+                                                {{ cust_form.health(class="input" , value=health.health)}}
                                             </div>
                                         </div>
                                        
@@ -77,7 +77,7 @@
                                         <br>
                                         <div class="field level">
                                             <div class="control">
-                                                {{ cust_form.health_update(class="button is-black" , value="Update Customer Category")}}
+                                                {{ cust_form.health_update(class="button is-black" , value="Save")}}
                                             </div>
                                             <div class="control ">
                                                 <a class="button is-text">Clear Fields</a>

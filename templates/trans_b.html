@@ -35,12 +35,10 @@
                             var options = [];
                             $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
                                 console.log(result)
-                                var leng = Object.keys(result).length
-                                for (var i = 1; i <= leng; i++) {
-                                    console.log(result[i])
+                                for (var j = 0; j < Object.keys(result).length; j++) {
                                     options.push('<option value="',
-                                        result[i], '">',
-                                        result[i], '</option>');
+                                        Object.keys(result)[j], '">',
+                                        Object.values(result)[j], '</option>');
                                 }
                                 $("#pp_sel").html(options.join(''));
                             });
@@ -50,17 +48,24 @@
                         $('#pp_update').click(function (e) {
                             e.preventDefault();
                             var pp_num = $('#pp_sel').val();
-                            
+
 
                             $.getJSON("/get/trans_pp_b?pp_num=" + pp_num, function (result) {
-                                var extra_fld = Object.keys(result['datefilter']).length;
-                                for (i = 11; i < extra_fld; i++) {
-                                    $("#add_field_button_fg").trigger('click');
-                                }
-                                console.log(extra_fld);
-                                populate('#trans_b_form', json2html_name_list(result))
-                                // populate('#trans_b_form', result);
+                                console.log(result);
 
+                                if ($.isEmptyObject(result)) {
+                                
+                                    $('#show_noti').show();
+                                }
+                                else {
+                                    $('#show_noti').hide();
+                                    var extra_fld = Object.keys(result['datefilter']).length;
+                                    for (i = 11; i < extra_fld; i++) {
+                                        $("#add_field_button_fg").trigger('click');
+                                    }
+                                    populate('#trans_b_form', json2html_name_list(result))
+
+                                }
                             })
                         });
 
@@ -90,7 +95,10 @@
 
             </nav>
             <hr>
-            <div class="tracking_data" >
+            <div class="notification has-text-centered animated fadeIn" id="show_noti" style="display: none;">
+                <p>Please do the required entry and submit the form.</p>
+            </div>
+            <div class="tracking_data">
                 <form id="trans_b_form">
                     <div class="table-container">
                         <table class="table">

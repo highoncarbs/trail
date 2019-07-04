@@ -66,10 +66,10 @@
                         </div>
                         <br>
                         <div class="field">
-                        <label class="label">Generated Product Name</label>
-                        <div class="notification">
-                            <p class="robo">Product Name</p>
-                        </div>
+                            <label class="label">Generated Product Name</label>
+                            <div class="notification">
+                                <p class="robo">Product Name</p>
+                            </div>
                         </div>
                         <br>
                         <div class="field is-grouped">
@@ -77,7 +77,7 @@
                                 {{fin_form.fin_submit(class="button is-black" , value="Add")}}
                             </div>
                             <div class="control">
-                                <a class="button is-info" id="fin_view"><span class="icon icon-btn-in"><i
+                                <a class="button is-info fin_view"><span class="icon icon-btn-in"><i
                                             data-feather="eye"></i></span>View </a>
                             </div>
                             <div class="control">
@@ -91,11 +91,250 @@
             </div>
         </div>
     </div>
-    <!-- <script>
-        $("#fin_view").click(function () {
-            $('#data_view').toggle();
-            $('#data_entry').toggle("hide");
+
+    <!-- View Modal -->
+    <div class="columns is-mobile is-centered" style="display:none" id="data_view">
+        <div class="column">
+
+            <div class="xtable">
+                <nav class="level is-mobile">
+                    <div class="level-left">
+
+                        <div class="level-item">
+                            <p class="is-size-5 robo ">
+                                Finished Goods</p>
+                        </div>
+                    </div>
+                    <div class="level-right">
+                        <div class="level-item">
+                            <a class="button is-black fin_view"><span class="icon icon-btn-in"><i
+                                        data-feather="plus"></i></span> Add
+                            </a>
+                        </div>
+                    </div>
+
+
+                </nav>
+                <hr>
+                {% if fin_goods_list|length == 0 %}
+                <div class="empty has-text-centered has-text-grey-light">
+                    <span class="icon"><i data-feather="info"></i></span><br>
+                    <p>No Customer Categories available. <br> Create a new one.</p>
+                    <hr>
+                </div>
+                {% else %}
+
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Product Category</th>
+                            <th>Fabric Combo</th>
+                            <th>Print Technique</th>
+                            <th>Design</th>
+                            <th>U.O.M</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for row in fin_goods_list %}
+
+                        <tr>
+                            <td> {{ row.product_category[0].cat}}</td>
+                            <td> {{ row.fabric_combo[0].comb}}</td>
+                            <td> {{ row.print_tech[0].tech}}</td>
+                            <td> {{ row.design[0].des}}</td>
+                            <td> {{ row.uom[0].measure}}</td>
+                            <td>
+                                <div class="level">
+                                    <div class="level-item">
+                                        <a id="edit_fin_btn_{{loop.index}}" class="button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="level-item">
+                                        <a href="{{ url_for('fin_goods_delete' , id = row.id)}}"
+                                            class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                    data-feather="x"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Modal for update -->
+                        <div class="modal " id="edit_fin_modal_{{loop.index}}">
+                            <div class="modal-background animated fadeIn"></div>
+                            <div class="modal-content animated fadeInUp">
+                                <div class="box has-background-light">
+                                    <h3 class="is-size-5 robo">Edit Customer Category</h3>
+                                    <br>
+                                    <br>
+                                    <div class="form">
+                                        <form method="POST" action="">
+                                            {{ fin_form.hidden_tag()}}
+
+                                            <div class="field-body is-horizontal">
+                                                <div class="field">
+                                                    <label class="label">Product Cateogry</label>
+                                                    <div class="control select is-fullwidth">
+                                                        {{fin_form.product_category()}}
+                                                    </div>
+                                                </div>
+                                                <div class="field">
+                                                    <label class="label">Fabric Combo</label>
+                                                    <div class="control select is-fullwidth">
+                                                        {{fin_form.fabric_combo()}}
+
+                                                    </div>
+                                                </div>
+                                                <div class="field">
+                                                    <label class="label">Print Technique</label>
+                                                    <div class="control select is-fullwidth">
+                                                        {{fin_form.print_tech()}}
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="field">
+                                                    <label class="label">Design</label>
+                                                    <div class="control select is-fullwidth">
+                                                        {{fin_form.design()}}
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="field">
+                                                    <label class="label">U.O.M</label>
+                                                    <div class="control select is-fullwidth">
+                                                        {{fin_form.uom()}}
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <br>
+                                            <div class="field">
+                                                <label class="label">Alternate Product Name</label>
+                                                <div class="control is-expanded">
+                                                    {{fin_form.alt_name(class="input")}}
+
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="field">
+                                                <label class="label">Generated Product Name</label>
+                                                <div class="notification">
+                                                    <p class="robo">Product Name</p>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="field is-grouped">
+                                                <div class="control ">
+                                                    <button class="button is-black">Update</button>
+                                                </div>
+                                                <div class="control">
+                                                    <a class="button is-text">Clear Fields</a>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+
+                            <script>
+                                document.querySelector('#edit_fin_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                    event.preventDefault();
+                                    var modal = document.querySelector('#edit_fin_modal_{{loop.index}}');  // assuming you have only 1
+                                    var html = document.querySelector('html');
+                                    modal.classList.add('is-active');
+                                    html.classList.add('is-clipped');
+
+                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+                                    });
+
+                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+
+
+                                    });
+
+                                });
+
+                            </script>
+                        </div>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+
+                <!-- City Edit Modal -->
+
+
+
+
+
+                {%endif%}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".fin_view").click(function () {
+
+            $("#data_entry, #data_view").toggle();
+        });
+    </script>
+
+    <script>
+
+
+        $(document).ready(function () {
+            // Construct URL object using current browser URL
+            var url = new URL(document.location);
+
+            // Get query parameters object
+            var params = url.searchParams;
+
+            // Get value of paper
+            var selTab = params.get("showTab");
+            var selView = params.get("view");
+
+            if (selTab === '14') {
+                $("li[data-tab=13]").removeClass('is-active');
+                $("div[data-content=13]").removeClass('is-active');
+
+                $("li[data-tab=14]").addClass('is-active');
+                $("div[data-content=14]").addClass('is-active');
+
+
+                if (selView === 'list') {
+                    $("#raw_data_entry, #raw_data_view").toggle();
+                }
+            }
+
+            if (selTab === '13') {
+               
+                if (selView === 'list') {
+                    $("#data_entry, #data_view").toggle();
+                }
+            }
+
+
 
         });
-    </script> -->
+
+    </script>
 </div>

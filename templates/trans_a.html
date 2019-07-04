@@ -51,17 +51,15 @@
                             <script>
                                 $(document).ready(function () {
                                     var options = [];
-                                    $.getJSON("{{url_for('get_raw_prod')}}", function (result) {
-                                        console.log(result)
-                                        var leng = Object.keys(result).length
-                                        for (var i = 1; i <= leng; i++) {
-                                            console.log(result[i])
-                                            options.push('<option value="',
-                                                result[i], '">',
-                                                result[i], '</option>');
-                                        }
-                                        $("#prod_sel").html(options.join(''));
-                                    });
+                                    $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
+                                            var leng = Object.keys(result).length
+                                            for (var i = 0; i < leng; i++) {
+                                                options.push('<option value="',
+                                                    Object.keys(result)[i], '">',
+                                                    Object.values(result)[i], '</option>');
+                                            }
+                                            $("#prod_sel").html(options.join(''));
+                                        });
                                 })
                             </script>
                             <div class="field">
@@ -85,7 +83,7 @@
                                                 for (var j = 0; j < Object.keys(result).length; j++) {
                                                     options.push('<option value="',
                                                         Object.keys(result)[j], '">',
-                                                        Object.keys(result)[j], '</option>');
+                                                        Object.values(result)[j], '</option>');
                                                 }
                                                 $("#prod_uom").html(options.join(''));
                                             });
@@ -235,12 +233,12 @@
                                 <script>
                                     $(document).ready(function () {
                                         var options = [];
-                                        $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
+                                        $.getJSON("{{url_for('get_raw_prod')}}", function (result) {
                                             var leng = Object.keys(result).length
                                             for (var i = 0; i < leng; i++) {
                                                 options.push('<option value="',
                                                     Object.keys(result)[i], '">',
-                                                    Object.keys(result)[i], '</option>');
+                                                    Object.values(result)[i], '</option>');
                                             }
                                             $(".fab_sel_cls").html(options.join(''));
                                         });
@@ -290,7 +288,7 @@
                                             for (var j = 0; j < Object.keys(result).length; j++) {
                                                 options.push('<option value="',
                                                     Object.keys(result)[j], '">',
-                                                    Object.keys(result)[j], '</option>');
+                                                    Object.values(result)[j], '</option>');
                                             }
                                             $(".acc_selector").html(options.join(''));
                                         });
@@ -339,7 +337,7 @@
                                             for (var j = 0; j < Object.keys(result).length; j++) {
                                                 options.push('<option value="',
                                                     Object.keys(result)[j], '">',
-                                                    Object.keys(result)[j], '</option>');
+                                                    Object.values(result)[j], '</option>');
                                             }
                                             $(".oth_selector").html(options.join(''));
                                         });
@@ -432,7 +430,7 @@
                 for (var j = 0; j < Object.keys(result).length; j++) {
                     options.push('<option value="',
                         Object.keys(result)[j], '">',
-                        Object.keys(result)[j], '</option>');
+                        Object.values(result)[j], '</option>');
                 }
                 $(".fab_sel_cls").html(options.join(''));
             });
@@ -472,7 +470,7 @@
                 for (var j = 0; j < Object.keys(result).length; j++) {
                     options.push('<option value="',
                         Object.keys(result)[j], '">',
-                        Object.keys(result)[j], '</option>');
+                        Object.values(result)[j], '</option>');
                 }
                 $(".acc_selector").html(options.join(''));
             });
@@ -511,7 +509,7 @@
                 for (var j = 0; j < Object.keys(result).length; j++) {
                     options.push('<option value="',
                         Object.keys(result)[j], '">',
-                        Object.keys(result)[j], '</option>');
+                        Object.values(result)[j], '</option>');
                 }
                 $(".oth_selector").html(options.join(''));
             });
@@ -523,4 +521,6 @@
         })
     });
 </script>
+
+
 {% endblock %}

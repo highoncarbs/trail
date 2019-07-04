@@ -1,6 +1,6 @@
 <div class="container">
 
-    <div class="columns is-mobile is-centered" id="data_entry">
+    <div class="columns is-mobile is-centered animated fadeIn" id="yarn_data_entry">
         <div class="column is-half">
             <nav class="level is-mobile">
                 <div class="level-left">
@@ -35,10 +35,10 @@
                         <br>
                         <div class="field is-grouped">
                             <div class="control ">
-                                {{yarn_form.yarn_submit(class="button is-black" , value="Add Yarn")}}
+                                {{yarn_form.yarn_submit(class="button is-black" , value="Save")}}
                             </div>
                             <div class="control">
-                                <a class="button is-info" id="yarn_view"><span class="icon icon-btn-in"><i
+                                <a class="button is-info yarn_view"><span class="icon icon-btn-in"><i
                                             data-feather="eye"></i></span>View </a>
                             </div>
                             <div class="control">
@@ -52,14 +52,7 @@
             </div>
         </div>
     </div>
-    <!-- <script>
-        $("#yarn_view").click(function () {
-            $('#data_view').toggle();
-            $('#data_entry').toggle("hide");
-
-        });
-    </script> -->
-    <div class="columns is-mobile is-centered"  id="data_view" hidden>
+    <div class="columns is-mobile is-centered animated fadeIn" id="yarn_data_view" style="display:none;">
         <div class="column is-half">
             <div class="xtable">
                 <nav class="level is-mobile">
@@ -71,6 +64,13 @@
                         </div>
                     </div>
 
+                    <div class="level-right">
+
+                        <div class="level-item">
+                            <a class="button is-black yarn_view"><span class="icon icon-btn-in"><i
+                                        data-feather="plus"></i></span>Add </a>
+                        </div>
+                    </div>
 
                 </nav>
 
@@ -95,7 +95,7 @@
 
                         <tr>
                             <td>
-                                <p class="tag is-medium is-black">{{yarn.yarn}}</p>
+                                <p>{{yarn.yarn}}</p>
                             </td>
                             <td>
                                 <p>{{yarn.desc}}</p>
@@ -134,19 +134,19 @@
                                             <div class="field">
                                                 <label class="label">Edit Yarn</label>
                                                 <div class="control">
-                                                    {{ yarn_form.yarn(class="input" , placeholder=yarn.yarn)}}
+                                                    {{ yarn_form.yarn(class="input" , value=yarn.yarn)}}
                                                 </div>
                                             </div>
                                             <div class="field">
                                                 <label class="label">Edit Description</label>
                                                 <div class="control">
-                                                    {{ yarn_form.desc(class="input" , placeholder=yarn.desc)}}
+                                                    {{ yarn_form.desc(class="input" , value=yarn.desc)}}
                                                 </div>
                                             </div>
                                             <br>
                                             <div class="field level">
                                                 <div class="control">
-                                                    {{ yarn_form.yarn_update(class="button is-black" , value="Update Yarn")}}
+                                                    {{ yarn_form.yarn_update(class="button is-black" , value="Save")}}
                                                 </div>
                                                 <div class="control ">
                                                     <a class="button is-text">Clear Fields</a>
@@ -195,3 +195,10 @@
         </div>
     </div>
 </div>
+
+<script>
+        $(".yarn_view").click(function () {
+            $('#yarn_data_view , #yarn_data_entry').toggle();
+    
+        });
+    </script>

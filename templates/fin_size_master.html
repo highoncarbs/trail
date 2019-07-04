@@ -1,6 +1,6 @@
 <div class="container">
 
-    <div class="columns is-mobile is-centered" id="data_entry">
+    <div class="columns is-mobile is-centered animated fadeIn" id="size_data_entry">
         <div class="column is-half">
             <nav class="level is-mobile">
                 <div class="level-left">
@@ -23,15 +23,15 @@
                                 {{size_form.size(class="input" , placeholder="Enter Fabric Size Code")}}
                             </div>
                         </div>
-                       
+
 
                         <br>
                         <div class="field is-grouped">
                             <div class="control ">
-                                {{size_form.size_submit(class="button is-black" , value="Add Fabric Size")}}
+                                {{size_form.size_submit(class="button is-black" , value="Save")}}
                             </div>
                             <div class="control">
-                                <a class="button is-info" id="size_view"><span class="icon icon-btn-in"><i
+                                <a class="button is-info size_view"><span class="icon icon-btn-in"><i
                                             data-feather="eye"></i></span>View </a>
                             </div>
                             <div class="control">
@@ -45,14 +45,7 @@
             </div>
         </div>
     </div>
-    <!-- <script>
-        $("#size_view").click(function () {
-            $('#data_view').toggle();
-            $('#data_entry').toggle("hide");
-
-        });
-    </script> -->
-    <div class="columns is-mobile is-centered"  id="data_view" hidden>
+    <div class="columns is-mobile is-centered" id="size_data_view" style="display: none;">
         <div class="column is-half">
             <div class="xtable">
                 <nav class="level is-mobile">
@@ -63,6 +56,14 @@
                                 Fabric Size</p>
                         </div>
                     </div>
+                    <div class="level-right">
+
+                        <div class="level-item">
+                            <a class="button is-black size_view"><span class="icon icon-btn-in"><i
+                                        data-feather="plus"></i></span>Add </a>
+                        </div>
+                    </div>
+
 
 
                 </nav>
@@ -79,7 +80,7 @@
                     <thead>
                         <tr>
                             <th class="has-text-grey">Fabric Size</th>
-                            <th class="has-text-grey"></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,11 +88,9 @@
 
                         <tr>
                             <td>
-                                <p class="tag is-medium is-black">{{size.size}}</p>
-                            </td>
-                            <td>
                                 <p>{{size.size}}</p>
                             </td>
+
 
                             <td>
                                 <div class="level">
@@ -126,14 +125,14 @@
                                             <div class="field">
                                                 <label class="label">Edit Fabric Size</label>
                                                 <div class="control">
-                                                    {{ size_form.size(class="input" , placeholder=size.size)}}
+                                                    {{ size_form.size(class="input" , value=size.size)}}
                                                 </div>
                                             </div>
-                                            
+
                                             <br>
                                             <div class="field level">
                                                 <div class="control">
-                                                    {{ size_form.size_update(class="button is-black" , value="Update Fabric Size")}}
+                                                    {{ size_form.size_update(class="button is-black" , value="Save")}}
                                                 </div>
                                                 <div class="control ">
                                                     <a class="button is-text">Clear Fields</a>
@@ -182,3 +181,9 @@
         </div>
     </div>
 </div>
+<script>
+    $(".size_view").click(function () {
+        $('#size_data_view , #size_data_entry').toggle();
+
+    });
+</script>

@@ -34,7 +34,8 @@
 </style>
 <div class="tabs has-background-white-bis is-fullwidth" id="tabs" style="padding-top: 1rem;">
     <div class="container">
-
+        <h2 class="is-size-4 has-text-centered robo ">Finished Goods</h2>
+      <hr style="margin:1rem !important;">
         <ul>
             <li class="is-active" data-tab="1">
                 <a>
@@ -87,4 +88,84 @@
     </div>
 
 </div>
+
+<script>
+
+
+
+    $(document).ready(function () {
+        // Construct URL object using current browser URL
+        var url = new URL(document.location);
+
+        // Get query parameters object
+        var params = url.searchParams;
+
+        // Get value of paper
+        var selTab = params.get("showTab");
+        var selView = params.get("view");
+
+        if (selTab === '2') {
+            $("li[data-tab=1] , li[data-tab=3] , li[data-tab=4] , li[data-tab=5] ").removeClass('is-active');
+            $("div[data-content=1] ,div[data-content=3] , div[data-content=4] ,div[data-content=5]").removeClass('is-active');
+
+            $("li[data-tab=2]").addClass('is-active');
+            $("div[data-content=2]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#comb_data_entry, #comb_data_view").toggle();
+            }
+        }
+
+        if (selTab === '3') {
+            $("li[data-tab=1] , li[data-tab=2] , li[data-tab=4] , li[data-tab=5] ").removeClass('is-active');
+            $("div[data-content=1] ,div[data-content=2] , div[data-content=4] ,div[data-content=5]").removeClass('is-active');
+
+            $("li[data-tab=3]").addClass('is-active');
+            $("div[data-content=3]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#tech_data_entry, #tech_data_view").toggle();
+            }
+        }
+
+        if (selTab === '4') {
+            $("li[data-tab=1] , li[data-tab=3] , li[data-tab=2] , li[data-tab=5] ").removeClass('is-active');
+            $("div[data-content=1] ,div[data-content=3] , div[data-content=2] ,div[data-content=5]").removeClass('is-active');
+
+            $("li[data-tab=4]").addClass('is-active');
+            $("div[data-content=4]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#des_data_entry, #des_data_view").toggle();
+            }
+        }
+
+        if (selTab === '5') {
+            $("li[data-tab=1] , li[data-tab=3] , li[data-tab=4] , li[data-tab=2] ").removeClass('is-active');
+            $("div[data-content=1] ,div[data-content=3] , div[data-content=4] ,div[data-content=2]").removeClass('is-active');
+
+            $("li[data-tab=5]").addClass('is-active');
+            $("div[data-content=5]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#size_data_entry, #size_data_view").toggle();
+            }
+        }
+
+        if (selTab === '1') {
+
+            if (selView === 'list') {
+                $("#prod_data_entry, #prod_data_view").toggle();
+            }
+        }
+
+
+
+    });
+
+</script>
 {% endblock %}

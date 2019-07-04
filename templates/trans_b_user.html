@@ -51,16 +51,15 @@
                             e.preventDefault();
                             var pp_num = $('#pp_sel').val();
 
-                            $.getJSON("/get/trans_pp_b?pp_num=" + pp_num, function (result) {
-                                var extra_fld = Object.keys(result['datefilter']).length;
-                                for (i = 11; i < extra_fld; i++) {
-                                    $("#add_field_button_fg").trigger('click');
+                            $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
+                                console.log(result)
+                                for (var j = 0; j < Object.keys(result).length; j++) {
+                                    options.push('<option value="',
+                                        Object.keys(result)[j], '">',
+                                        Object.keys(result)[j], '</option>');
                                 }
-                                console.log(extra_fld);
-                                populate('#trans_b_form', json2html_name_list(result))
-                                // populate('#trans_b_form', result);
-
-                            })
+                                $("#pp_sel").html(options.join(''));
+                            });
                         });
 
                         function json2html_name_list(json, result, parent) {

@@ -354,6 +354,15 @@ class FinGoods(db.Model):
     alt_name = db.Column(db.String(20))
     gen_name = db.Column(db.String(50))
 
+    def get_gen_name(self):
+        product_category = self.product_category
+        fabric_combo = self.fabric_combo
+        print_tech = self.print_tech
+        design = self.design
+        uom = self.uom
+        display_name = "{} / {} / {} / {}".format(product_category[0].cat, fabric_combo[0].comb, print_tech[0].tech, design[0].des)
+        return display_name
+
 db.Table('cat_goods',
     db.Column('cat_id' , db.Integer , db.ForeignKey('fin_cat.id' , ondelete='SET NULL' )),
     db.Column('goods_id' , db.Integer , db.ForeignKey('fin_goods.id' , ondelete='SET NULL'))
@@ -398,6 +407,17 @@ class RawFabMain(db.Model):
     dye = db.relationship('FabDye' ,cascade="all,delete", secondary='dye_goods' , backref='dye_goods' , lazy = 'joined')
     alt_name = db.Column(db.String(20))
     gen_name = db.Column(db.String(50))
+
+    def get_gen_name(self):
+        product_category = self.product_category
+        yarn = self.yarn
+        fab_const = self.fab_const
+        proc = self.proc
+        width = self.width
+        dye = self.dye
+        display_name = " {} / {} / {} / {}".format(product_category[0].cat, yarn[0].yarn ,fab_const[0].const, proc[0].process, width[0].width , dye[0].dye)
+        return display_name
+    
 
 db.Table('cat_fab_goods',
     db.Column('cat_id' , db.Integer , db.ForeignKey('raw_cat.id' , ondelete='SET NULL' )),

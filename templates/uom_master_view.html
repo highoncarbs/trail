@@ -15,7 +15,8 @@
                     </div>
                     <div class="level-right">
                         <div class="level-item">
-                            <a class="button is-black" href="{{ url_for('uom')}}"><span class="icon icon-btn-in"><i data-feather="plus"></i></span>
+                            <a class="button is-black" href="{{ url_for('uom')}}"><span class="icon icon-btn-in"><i
+                                        data-feather="plus"></i></span>
                                 Add
                             </a>
                         </div>
@@ -45,7 +46,7 @@
 
                         <tr>
                             <td>
-                                <p class="tag is-medium is-black">{{uom.measure}}</p>
+                                <p>{{uom.measure}}</p>
                             </td>
                             <td>
                                 <p>{{uom.desc}}</p>
@@ -86,15 +87,31 @@
                                             <div class="field">
                                                 <label class="label">Edit Measurement</label>
                                                 <div class="control">
-                                                    {{ uom_form.measure(class="input" , placeholder=uom.measure)}}
+                                                    {{ uom_form.measure(class="input" , value=uom.measure)}}
                                                 </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Edit Description</label>
+                                                <div class="control">
+                                                    {{ uom_form.measure(class="input" , value=uom.desc)}}
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Edit Description</label>
+                                                <div class="control select select_{{loop.index}}">
+                                                    {{ uom_form.decimal()}}
+
+                                                </div>
+                                                <script>
+                                                    $('.select_{{loop.index}} > #decimal').val('{{ uom.decimal}}')
+                                                </script>
                                             </div>
 
                                             <br>
                                             <br>
                                             <div class="field level">
                                                 <div class="control">
-                                                    {{ uom_form.uom_update(class="button is-black" , value="Update Measurement")}}
+                                                    {{ uom_form.uom_update(class="button is-black" , value="Save")}}
                                                 </div>
                                                 <div class="control ">
                                                     <a class="button is-text">Clear Fields</a>

@@ -34,7 +34,8 @@
 </style>
 <div class="tabs has-background-white-bis is-fullwidth" id="tabs" style="padding-top: 1rem;">
     <div class="container">
-
+            <h2 class="is-size-4 has-text-centered robo ">Raw Materials</h2>
+            <hr style="margin:1rem !important;">
         <ul>
             <li class="is-active" data-tab="8">
                 <a>
@@ -97,4 +98,98 @@
 
 
 </div>
+
+
+
+<script>
+
+
+
+    $(document).ready(function () {
+        // Construct URL object using current browser URL
+        var url = new URL(document.location);
+
+        // Get query parameters object
+        var params = url.searchParams;
+
+        // Get value of paper
+        var selTab = params.get("showTab");
+        var selView = params.get("view");
+
+        if (selTab === '9') {
+            $("li[data-tab=8] , li[data-tab=10] , li[data-tab=11] , li[data-tab=12] , li[data-tab=13] ").removeClass('is-active');
+            $("div[data-content=8] ,div[data-content=10] , div[data-content=11] ,div[data-content=12 , ,div[data-content=13]").removeClass('is-active');
+
+            $("li[data-tab=9]").addClass('is-active');
+            $("div[data-content=9]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#proc_data_entry, #proc_data_view").toggle();
+            }
+        }
+
+        if (selTab === '10') {
+            $("li[data-tab=8] , li[data-tab=9] , li[data-tab=11] , li[data-tab=12] , li[data-tab=13] ").removeClass('is-active');
+            $("div[data-content=8] ,div[data-content=9] , div[data-content=11] ,div[data-content=12 , ,div[data-content=13]").removeClass('is-active');
+
+            $("li[data-tab=10]").addClass('is-active');
+            $("div[data-content=10]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#width_data_entry, #width_data_view").toggle();
+            }
+        }
+
+        if (selTab === '11') {
+            $("li[data-tab=8] , li[data-tab=9] , li[data-tab=10] , li[data-tab=12] , li[data-tab=13] ").removeClass('is-active');
+            $("div[data-content=8] ,div[data-content=9] , div[data-content=10] ,div[data-content=12 , ,div[data-content=13]").removeClass('is-active');
+
+            $("li[data-tab=11]").addClass('is-active');
+            $("div[data-content=11]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#dye_data_entry, #dye_data_view").toggle();
+            }
+        }
+
+        if (selTab === '12') {
+            $("li[data-tab=8] , li[data-tab=9] , li[data-tab=10] , li[data-tab=11] , li[data-tab=13] ").removeClass('is-active');
+            $("div[data-content=8] ,div[data-content=9] , div[data-content=10] ,div[data-content=11 , ,div[data-content=13]").removeClass('is-active');
+
+            $("li[data-tab=12]").addClass('is-active');
+            $("div[data-content=12]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#cat_data_entry, #cat_data_view").toggle();
+            }
+        }
+
+        if (selTab === '13') {
+            $("li[data-tab=8] , li[data-tab=9] , li[data-tab=10] , li[data-tab=11] , li[data-tab=12] ").removeClass('is-active');
+            $("div[data-content=8] ,div[data-content=9] , div[data-content=10] ,div[data-content=11 , ,div[data-content=12]").removeClass('is-active');
+
+            $("li[data-tab=13]").addClass('is-active');
+            $("div[data-content=13]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#const_data_entry, #const_data_view").toggle();
+            }
+        }
+        if (selTab === '8') {
+
+            if (selView === 'list') {
+                $("#yarn_data_entry, #yarn_data_view").toggle();
+            }
+        }
+
+
+
+    });
+
+</script>
 {% endblock %}

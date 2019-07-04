@@ -497,15 +497,15 @@ def fin_goods():
             check_one = db.session.query(
                 FinCat).filter_by(cat=cat_name).first()
             if check_one is not None:
-                session['mssg'] = "Fabric Process already exists "
+                session['mssg'] = "Fabric Category already exists "
             else:
                 new_cat = FinCat(
                     cat=cat_name, desc=cat_form.desc.data)
                 db.session.add(new_cat)
                 db.session.commit()
-                session['mssg'] = "Fabric Process - " + \
+                session['mssg'] = "Fabric Category - " + \
                     cat_name+"  successfully added."
-                return redirect('/finished_goods')
+                return redirect('/finished_goods?showTab=1')
 
     comb_list = db.session.query(
         FabComb).all()
@@ -517,15 +517,15 @@ def fin_goods():
             check_one = db.session.query(
                 FabComb).filter_by(comb=comb_name).first()
             if check_one is not None:
-                session['mssg'] = "Fabric Process already exists "
+                session['mssg'] = "Fabric Combination already exists "
             else:
                 new_comb = FabComb(
                     comb=comb_name, desc=comb_form.desc.data)
                 db.session.add(new_comb)
                 db.session.commit()
-                session['mssg'] = "Fabric Process - " + \
+                session['mssg'] = "Fabric Combination - " + \
                     comb_name+"  successfully added."
-                return redirect('/finished_goods')
+                return redirect('/finished_goods?showTab=2')
     
     tech_list = db.session.query(
         PrintTech).all()
@@ -537,15 +537,15 @@ def fin_goods():
             check_one = db.session.query(
                 PrintTech).filter_by(tech=tech_name).first()
             if check_one is not None:
-                session['mssg'] = "Fabric Process already exists "
+                session['mssg'] = "Print Technique already exists "
             else:
                 new_tech = PrintTech(
                     tech=tech_name, desc=tech_form.desc.data)
                 db.session.add(new_tech)
                 db.session.commit()
-                session['mssg'] = "Fabric Process - " + \
+                session['mssg'] = "Print Technique - " + \
                     tech_name+"  successfully added."
-                return redirect('/finished_goods')
+                return redirect('/finished_goods?showTab=3')
 
     des_list = db.session.query(
         FinDes).all()
@@ -564,7 +564,7 @@ def fin_goods():
                 db.session.commit()
                 session['mssg'] = "Design - " + \
                     des_name+" successfully added."
-                return redirect('/finished_goods')
+                return redirect('/finished_goods?showTab=4')
     
     size_list = db.session.query(
         FinSize).all()
@@ -583,7 +583,7 @@ def fin_goods():
                 db.session.commit()
                 session['mssg'] = "Size - " + \
                     size_name+" successfully added."
-                return redirect('/finished_goods')
+                return redirect('/finished_goods?showTab=5')
 
     return render_template('fin_goods.html' , subtitle = "Finished Goods " , mssg = session['mssg'] , cat_list =cat_list ,cat_form = cat_form ,\
          comb_list =comb_list ,comb_form = comb_form , tech_list = tech_list , tech_form = tech_form , des_list = des_list ,des_form = des_form ,\
@@ -610,10 +610,10 @@ def pcat_edit(id):
             check_one.desc = cat_form.desc.data
             db.session.commit()
             session['mssg'] = "Finished Goods Category updated successfully"
-            return redirect('/finished_goods')
+            return redirect('/finished_goods?showTab=1&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/finished_goods')
+            return redirect('/finished_goods?showTab=1&view=list')
 
 
 @app.route("/finished_goods/cat/delete/<id>", methods=['POST', 'GET'])
@@ -626,10 +626,10 @@ def pcat_delete(id):
         check_one.delete()
         db.session.commit()
         session['mssg'] = "Category deleted successfully"
-        return redirect('/finished_goods')
+        return redirect('/finished_goods?showTab=1&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/finished_goods')
+        return redirect('/finished_goods?showTab=1&view=list')
 
 # FInished Comb Edits
 
@@ -650,11 +650,11 @@ def comb_edit(id):
             check_one.comb = comb_name
             check_one.desc = comb_form.desc.data
             db.session.commit()
-            session['mssg'] = "Finished Goods Category updated successfully"
-            return redirect('/finished_goods')
+            session['mssg'] = "Finished Goods Combination updated successfully"
+            return redirect('/finished_goods?showTab=2&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/finished_goods')
+            return redirect('/finished_goods?showTab=2&view=list')
 
 
 @app.route("/finished_goods/comb/delete/<id>", methods=['POST', 'GET'])
@@ -666,11 +666,11 @@ def comb_delete(id):
     if check_one.first() is not None:
         check_one.delete()
         db.session.commit()
-        session['mssg'] = "Category deleted successfully"
-        return redirect('/finished_goods')
+        session['mssg'] = "Combination deleted successfully"
+        return redirect('/finished_goods?showTab=2&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/finished_goods')
+        return redirect('/finished_goods?showTab=2&view=list')
 
 # FInished Tech Edits
 
@@ -692,10 +692,10 @@ def tech_edit(id):
             check_one.desc = tech_form.desc.data
             db.session.commit()
             session['mssg'] = "Print Technique updated successfully"
-            return redirect('/finished_goods')
+            return redirect('/finished_goods?showTab=3&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/finished_goods')
+            return redirect('/finished_goods?showTab=3&view=list')
 
 
 @app.route("/finished_goods/tech/delete/<id>", methods=['POST', 'GET'])
@@ -708,10 +708,10 @@ def tech_delete(id):
         check_one.delete()
         db.session.commit()
         session['mssg'] = "Print Technique deleted successfully"
-        return redirect('/finished_goods')
+        return redirect('/finished_goods?showTab=3&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/finished_goods')
+        return redirect('/finished_goods?showTab=3&view=list')
 
 
 # FInished Des Edits
@@ -733,10 +733,10 @@ def des_edit(id):
             check_one.des = des_name
             db.session.commit()
             session['mssg'] = "Fabric Design updated successfully"
-            return redirect('/finished_goods')
+            return redirect('/finished_goods?showTab=4&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/finished_goods')
+            return redirect('/finished_goods?showTab=4&view=list')
 
 
 @app.route("/finished_goods/des/delete/<id>", methods=['POST', 'GET'])
@@ -749,10 +749,10 @@ def des_delete(id):
         check_one.delete()
         db.session.commit()
         session['mssg'] = "Fabric Design deleted successfully"
-        return redirect('/finished_goods')
+        return redirect('/finished_goods?showTab=4&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/finished_goods')
+        return redirect('/finished_goods?showTab=4&view=list')
 
 # Finished Des Edits
 
@@ -773,10 +773,10 @@ def size_edit(id):
             check_one.size = size_name
             db.session.commit()
             session['mssg'] = "Fabric Size updated successfully"
-            return redirect('/finished_goods')
+            return redirect('/finished_goods?showTab=5&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/finished_goods')
+            return redirect('/finished_goods?showTab=5&view=list')
 
 
 @app.route("/finished_goods/size/delete/<id>", methods=['POST', 'GET'])
@@ -789,10 +789,10 @@ def size_delete(id):
         check_one.delete()
         db.session.commit()
         session['mssg'] = "Fabric Size deleted successfully"
-        return redirect('/finished_goods')
+        return redirect('/finished_goods?showTab=5&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/finished_goods')
+        return redirect('/finished_goods?showTab=5&view=list')
 
 
 @app.route('/other_materials', methods=['GET', 'POST'])
@@ -834,6 +834,9 @@ def main_master():
     raw_goods_form = RawFabMainForm()
 
     raw_goods = RawFabMain()
+    fin_goods = FinGoods.query.all()
+    raw_goods = RawFabMain.query.all()
+    print(raw_goods)
     
     if fin_goods_form.fin_submit.data :
         new_fin_good = FinGoods(alt_name = fin_goods_form.alt_name.data , gen_name = "")
@@ -874,7 +877,7 @@ def main_master():
     else:
         print(raw_goods_form.errors)
 
-    return render_template('main_master.html' , fin_form = fin_goods_form , raw_form = raw_goods_form) ,200
+    return render_template('main_master.html' , fin_form = fin_goods_form , raw_form = raw_goods_form , fin_goods_list = fin_goods , raw_goods_list = raw_goods) ,200
 
 
 @app.route('/raw_materials', methods=['GET', 'POST'])
@@ -895,14 +898,14 @@ def raw_materials():
                 Yarn).filter_by(yarn=yarn_name).first()
             if check_one is not None:
                 session['mssg'] = "Yarn already exists "
-                return redirect('/raw_materials')
+                return redirect('/raw_materials?showTab=8')
 
             else:
                 new_yarn = Yarn(yarn=yarn_name, desc=yarn_form.desc.data)
                 db.session.add(new_yarn)
                 db.session.commit()
                 session['mssg'] = "Yarn - "+yarn_name+" successfully added."
-                return redirect('/raw_materials')
+                return redirect('/raw_materials?showTab=8')
 
     # Fabric Construction Form
 
@@ -917,13 +920,15 @@ def raw_materials():
                 FabConst).filter_by(const=const_name).first()
             if check_one is not None:
                 session['mssg'] = "Construction already exists "
+                return redirect('/raw_materials?showTab=13')
+
             else:
                 new_const = FabConst(const=const_name)
                 db.session.add(new_const)
                 db.session.commit()
                 session['mssg'] = "Construction - " + \
                     const_name+" successfully added."
-                return redirect('/raw_materials')
+                return redirect('/raw_materials?showTab=13')
 
     # Fabric process Form
 
@@ -938,6 +943,8 @@ def raw_materials():
                 FabProc).filter_by(process=process_name).first()
             if check_one is not None:
                 session['mssg'] = "Fabric Process already exists "
+                return redirect('/raw_materials?showTab=9')
+
             else:
                 new_process = FabProc(
                     process=process_name, desc=process_form.desc.data)
@@ -945,7 +952,7 @@ def raw_materials():
                 db.session.commit()
                 session['mssg'] = "Fabric Process - " + \
                     process_name+"  successfully added."
-                return redirect('/raw_materials')
+                return redirect('/raw_materials?showTab=9')
 
     # Fabric Width Form
 
@@ -960,13 +967,14 @@ def raw_materials():
                 FabWidth).filter_by(width=width_name).first()
             if check_one is not None:
                 session['mssg'] = "Fabric Width already exists "
+                return redirect('/raw_materials?showTab=10')
             else:
                 new_width = FabWidth(width=width_name)
                 db.session.add(new_width)
                 db.session.commit()
                 session['mssg'] = "Fabric Width - " + \
                     width_name+"  successfully added."
-                return redirect('/raw_materials')
+                return redirect('/raw_materials?showTab=10')
 
     # Fabric Dye Form
 
@@ -981,13 +989,14 @@ def raw_materials():
                 FabDye).filter_by(dye=dye_name).first()
             if check_one is not None:
                 session['mssg'] = "Fabric Dye already exists "
+                return redirect('/raw_materials?showTab=11')
             else:
                 new_dye = FabDye(dye=dye_name)
                 db.session.add(new_dye)
                 db.session.commit()
                 session['mssg'] = "Fabric Dye - " + \
                     dye_name+"  successfully added."
-                return redirect('/raw_materials')
+                return redirect('/raw_materials?showTab=11')
 
     # Raw Mat Cateogry Form
 
@@ -1002,13 +1011,14 @@ def raw_materials():
                 RawCat).filter_by(cat=cat_name).first()
             if check_one is not None:
                 session['mssg'] = "Raw Material Category already exists "
+                return redirect('/raw_materials?showTab=12')
             else:
                 new_cat = RawCat(cat=cat_name, desc=cat_form.desc.data)
                 db.session.add(new_cat)
                 db.session.commit()
                 session['mssg'] = "Category - " + \
                     cat_name+"  successfully added."
-                return redirect('/raw_materials')
+                return redirect('/raw_materials?showTab=12')
 
     return render_template('raw_mat_master.html', subtitle="Basic Master", mssg=session['mssg'],
                            yarn_list=yarn_list,  yarn_form=yarn_form,  const_list=const_list, const_form=const_form,
@@ -1597,7 +1607,34 @@ def firm_delete(firm):
         session["mssg"] = "Couldn't delete firm."
         return redirect('/')
 
+@app.route('/fin_goods/delete/<id>', methods=["POST", "GET"])
+@login_required
+def fin_goods_delete(id):
+    try:
+        data_get = db.session.query(FinGoods).filter_by(id=int(id)).first().get_gen_name()
+        db.session.query(FinGoods).filter_by(id=int(id)).delete()
+        db.session.commit()
+        session["mssg"] = "Finished Goods - "+str(data_get)+" is deleted."
+        return redirect('/main_master?showTab=13&view=list')
+    except Exception as e:
+        logging.error('Error deleting Finished Goods : ' + str(e))
+        session["mssg"] = "Couldn't delete firm."
+        return redirect('/main_master?showTab=13&view=list')
 
+
+@app.route('/raw_goods/delete/<id>', methods=["POST", "GET"])
+@login_required
+def raw_goods_delete(id):
+    try:
+        data_get = db.session.query(RawFabMain).filter_by(id=int(id)).first().get_gen_name()
+        db.session.query(RawFabMain).filter_by(id=int(id)).delete()
+        db.session.commit()
+        session["mssg"] = "Raw Fabric Material - "+str(data_get)+" is deleted."
+        return redirect('/main_master?showTab=14&view=list')
+    except Exception as e:
+        logging.error('Error deleting Finished Goods : ' + str(e))
+        session["mssg"] = "Couldn't delete Raw Fabric Material."
+        return redirect('/main_master?showTab=14&view=list')
 # APIs for Transaction Masters
 
 @app.route('/get/raw_product/' , methods=["GET"])
@@ -1607,9 +1644,11 @@ def get_raw_prod():
     data = []
     for r in res:
         p_id = str(r.id)
-        p_name = str(r.gen_name)
+        p_name = str(r.get_gen_name())
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
+        print(temp_tup)
+
     obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     return obj
 
@@ -1620,10 +1659,11 @@ def get_fin_prod():
     data = []
     for r in res:
         p_id = str(r.id)
-        p_name = str(r.gen_name)
+        p_name = str(r.get_gen_name())
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
-    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
+        print(temp_tup)
+    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     return obj
 
 @app.route('/get/uom/' , methods=["GET"])
@@ -1636,7 +1676,7 @@ def get_uom():
         p_name = str(r.measure)
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
-    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
+    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     return obj
 
 @app.route('/get/acc/' , methods=["GET"])
@@ -1649,7 +1689,7 @@ def get_acc():
         p_name = str(r.acc)
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
-    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
+    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     print(obj)
     return obj
 
@@ -1663,19 +1703,19 @@ def get_oth_mat():
         p_name = str(r.mat)
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
-    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
+    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     return obj
 
 @app.route('/get/trans_pp/' , methods=["GET"])
 @login_required 
 def get_trans_pp():
-    res =   db.session.query(Trans).filter_by(flag = 0 ).all()
+    res =   db.session.query(Trans).filter_by(flag=0).all()
     data = []
     for r in res:
         p_id = str(r.id)
         temp_tup = (str(p_id) , str(p_id))
         data.append(temp_tup)
-    obj = '{' + ', '.join('"{}": "{}"'.format(v, v) for k, v in data) + '}'
+    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     return obj
 
 

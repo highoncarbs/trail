@@ -50,10 +50,11 @@
 
                     <div class="field is-grouped">
                         <div class="control">
-                            {{uom_form.uom_submit(class="button is-black" , value="Add Measurement")}}
+                            {{uom_form.uom_submit(class="button is-black" , value="Save")}}
                         </div>
                         <div class="control">
-                                <a href="{{url_for('uom_master_view')}}" class="button is-info">View</a>
+                                <a href="{{url_for('uom_master_view')}}" class="button is-info"><span class="icon icon-btn-in"><i
+                                    data-feather="eye"></i></span>View</a>
                             </div>
                         <div class="control">
                             <a class="button is-text">Clear Fields</a>
