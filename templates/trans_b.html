@@ -554,7 +554,7 @@
                 });
 
                 $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                    $(this).val(picker.startDate.format('MM/DD/YYYY'));
                 });
 
                 $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
@@ -568,30 +568,33 @@
 
         $(wrapper_fg).on("click", ".remove_field", function (e) { //user click on remove text
             e.preventDefault();
-            $(this).parent('div').remove(); x--;
+            $(this).parent('div').parent('div').remove(); x--;
         })
 
     });
 </script>
 <script type="text/javascript">
+
     $(function () {
 
         $('input[name*="datefilter"]').daterangepicker({
-            singleDatePicker: true,
-            autoUpdateInput: false,
-            locale: {
-                cancelLabel: 'Clear'
-            }
-        });
+                    singleDatePicker: true,
+                    autoUpdateInput: false,
+                    locale: {
+                        cancelLabel: 'Clear'
+                    }
+                });
 
-        $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-        });
+                $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('MM/DD/YYYY'));
+                });
 
-        $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
-            $(this).val('');
-        });
+                $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                    $(this).val('');
+                });
 
+
+     
     });
 </script>
 

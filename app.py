@@ -216,7 +216,6 @@ def trans_b():
     
     pp_num = db.session.query(Trans).filter_by(flag = 0 ).all()
     if request.method == "POST":
-        print(request.json)
         payload = request.json
         pp_num = db.session.query(Trans).filter_by(id = int(payload['pp_num'])).first()
         dump = json.dumps(payload['data'])
@@ -623,10 +622,14 @@ def pcat_delete(id):
     check_one = db.session.query(
         FinCat).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Category deleted successfully"
-        return redirect('/finished_goods?showTab=1&view=list')
+        if len(check_one.first().cat_goods) is int(0):
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Category deleted successfully"
+            return redirect('/finished_goods?showTab=1&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=1&view=list')
     else:
         session['mssg'] = "Something went wrong."
         return redirect('/finished_goods?showTab=1&view=list')
@@ -664,10 +667,14 @@ def comb_delete(id):
     check_one = db.session.query(
         FabComb).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Combination deleted successfully"
-        return redirect('/finished_goods?showTab=2&view=list')
+        if len(check_one.first().comb_goods) is int(0):
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Combination deleted successfully"
+            return redirect('/finished_goods?showTab=2&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=2&view=list')
     else:
         session['mssg'] = "Something went wrong."
         return redirect('/finished_goods?showTab=2&view=list')
@@ -705,10 +712,14 @@ def tech_delete(id):
     check_one = db.session.query(
         PrintTech).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Print Technique deleted successfully"
-        return redirect('/finished_goods?showTab=3&view=list')
+        if len(check_one.first().tech_goods) is int(0):
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Print Technique deleted successfully"
+            return redirect('/finished_goods?showTab=3&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=3&view=list')
     else:
         session['mssg'] = "Something went wrong."
         return redirect('/finished_goods?showTab=3&view=list')
@@ -746,10 +757,14 @@ def des_delete(id):
     check_one = db.session.query(
         FinDes).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Fabric Design deleted successfully"
-        return redirect('/finished_goods?showTab=4&view=list')
+        if len(check_one.first().des_goods) is int(0):        
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Fabric Design deleted successfully"
+            return redirect('/finished_goods?showTab=4&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=4&view=list')
     else:
         session['mssg'] = "Something went wrong."
         return redirect('/finished_goods?showTab=4&view=list')
@@ -826,9 +841,10 @@ def firms():
 
 from model import FinGoodsForm , RawFabMainForm , FinGoods ,RawFabMain
 
-@app.route('/main_master', methods=['GET', 'POST'])
+@app.route('/main_master/', defaults = {'fin_id' : None} , methods=['GET', 'POST'])
+@app.route('/main_master/<fin_id>' , methods=['POST'])
 @login_required
-def main_master():
+def main_master(fin_id):
     fin_goods_form = FinGoodsForm()
 
     raw_goods_form = RawFabMainForm()
@@ -836,10 +852,9 @@ def main_master():
     raw_goods = RawFabMain()
     fin_goods = FinGoods.query.all()
     raw_goods = RawFabMain.query.all()
-    print(raw_goods)
     
     if fin_goods_form.fin_submit.data :
-        new_fin_good = FinGoods(alt_name = fin_goods_form.alt_name.data , gen_name = "")
+        new_fin_good = FinGoods(alt_name = fin_goods_form.alt_name.data)
         try:
             db.session.add(new_fin_good)
             new_fin_good.product_category.append(fin_goods_form.product_category.data)
@@ -847,18 +862,44 @@ def main_master():
             new_fin_good.print_tech.append(fin_goods_form.print_tech.data)
             new_fin_good.design.append(fin_goods_form.design.data)
             new_fin_good.uom.append(fin_goods_form.uom.data)
-            new_fin_good.gen_name = str( '-'.join([ str(fin_goods_form.product_category.data.id) , str(fin_goods_form.fabric_combo.data.id) , str(fin_goods_form.print_tech.data.id) , str(fin_goods_form.design.data.id)]))
             db.session.commit()
             db.session.close()
-            return redirect(url_for('main_master'))
+            session['mssg'] = "Finished Goods successfully added."
+            return redirect('/main_master?showTab=13')
         except Exception as e:
-            print(e)
-            return redirect(url_for('main_master'))
+            session['mssg'] = "Something unexpected happened."
+            return redirect('/main_master?showTab=13')
     
-    if raw_goods_form.raw_submit.data :
-        new_raw_good = RawFabMain(alt_name = raw_goods_form.alt_name.data , gen_name = "XXX")
+    if fin_goods_form.fin_update.data:
         try:
-            print('trying')
+            fin_g_id = int(fin_id)
+            db.session.query(FinGoods).filter_by(id = fin_g_id).delete()
+            new_fin_good = FinGoods(alt_name = fin_goods_form.alt_name.data)
+
+            new_fin_good.product_category.append(fin_goods_form.product_category.data)
+            
+            new_fin_good.fabric_combo.append(fin_goods_form.fabric_combo.data)
+          
+            new_fin_good.print_tech.append(fin_goods_form.print_tech.data)
+
+       
+            new_fin_good.design.append(fin_goods_form.design.data)
+
+            new_fin_good.uom.append(fin_goods_form.uom.data)
+            session["mssg"] = "Finished Goods - "+str(new_fin_good.id)+" has been updated."
+
+            db.session.commit()
+            return redirect('/main_master?showTab=13&view=list')
+        except Exception as e:
+            session['mssg'] = "Something unexpected happened."
+            print(e)
+            return redirect('/main_master?showTab=13&view=list')
+    else:
+        print(fin_goods_form.errors)
+
+    if raw_goods_form.raw_submit.data :
+        new_raw_good = RawFabMain(alt_name = raw_goods_form.alt_name.data)
+        try:
             db.session.add(new_raw_good)
             new_raw_good.product_category.append(raw_goods_form.product_category.data)
             new_raw_good.yarn.append(raw_goods_form.yarn.data)
@@ -870,12 +911,12 @@ def main_master():
 
             db.session.commit()
             db.session.close()
-            return redirect(url_for('main_master'))
+            session['mssg'] = "Raw Material Fabric successfully added."
+            return redirect('/main_master?showTab=14')
         except Exception as e:
-            print(e)
-            return redirect(url_for('main_master'))
-    else:
-        print(raw_goods_form.errors)
+            session['mssg'] = "Something unexpected happened."
+            return redirect('/main_master?showTab=14')
+   
 
     return render_template('main_master.html' , fin_form = fin_goods_form , raw_form = raw_goods_form , fin_goods_list = fin_goods , raw_goods_list = raw_goods) ,200
 
@@ -1173,10 +1214,10 @@ def cust_edit(id):
             check_one.health = cust_name
             db.session.commit()
             session['mssg'] = "Customer Category updated successfully"
-            return redirect('/raw_materials')
+            return redirect('/raw_materials/customer_category_view')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/raw_materials')
+            return redirect('/raw_materials/customer_category_view')
 
 
 @app.route("/raw_materials/health/delete/<id>", methods=['POST', 'GET'])
@@ -1189,10 +1230,10 @@ def cust_delete(id):
         check_one.delete()
         db.session.commit()
         session['mssg'] = "Customer Category deleted successfully"
-        return redirect('/raw_materials')
+        return redirect('/raw_materials/customer_category_view')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/raw_materials')
+        return redirect('/raw_materials/customer_category_view')
 
 # Accessories  Edits
 
@@ -1227,9 +1268,9 @@ def acc_delete(id):
     check_one = db.session.query(
         Accessories).filter_by(id=id)
     if check_one.first() is not None:
+        session['mssg'] = "Accessories - "+ check_one.first().acc +" deleted successfully"
         check_one.delete()
         db.session.commit()
-        session['mssg'] = "Accessories deleted successfully"
         return redirect('/raw_materials/accessories_view')
     else:
         session['mssg'] = "Something went wrong."
@@ -1271,11 +1312,11 @@ def mat_delete(id):
     if check_one.first() is not None:
         check_one.delete()
         db.session.commit()
-        session['mssg'] = "Customer Category deleted successfully"
-        return redirect('/raw_materials')
+        session['mssg'] = "Other Materials deleted successfully"
+        return redirect('/raw_materials/other_mat_view')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/raw_materials')
+        return redirect('/raw_materials/other_mat_view')
 
 # UOM  Edits
 
@@ -1298,10 +1339,10 @@ def uom_edit(id):
             check_one.decimal = uom_form.decimal.data
             db.session.commit()
             session['mssg'] = "Measure updated successfully"
-            return redirect('/raw_materials')
+            return redirect('/raw_materials/uom_view')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/raw_materials')
+            return redirect('/raw_materials/uom_view')
 
 
 @app.route("/raw_materials/uom/delete/<id>", methods=['POST', 'GET'])
@@ -1311,13 +1352,17 @@ def uom_delete(id):
     check_one = db.session.query(
         Uom).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Measure deleted successfully"
-        return redirect('/raw_materials')
+        if len(check_one.first().uom_goods) is int(0) and len(check_one.first().uom_raw_goods) is int(0):
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Measure deleted successfully"
+            return redirect('/uom')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials/uom_view')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/raw_materials')
+        return redirect('/raw_materials/uom_view')
 
 
 # Raw MAterial Yarn  Edits
@@ -1340,10 +1385,10 @@ def yarn_edit(id):
             check_one.desc = yarn_form.desc.data
             db.session.commit()
             session['mssg'] = "Yarn updated successfully"
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=8&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=8&view=list')
 
 
 @app.route("/raw_materials/yarn/delete/<id>", methods=['POST', 'GET'])
@@ -1353,15 +1398,19 @@ def yarn_delete(id):
     check_one = db.session.query(
         Yarn).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Yarn deleted successfully"
-        return redirect('/raw_materials')
+        if len(check_one.first().yarn_goods) is int(0):
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Yarn deleted successfully"
+            return redirect('/raw_materials?showTab=8&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=9&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/raw_materials')
+        return redirect('/raw_materials?showTab=8&view=list')
 
-# Raw MAterial Process
+# Raw Material Process
 
 
 @app.route("/raw_materials/process/update/<id>", methods=['POST'])
@@ -1382,10 +1431,10 @@ def process_edit(id):
             check_one.desc = process_form.desc.data
             db.session.commit()
             session['mssg'] = "Process updated successfully"
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=9&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=9&view=list')
 
 
 @app.route("/raw_materials/process/delete/<id>", methods=['POST', 'GET'])
@@ -1395,13 +1444,17 @@ def process_delete(id):
     check_one = db.session.query(
         FabProc).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Process deleted successfully"
-        return redirect('/raw_materials')
+        if len(check_one.first().proc_goods) is int(0):
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Process deleted successfully"
+            return redirect('/raw_materials?showTab=9&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=9&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/raw_materials')
+        return redirect('/raw_materials?showTab=9&view=list')
 
 
 # Raw Material Category  Edits
@@ -1424,10 +1477,10 @@ def cat_edit(id):
             check_one.desc = cat_form.desc.data
             db.session.commit()
             session['mssg'] = "Category updated successfully"
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=12&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=12&view=list')
 
 
 @app.route("/raw_materials/cat/delete/<id>", methods=['POST', 'GET'])
@@ -1437,13 +1490,18 @@ def cat_delete(id):
     check_one = db.session.query(
         RawCat).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Category deleted successfully"
-        return redirect('/raw_materials')
+        if len(check_one.first().cat_fab_goods) is int(0):
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Category deleted successfully"
+            return redirect('/raw_materials?showTab=12&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=9&view=list')
+        
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/raw_materials')
+        return redirect('/raw_materials?showTab=12&view=list')
 
 
 # Raw Material Width  Edits
@@ -1465,10 +1523,10 @@ def width_edit(id):
             check_one.width = width_name
             db.session.commit()
             session['mssg'] = "Width updated successfully"
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=10&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=10&view=list')
 
 
 @app.route("/raw_materials/width/delete/<id>", methods=['POST', 'GET'])
@@ -1478,13 +1536,17 @@ def width_delete(id):
     check_one = db.session.query(
         FabWidth).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Width deleted successfully"
-        return redirect('/raw_materials')
+        if len(check_one.first().width_goods) is 0:
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Width deleted successfully"
+            return redirect('/raw_materials?showTab=10&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=10&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/raw_materials')
+        return redirect('/raw_materials?showTab=10&view=list')
 
 
 # Raw Material Dye  Edits
@@ -1506,10 +1568,10 @@ def dye_edit(id):
             check_one.dye = dye_name
             db.session.commit()
             session['mssg'] = "Dye updated successfully"
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=11&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=11&view=list')
 
 
 @app.route("/raw_materials/dye/delete/<id>", methods=['POST', 'GET'])
@@ -1519,13 +1581,17 @@ def dye_delete(id):
     check_one = db.session.query(
         FabDye).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Dye deleted successfully"
-        return redirect('/raw_materials')
+        if len(check_one.first().dye_goods) is int(0):
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Dye deleted successfully"
+            return redirect('/raw_materials?showTab=11&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=11&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/raw_materials')
+        return redirect('/raw_materials?showTab=11&view=list')
 
 # Raw Material Construction  Edits
 
@@ -1547,10 +1613,10 @@ def const_edit(id):
             check_one.const = const_name
             db.session.commit()
             session['mssg'] = "Construction updated successfully"
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=13&view=list')
         else:
             session['mssg'] = "Something went wrong."
-            return redirect('/raw_materials')
+            return redirect('/raw_materials?showTab=13&view=list')
 
 
 @app.route("/raw_materials/const/delete/<id>", methods=['POST', 'GET'])
@@ -1560,13 +1626,17 @@ def const_delete(id):
     check_one = db.session.query(
         FabConst).filter_by(id=id)
     if check_one.first() is not None:
-        check_one.delete()
-        db.session.commit()
-        session['mssg'] = "Construction deleted successfully"
-        return redirect('/raw_materials')
+        if len(check_one.first().const_goods) is int(0):
+            check_one.delete()
+            db.session.commit()
+            session['mssg'] = "Construction deleted successfully"
+            return redirect('/raw_materials?showTab=13&view=list')
+        else:
+            session['mssg'] = "Cannot delete. Value is being used."
+            return redirect('/raw_materials?showTab=13&view=list')
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/raw_materials')
+        return redirect('/raw_materials?showTab=13&view=list')
 
 # Logout
 
@@ -1615,13 +1685,25 @@ def fin_goods_delete(id):
         db.session.query(FinGoods).filter_by(id=int(id)).delete()
         db.session.commit()
         session["mssg"] = "Finished Goods - "+str(data_get)+" is deleted."
-        return redirect('/main_master?showTab=13&view=list')
+        return redirect('/main_master?showTab=14&view=list')
     except Exception as e:
         logging.error('Error deleting Finished Goods : ' + str(e))
         session["mssg"] = "Couldn't delete firm."
-        return redirect('/main_master?showTab=13&view=list')
+        return redirect('/main_master?showTab=14&view=list')
 
 
+@app.route('/fin_goods/update/<id>', methods=["POST"])
+@login_required
+def fin_goods_update(id):
+    if request.method == "POST":
+        payload = request.json
+        fin_good = db.session.query(Trans).filter_by(id = int(id)).first()
+        new_fin_good.product_category.clear()
+        fin_good.product_category.append()
+        db.session.commit()
+        session['mssg'] = "Transaction - Part B with PP No. " + str( pp_num.id) + " has been added."
+        return jsonify("success")
+    
 @app.route('/raw_goods/delete/<id>', methods=["POST", "GET"])
 @login_required
 def raw_goods_delete(id):
@@ -1630,11 +1712,11 @@ def raw_goods_delete(id):
         db.session.query(RawFabMain).filter_by(id=int(id)).delete()
         db.session.commit()
         session["mssg"] = "Raw Fabric Material - "+str(data_get)+" is deleted."
-        return redirect('/main_master?showTab=14&view=list')
+        return redirect('/main_master?showTab=15&view=list')
     except Exception as e:
         logging.error('Error deleting Finished Goods : ' + str(e))
         session["mssg"] = "Couldn't delete Raw Fabric Material."
-        return redirect('/main_master?showTab=14&view=list')
+        return redirect('/main_master?showTab=15&view=list')
 # APIs for Transaction Masters
 
 @app.route('/get/raw_product/' , methods=["GET"])

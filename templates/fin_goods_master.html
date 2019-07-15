@@ -171,45 +171,66 @@
                                     <br>
                                     <br>
                                     <div class="form">
-                                        <form method="POST" action="">
+                                        <form method="POST" action="{{ url_for('main_master' , fin_id = row.id )}}">
                                             {{ fin_form.hidden_tag()}}
 
                                             <div class="field-body is-horizontal">
                                                 <div class="field">
                                                     <label class="label">Product Cateogry</label>
-                                                    <div class="control select is-fullwidth">
+                                                    <div class="control select select_prod_{{loop.index}} is-fullwidth">
                                                         {{fin_form.product_category()}}
                                                     </div>
+                                                    <script>
+                                                        $('.select_prod_{{loop.index}} > #product_category').val('{{row.product_category[0].id}}')
+
+                                                    </script>
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Fabric Combo</label>
-                                                    <div class="control select is-fullwidth">
+                                                    <div
+                                                        class="control select select_combo_{{loop.index}} is-fullwidth">
                                                         {{fin_form.fabric_combo()}}
 
                                                     </div>
+                                                    <script>
+                                                            $('.select_combo_{{loop.index}} > #fabric_combo').val('{{row.fabric_combo[0].id}}')
+    
+                                                        </script>
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Print Technique</label>
-                                                    <div class="control select is-fullwidth">
+                                                    <div class="control select select_print_{{loop.index}} is-fullwidth">
                                                         {{fin_form.print_tech()}}
 
                                                     </div>
+                                                    <script>
+                                                        $('.select_print_{{loop.index}} > #print_tech').val('{{row.print_tech[0].id}}')
+
+                                                    </script>
                                                 </div>
 
                                                 <div class="field">
                                                     <label class="label">Design</label>
-                                                    <div class="control select is-fullwidth">
+                                                    <div class="control select select_des_{{loop.index}} is-fullwidth">
                                                         {{fin_form.design()}}
 
                                                     </div>
+                                                    <script>
+                                                        $('.select_des_{{loop.index}} > #design').val('{{row.design[0].id}}')
+
+                                                    </script>
                                                 </div>
 
                                                 <div class="field">
                                                     <label class="label">U.O.M</label>
-                                                    <div class="control select is-fullwidth">
+                                                    <div class="control select select_uom_{{loop.index}} is-fullwidth">
                                                         {{fin_form.uom()}}
 
                                                     </div>
+                                                    <script>
+                                                        $('.select_uom_{{loop.index}} > #uom').val('{{row.uom[0].id}}')
+
+                                                    </script>
                                                 </div>
 
                                             </div>
@@ -217,27 +238,28 @@
                                             <div class="field">
                                                 <label class="label">Alternate Product Name</label>
                                                 <div class="control is-expanded">
-                                                    {{fin_form.alt_name(class="input")}}
+                                                    {{fin_form.alt_name(class="input" , value = row.alt_name )}}
 
                                                 </div>
                                             </div>
                                             <br>
-                                            <div class="field">
+                                            <!-- <div class="field">
                                                 <label class="label">Generated Product Name</label>
                                                 <div class="notification">
                                                     <p class="robo">Product Name</p>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <br>
                                             <div class="field is-grouped">
                                                 <div class="control ">
-                                                    <button class="button is-black">Update</button>
+                                                    {{ fin_form.fin_update( class="is-black" )}}
                                                 </div>
                                                 <div class="control">
                                                     <a class="button is-text">Clear Fields</a>
                                                 </div>
 
                                             </div>
+                                           
 
                                         </form>
                                     </div>
@@ -326,7 +348,7 @@
             }
 
             if (selTab === '13') {
-               
+
                 if (selView === 'list') {
                     $("#data_entry, #data_view").toggle();
                 }

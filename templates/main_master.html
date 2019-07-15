@@ -36,12 +36,12 @@
     <div class="container">
 
         <ul>
-            <li class="is-active" data-tab="13">
+            <li class="is-active" data-tab="14">
                 <a>
                     <span>Finished Goods Item</span>
                 </a>
             </li>
-            <li data-tab="14">
+            <li data-tab="15">
                 <a>
                     <span>Raw Material Fabric</span>
                 </a>
@@ -51,13 +51,48 @@
 </div>
 
 <div id="tab-content">
-    <div class="tab-box is-active " data-content="13">
+    <div class="tab-box is-active animated fadeIn" data-content="14">
         {% include 'fin_goods_master.html' %}
     </div>
-    <div class="tab-box " data-content="14">
+    <div class="tab-box animated fadeIn " data-content="15">
         {% include 'raw_mat_fabric_master.html' %}
 
     </div>
 
 </div>
+
+<script>
+
+$(document).ready(function () {
+        // Construct URL object using current browser URL
+        var url = new URL(document.location);
+
+        // Get query parameters object
+        var params = url.searchParams;
+
+        // Get value of paper
+        var selTab = params.get("showTab");
+        var selView = params.get("view");
+
+        if (selTab === '15') {
+            $("li[data-tab=14] ").removeClass('is-active');
+            $("div[data-content=14]").removeClass('is-active');
+
+            $("li[data-tab=15]").addClass('is-active');
+            $("div[data-content=15]").addClass('is-active');
+
+
+            if (selView === 'list') {
+                $("#raw_data_entry, #raw_data_view").toggle();
+            }
+        }
+        if (selTab === '14') {
+
+            if (selView === 'list') {
+                $("#data_entry, #data_view").toggle();
+            }
+        }
+
+    });
+</script>
 {% endblock %}

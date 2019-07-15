@@ -343,6 +343,7 @@ class FinGoodsForm(FlaskForm):
     uom = QuerySelectField('uom',validators=[InputRequired()] , query_factory= uom_choice , allow_blank= False  , get_label='measure')
     alt_name = StringField('alt_name')
     fin_submit = SubmitField('fin_submit')
+    fin_update = SubmitField('fin_update')
 
 class FinGoods(db.Model):
     id = db.Column(db.Integer , primary_key = True)

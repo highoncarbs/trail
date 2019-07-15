@@ -31,9 +31,18 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label">Date</label>
+                                <label class="label">Start Date</label>
                                 <div class="control has-icons-left">
-                                    <input class="input" name="dates">
+                                    <input class="input" name="start-dates">
+                                    <span class="icon is-small is-left">
+                                        <i data-feather="calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Target Date</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" name="target-dates">
                                     <span class="icon is-small is-left">
                                         <i data-feather="calendar"></i>
                                     </span>
@@ -402,7 +411,7 @@
 </script>
 <script>
 
-    $('input[name="dates"]').daterangepicker({ buttonClasses: 'button', applyButtonClasses: 'is-primary', cancelButtonClasses: 'is-text' });
+    $('input[name*="dates"]').daterangepicker({ "singleDatePicker": true, buttonClasses: 'button', applyButtonClasses: 'is-primary', cancelButtonClasses: 'is-text' });
 
     $(document).ready(function () {
         var max_fields = 10; //maximum input boxes allowed
@@ -426,7 +435,7 @@
             }
 
             var options = [];
-            $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
+            $.getJSON("{{url_for('get_raw_prod')}}", function (result) {
                 for (var j = 0; j < Object.keys(result).length; j++) {
                     options.push('<option value="',
                         Object.keys(result)[j], '">',
