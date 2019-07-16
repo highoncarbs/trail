@@ -68,6 +68,14 @@
                                                     Object.values(result)[i], '</option>');
                                             }
                                             $("#prod_sel").html(options.join(''));
+                                            $("#prod_sel").prop("selectedIndex", 0);
+                                          
+                                            var pp_sel = $("#prod_sel").val()
+                                            $.getJSON("/get/uom/"+pp_sel, function (result) {
+                                                console.log(result)
+                                                $("#prod_uom").val(result);
+                                            });
+
                                         });
                                 })
                             </script>
@@ -82,19 +90,16 @@
                             <div class="field">
                                 <label class="label">U.O.M</label>
                                 <div class="control">
-                                    <div class="control is-fullwidth select">
-                                        <select id="prod_uom" name="prod_uom"></select>
-                                    </div>
+                                        <input class="input robo" id="prod_uom" name="prod_uom" disabled >
+                                        
                                     <script>
-                                        $(document).ready(function () {
-                                            var options = [];
-                                            $.getJSON("{{url_for('get_uom')}}", function (result) {
-                                                for (var j = 0; j < Object.keys(result).length; j++) {
-                                                    options.push('<option value="',
-                                                        Object.keys(result)[j], '">',
-                                                        Object.values(result)[j], '</option>');
-                                                }
-                                                $("#prod_uom").html(options.join(''));
+                                    
+                                    $("#prod_sel").on('click' , function () {
+
+                                        var pp_sel = $("#prod_sel").val()
+                                            $.getJSON("/get/uom/"+pp_sel, function (result) {
+                                                console.log(result)
+                                                $("#prod_uom").val(result);
                                             });
                                         })
                                     </script>

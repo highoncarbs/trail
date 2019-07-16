@@ -17,7 +17,7 @@
             <hr>
             <div class="">
                 <div class="form">
-                    <form method="POST" action="{{ url_for('user_roles')}}">
+                    <form method="POST" action="{{ url_for('user_roles')}}" >
                         {{user_form.hidden_tag()}}
                         <div class="field">
                             <label class="label">Username</label>
@@ -28,9 +28,10 @@
                         <div class="field">
                             <label class="label">Password</label>
                             <div class="control">
-                                {{user_form.password(class="input" , placeholder="Enter Password")}}
+                                {{user_form.password(class="input" , placeholder="Enter Password" , type="text")}}
                             </div>
                         </div>
+                      
                         <br>
                         <div class="field is-grouped">
                             <div class="control is-left">
@@ -120,7 +121,7 @@
                                             <div class="field">
                                                 <label class="label">Edit Users</label>
                                                 <div class="control">
-                                                    {{ user_form.username(class="input" , placeholder=user.username)}}
+                                                    {{ user_form.username(class="input" , value=user.username)}}
                                                 </div>
                                             </div>
                                            
@@ -174,7 +175,7 @@
 
             </div>
         </div>
- 
+
 
 
 </div>

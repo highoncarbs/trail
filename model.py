@@ -14,13 +14,13 @@ class LoginForm(FlaskForm):
 
 
 class SignupForm(FlaskForm):
-    username = StringField('username')
-    password = PasswordField('password')
+    username = StringField('username' , validators=[InputRequired()])
+    password = PasswordField('password' ,  validators=[InputRequired()])
     email = StringField('email')
 
 class UserForm(FlaskForm):
-    username = StringField('username')
-    password = PasswordField('password')
+    username = StringField('username' ,  validators=[InputRequired()])
+    password = PasswordField('password' , validators=[InputRequired()])
     submit = SubmitField('user_submit')
     update_submit = SubmitField('update_submit')
 
@@ -396,6 +396,8 @@ class RawFabMainForm(FlaskForm):
     dye = QuerySelectField('dye',validators=[InputRequired()] , query_factory= dye_choice , allow_blank= False  , get_label='dye')
     alt_name = StringField('alt_name')
     raw_submit = SubmitField('raw_submit')
+    raw_update = SubmitField('raw_update')
+
 
 class RawFabMain(db.Model):
     id = db.Column(db.Integer , primary_key = True)

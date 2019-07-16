@@ -35,12 +35,10 @@
                             var options = [];
                             $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
                                 console.log(result)
-                                var leng = Object.keys(result).length
-                                for (var i = 1; i <= leng; i++) {
-                                    console.log(result[i])
+                                for (var j = 0; j < Object.keys(result).length; j++) {
                                     options.push('<option value="',
-                                        result[i], '">',
-                                        result[i], '</option>');
+                                        Object.keys(result)[j], '">',
+                                        Object.values(result)[j], '</option>');
                                 }
                                 $("#pp_sel").html(options.join(''));
                             });
@@ -51,15 +49,25 @@
                             e.preventDefault();
                             var pp_num = $('#pp_sel').val();
 
-                            $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
-                                console.log(result)
-                                for (var j = 0; j < Object.keys(result).length; j++) {
-                                    options.push('<option value="',
-                                        Object.keys(result)[j], '">',
-                                        Object.keys(result)[j], '</option>');
+
+                            $.getJSON("/get/trans_pp_b?pp_num=" + pp_num, function (result) {
+                                console.log(result);
+
+                                if ($.isEmptyObject(result)) {
+                                
+                                    $('#show_noti').show();
+                                    $('#trans_b_form').trigger("reset");
                                 }
-                                $("#pp_sel").html(options.join(''));
-                            });
+                                else {
+                                    $('#show_noti').hide();
+                                    var extra_fld = Object.keys(result['datefilter']).length;
+                                    for (i = 11; i < extra_fld; i++) {
+                                        $("#add_field_button_fg").trigger('click');
+                                    }
+                                    populate('#trans_b_form', json2html_name_list(result))
+
+                                }
+                            })
                         });
 
                         function json2html_name_list(json, result, parent) {
@@ -88,6 +96,9 @@
 
             </nav>
             <hr>
+            <div class="notification has-text-centered animated fadeIn" id="show_noti" style="display: none;">
+                <p>Please do the required entry and submit the form.</p>
+            </div>
             <div class="tracking_data">
                 <form id="trans_b_form">
                     <div class="table-container">
@@ -378,13 +389,38 @@
                             <button id="submit_btn_trans_b" class="button is-black robo"><span
                                     class="icon icon-btn-in"><i data-feather="check"></i></span>Submit</button>
                         </div>
-                        <div class="control">
-                        </div>
+
                         <div class="control ">
                             <a class="button is-text">Clear Fields</a>
                         </div>
 
+                        <!-- <div class="control">
+                            <button class="button is-danger robo" id="close_btn_trans_b"><span
+                                    class="icon icon-btn-in"><i data-feather="x"></i></span>Close Report</button>
+                        </div> -->
+                        <script>
+                            $('#close_btn_trans_b').click(function (e) {
+                                e.preventDefault();
+
+                                var payload = { 'pp_num': $('#pp_sel').val() };
+
+                                $.ajax({
+                                    url: "{{url_for('close_trans')}}",
+                                    type: 'POST',
+                                    data: JSON.stringify(payload),
+                                    contentType: 'application/json; charset=utf-8',
+                                    dataType: 'json',
+                                    async: true,
+                                    success: function (msg) {
+                                        window.location.href = "{{url_for('trans_b')}}";
+                                    }
+                                });
+
+                            });
+                        </script>
                     </div>
+                    <hr>
+
                 </form>
             </div>
 
@@ -518,7 +554,7 @@
                 });
 
                 $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                    $(this).val(picker.startDate.format('MM/DD/YYYY'));
                 });
 
                 $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
@@ -532,30 +568,33 @@
 
         $(wrapper_fg).on("click", ".remove_field", function (e) { //user click on remove text
             e.preventDefault();
-            $(this).parent('div').remove(); x--;
+            $(this).parent('div').parent('div').remove(); x--;
         })
 
     });
 </script>
 <script type="text/javascript">
+
     $(function () {
 
         $('input[name*="datefilter"]').daterangepicker({
-            singleDatePicker: true,
-            autoUpdateInput: false,
-            locale: {
-                cancelLabel: 'Clear'
-            }
-        });
+                    singleDatePicker: true,
+                    autoUpdateInput: false,
+                    locale: {
+                        cancelLabel: 'Clear'
+                    }
+                });
 
-        $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-        });
+                $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('MM/DD/YYYY'));
+                });
 
-        $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
-            $(this).val('');
-        });
+                $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                    $(this).val('');
+                });
 
+
+     
     });
 </script>
 
@@ -572,7 +611,7 @@
         var payload = { 'pp_num': $('#pp_sel').val(), 'data': formdata };
 
         $.ajax({
-            url: "{{url_for('trans_b_user')}}",
+            url: "{{url_for('trans_b')}}",
             type: 'POST',
             data: JSON.stringify(payload),
             contentType: 'application/json; charset=utf-8',

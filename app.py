@@ -865,10 +865,10 @@ def main_master(fin_id):
             db.session.commit()
             db.session.close()
             session['mssg'] = "Finished Goods successfully added."
-            return redirect('/main_master?showTab=13')
+            return redirect('/main_master?showTab=14')
         except Exception as e:
             session['mssg'] = "Something unexpected happened."
-            return redirect('/main_master?showTab=13')
+            return redirect('/main_master?showTab=14')
     
     if fin_goods_form.fin_update.data:
         try:
@@ -886,16 +886,15 @@ def main_master(fin_id):
             new_fin_good.design.append(fin_goods_form.design.data)
 
             new_fin_good.uom.append(fin_goods_form.uom.data)
-            session["mssg"] = "Finished Goods - "+str(new_fin_good.id)+" has been updated."
+            session["mssg"] = "Finished Goods has been updated."
 
             db.session.commit()
-            return redirect('/main_master?showTab=13&view=list')
+            return redirect('/main_master?showTab=14&view=list')
         except Exception as e:
             session['mssg'] = "Something unexpected happened."
             print(e)
-            return redirect('/main_master?showTab=13&view=list')
-    else:
-        print(fin_goods_form.errors)
+            return redirect('/main_master?showTab=14&view=list')
+    
 
     if raw_goods_form.raw_submit.data :
         new_raw_good = RawFabMain(alt_name = raw_goods_form.alt_name.data)
@@ -912,13 +911,35 @@ def main_master(fin_id):
             db.session.commit()
             db.session.close()
             session['mssg'] = "Raw Material Fabric successfully added."
-            return redirect('/main_master?showTab=14')
+            return redirect('/main_master?showTab=15')
         except Exception as e:
             session['mssg'] = "Something unexpected happened."
-            return redirect('/main_master?showTab=14')
-   
+            return redirect('/main_master?showTab=15')
+    
+    if raw_goods_form.raw_update.data:
+        try:
+            raw_g_id = int(fin_id)
+            db.session.query(RawFabMain).filter_by(id = raw_g_id).delete()
+            new_raw_good = RawFabMain(alt_name = raw_goods_form.alt_name.data)
 
-    return render_template('main_master.html' , fin_form = fin_goods_form , raw_form = raw_goods_form , fin_goods_list = fin_goods , raw_goods_list = raw_goods) ,200
+            new_raw_good.product_category.append(raw_goods_form.product_category.data)
+            new_raw_good.yarn.append(raw_goods_form.yarn.data)
+            new_raw_good.fab_const.append(raw_goods_form.fab_const.data)
+            new_raw_good.proc.append(raw_goods_form.proc.data)
+            new_raw_good.uom.append(raw_goods_form.uom.data)
+            new_raw_good.width.append(raw_goods_form.width.data)
+            new_raw_good.dye.append(raw_goods_form.dye.data)
+
+            db.session.commit()
+            db.session.close()
+            session['mssg'] = "Raw Material Fabric successfully added."
+            return redirect('/main_master?showTab=15&view=list')
+        except Exception as e:
+            session['mssg'] = "Something unexpected happened."
+            print(e)
+            return redirect('/main_master?showTab=15&view=list')
+
+    return render_template('main_master.html' ,mssg=session['mssg'], fin_form = fin_goods_form , raw_form = raw_goods_form , fin_goods_list = fin_goods , raw_goods_list = raw_goods ) ,200
 
 
 @app.route('/raw_materials', methods=['GET', 'POST'])
@@ -1760,6 +1781,14 @@ def get_uom():
         data.append(temp_tup)
     obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     return obj
+    
+@app.route('/get/uom/<fin_id>' , methods=["GET"])
+@login_required 
+def get_uom_by_id(fin_id):
+    res = db.session.query(FinGoods).filter_by(id = int(fin_id)).first().uom[0].measure
+    print(res)
+    return jsonify(res)
+    
 
 @app.route('/get/acc/' , methods=["GET"])
 @login_required 
