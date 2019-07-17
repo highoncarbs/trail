@@ -12,6 +12,7 @@
                                         <p class="is-size-5 robo ">
                                             Accessories</p>
                                     </div>
+                                    
                                 </div>
                                 <div class="level-right">
                                     <div class="level-item">
@@ -33,9 +34,18 @@
                     {% for acc in acc_list %}
                     <div class="level is-mobile">
                         <div class="level-left">
-                            <div class="level-left">
+                            <div class="level-item">
                                 <p>{{acc.acc}}</p>
                             </div>
+                            <div class="level-item">
+                            
+                                </div>
+                                <div class="level-item">
+                            
+                                    </div>
+                            <div class="level-item">
+                                    <p>{{acc.uom[0].measure}}</p>
+                                </div>
                         </div>
                         <div class="level-right">
         
@@ -65,14 +75,27 @@
                                 <div class="form">
                                     <form method="POST" action="{{ url_for('acc_edit' , id = acc.id)}}">
                                         {{ acc_form.hidden_tag()}}
-        
+                                        <div class="field-body is-horizontal">
+
                                         <div class="field">
                                             <label class="label">Edit Accessories</label>
                                             <div class="control">
                                                 {{ acc_form.acc(class="input" , value=acc.acc)}}
                                             </div>
                                         </div>
-                                       
+                                        <div class="field">
+                                                <label class="label">U.O.M</label>
+                                                <div class="control select " id="uom_sel_{{loop.index}}">
+                                                    {{acc_form.uom()}}
+                                                </div>
+                                                <script>
+                                                    $(document).ready(function(){
+                                                        $('#uom_sel_{{loop.index}} > #uom').val('{{ acc.uom[0].id }}')
+
+                                                    })
+                                                </script>
+                                            </div>
+                                       </div>
                                         <br>
                                         <br>
                                         <div class="field level">

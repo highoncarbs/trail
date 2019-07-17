@@ -8,6 +8,10 @@ from wtforms.validators import InputRequired, Email, Length , DataRequired ,Rege
 
 from app import db
 
+
+def uom_choice():
+    return db.session.query(Uom)
+
 class LoginForm(FlaskForm):
     username = StringField('username')
     password = PasswordField('password')
@@ -87,9 +91,18 @@ class CustomerCategoryForm(FlaskForm):
 class Accessories(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     acc = db.Column(db.String(50), unique=True, nullable=False)
+    uom = db.relationship('Uom' ,cascade="all,delete", secondary='uom_acc' , backref='uom_acc' , lazy = 'joined')
+
+db.Table('uom_acc',
+    db.Column('uom_id' , db.Integer , db.ForeignKey('uom.id' , ondelete='SET NULL' )),
+    db.Column('acc_id' , db.Integer , db.ForeignKey('accessories.id' , ondelete='SET NULL'))
+)
+
 
 class AccessoriesForm(FlaskForm):
     acc = StringField('acc', validators=[InputRequired()])
+    uom = QuerySelectField('uom',validators=[InputRequired()] , query_factory= uom_choice , allow_blank= False  , get_label='measure')
+
     acc_submit = SubmitField('acc_submit')
     acc_update = SubmitField('acc_update')
 
@@ -98,9 +111,17 @@ class AccessoriesForm(FlaskForm):
 class OtherMat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mat = db.Column(db.String(50), unique=True, nullable=False)
+    uom = db.relationship('Uom' ,cascade="all,delete", secondary='uom_oth' , backref='uom_oth' , lazy = 'joined')
+
+db.Table('uom_oth',
+    db.Column('uom_id' , db.Integer , db.ForeignKey('uom.id' , ondelete='SET NULL' )),
+    db.Column('mat_id' , db.Integer , db.ForeignKey('other_mat.id' , ondelete='SET NULL'))
+)
 
 class OtherMatForm(FlaskForm):
     mat = StringField('mat', validators=[InputRequired()])
+    uom = QuerySelectField('uom',validators=[InputRequired()] , query_factory= uom_choice , allow_blank= False  , get_label='measure')
+
     mat_submit = SubmitField('mat_submit')
     mat_update = SubmitField('mat_update')
 
@@ -328,9 +349,6 @@ def print_tech_choice():
 
 def design_choice():
     return db.session.query(FinDes)
-
-def uom_choice():
-    return db.session.query(Uom)
 
 
 # Finished Goods Master

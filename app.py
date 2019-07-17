@@ -319,6 +319,7 @@ def accessories():
                 Accessories).filter_by(acc=acc_name).first()
             if check_one is None:
                 new_acc = Accessories(acc=acc_name)
+                new_acc.uom.append(acc_form.uom.data)
                 db.session.add(new_acc)
                 db.session.commit()
                 session['mssg'] = "Accessory - "+acc_name+" has been added."
@@ -357,6 +358,8 @@ def other_mat():
                 OtherMat).filter_by(mat=mat_name).first()
             if check_one is None:
                 new_mat = OtherMat(mat=mat_name)
+                new_mat.uom.append(mat_form.uom.data)
+
                 db.session.add(new_mat)
                 db.session.commit()
                 session['mssg'] = "Material - "+mat_name+" has been added."
@@ -1286,9 +1289,11 @@ def acc_edit(id):
     if acc_form.acc_update.data:
         acc_name = str(acc_form.acc.data).lower()
         check_one = db.session.query(
-            Accessories).filter_by(id=id).first()
-        if check_one is not None:
-            check_one.acc = acc_name
+            Accessories).filter_by(id=id)
+        if check_one.first() is not None:
+            check_one.delete()
+            new_acc = Accessories(acc = acc_name)
+            new_acc.uom.append(acc_form.uom.data)
             db.session.commit()
             session['mssg'] = "Accessories updated successfully"
             return redirect('/raw_materials/accessories_view')
@@ -1328,9 +1333,11 @@ def mat_edit(id):
     if mat_form.mat_update.data:
         mat_name = str(mat_form.mat.data).lower()
         check_one = db.session.query(
-            OtherMat).filter_by(id=id).first()
-        if check_one is not None:
-            check_one.mat = mat_name
+            OtherMat).filter_by(id=id)
+        if check_one.first() is not None:
+            check_one.delete()
+            new_mat = OtherMat(mat = mat_name)
+            new_mat.uom.append(mat_form.uom.data)
             db.session.commit()
             session['mssg'] = "Accessories updated successfully"
             return redirect('/raw_materials/other_mat_view')
@@ -1811,6 +1818,20 @@ def get_uom_by_id_raw_fab(fin_id):
     print(res)
     return jsonify(res)
     
+
+@app.route('/get/uom/acc/<fin_id>' , methods=["GET"])
+@login_required 
+def get_uom_by_id_acc(fin_id):
+    res = db.session.query(Accessories).filter_by(id = int(fin_id)).first().uom[0].measure
+    print(res)
+    return jsonify(res)
+
+@app.route('/get/uom/oth/<fin_id>' , methods=["GET"])
+@login_required 
+def get_uom_by_id_oth(fin_id):
+    res = db.session.query(OtherMat).filter_by(id = int(fin_id)).first().uom[0].measure
+    print(res)
+    return jsonify(res)
 
 @app.route('/get/acc/' , methods=["GET"])
 @login_required 

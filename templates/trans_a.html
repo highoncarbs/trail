@@ -258,17 +258,21 @@
                                                     Object.values(result)[i], '</option>');
                                             }
                                             $(".fab_sel_cls").html(options.join(''));
+                                            $(".fab_sel_cls").prop("selectedIndex", 0);
+                                            var pp_sel = $("select[name=fab_sel_0]").val()
+                                            $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
+                                                $("input[name='fab_sel_uom_0']").val(result);
+                                            });
+
                                         });
                                     });
 
                                 </script>
                                 <script>
-                                    $("input[name=fab_sel_0]").on('click', function () {
-
-                                        var pp_sel = $("input[name=fab_sel_0]").val()
+                                    $("select[name=fab_sel_0]").on('change', function () {
+                                        var pp_sel = $("select[name=fab_sel_0]").val()
                                         $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
-                                            console.log(result)
-                                            $("input[name=fab_sel_uom_0]").val(result);
+                                            $("input[name='fab_sel_uom_0']").val(result);
                                         });
                                     })
                                 </script>
@@ -285,6 +289,8 @@
                             <thead>
                                 <tr>
                                     <th>Accessories</th>
+                                    <th>U.O.M</th>
+
                                     <th>Per Pc. Consum.</th>
                                     <th>Qty Required</th>
                                     <th>Qty Issued</th>
@@ -302,6 +308,7 @@
                                             </select>
                                         </div>
                                     </td>
+                                    <td><input type="text" class="input" name="acc_sel_uom_0" disabled></td>
                                     <td><input type="text" class="input" name="acc_pr_pc_0" /></td>
                                     <td><input type="text" class="input" name="acc_qty_req_0" /></td>
                                     <td><input type="text" class="input" name="acc_qty_iss_0" /></td>
@@ -320,6 +327,13 @@
                                                     Object.values(result)[j], '</option>');
                                             }
                                             $(".acc_selector").html(options.join(''));
+                                            $(".acc_selector").prop("selectedIndex", 0);
+                                            var pp_sel = $("select[name=acc_sel_0]").val()
+
+                                            // TODO:  Fix theses UOM for Other and acces
+                                            $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
+                                                $("input[name='acc_sel_uom_0']").val(result);
+                                            });
                                         });
 
                                     })
@@ -336,6 +350,8 @@
                             <thead>
                                 <tr>
                                     <th>Other Materials</th>
+                                    <th>U.O.M</th>
+
                                     <th>Per Pc. Consum.</th>
                                     <th>Qty Required</th>
                                     <th>Qty Issued</th>
@@ -352,6 +368,7 @@
                                             </select>
                                         </div>
                                     </td>
+                                    <td><input type="text" class="input" name="oth_pr_uom_0" disabled></td>
                                     <td><input type="text" class="input" name="oth_pr_pc_0" /></td>
                                     <td><input type="text" class="input" name="oth_qty_req_0" /></td>
                                     <td><input type="text" class="input" name="oth_qty_iss_0" /></td>
@@ -370,6 +387,13 @@
                                                     Object.values(result)[j], '</option>');
                                             }
                                             $(".oth_selector").html(options.join(''));
+                                            $(".oth_selector").prop("selectedIndex", 0);
+                                            var pp_sel = $("select[name='oth_sel_0']").val()
+
+                                            // TODO:  Fix theses UOM for Other and acces
+                                            $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
+                                                $("input[name='oth_pr_uom_0']").val(result);
+                                            });
                                         });
                                     })
                                 </script>
@@ -384,8 +408,8 @@
                         <hr>
                         <div class="field is-grouped">
                             <div class="control">
-                                <button id="submit_btn_trans_a" class="button is-black robo"><span
-                                        class="icon icon-btn-in"><i data-feather="check"></i></span>Submit</button>
+                                <button id="submit_btn_trans_a" class="button is-black"><span
+                                        class="icon icon-btn-in"><i data-feather="check"></i></span>Save</button>
                             </div>
                             <div class="control">
                             </div>
@@ -451,14 +475,23 @@
                 x++; //text box increment
                 $(wrapper_fab).append('<tr> \
                     <td><div class="select"><select  class="fab_sel_cls" name="fab_sel_'+ x + '"></select></div></td>\
+                    <td><input type="text" class="input" name="fab_sel_uom_'+ x + '" disabled></td>\
                     <td><input type="text" class="input" name="fab_pr_pc_'+ x + '"/></td>\
                     <td><input type="text" class="input" name="fab_qty_req_'+ x + '"/></td> \
                     <td><input type = "text" class= "input" name = "fab_qty_iss_'+ x + '" /></td>\
                     <td><input type="text" class="input" name="fab_qty_ret_'+ x + '" /></td>\
                     <td><input type="text" class="input" name="fab_net_con_'+ x + '" /></td>\
                     <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
-                                        data-feather="x"></i></span></a></td></tr> '); feather.replace()
+                                        data-feather="x"></i></span></a></td></tr> ');
+                feather.replace();
 
+                $("select[name='fab_sel_" + x + "']").on('change', function () {
+
+                    var pp_sel = $("select[name='fab_sel_" + x + "']").val()
+                    $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
+                        $("input[name='fab_sel_uom_" + x + "']").val(result);
+                    });
+                })
             }
 
             var options = [];
@@ -468,7 +501,14 @@
                         Object.keys(result)[j], '">',
                         Object.values(result)[j], '</option>');
                 }
-                $(".fab_sel_cls").html(options.join(''));
+                $("select[name='fab_sel_" + x + "']").html(options.join(''));
+                $("select[name='fab_sel_" + x + "']").prop("selectedIndex", 0);
+                var pp_sel = $("select[name='fab_sel_" + x + "']").val()
+                $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
+                    $("input[name='fab_sel_uom_" + x + "']").val(result);
+                });
+
+
             });
         });
 
@@ -484,7 +524,7 @@
         var wrapper_acc = $(".input_fields_wrap_acc"); //Fields wrapper
         var add_button_acc = $("#add_field_button_acc"); //Add button ID
 
-        var x = 1; //initlal text box count
+        var x = 0; //initlal text box count
         $(add_button_acc).click(function (e) { //on add input button click
             console.log("clicked")
             e.preventDefault();
@@ -492,6 +532,7 @@
                 x++; //text box increment
                 $(wrapper_acc).append('<tr> \
                     <td><div class="select"><select class="acc_selector" name="acc_sel_'+ x + '"></select></div></td>\
+                    <td><input type="text" class="input" name="acc_sel_uom_'+ x + '" disabled></td> \
                     <td><input type="text" class="input" name="acc_pr_pc_'+ x + '"/></td>\
                     <td><input type="text" class="input" name="acc_qty_req_'+ x + '"/></td> \
                     <td><input type = "text" class= "input" name = "acc_qty_iss_'+ x + '" /></td>\
@@ -499,7 +540,15 @@
                     <td><input type="text" class="input" name="acc_net_con_'+ x + '" /></td>\
                     <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
                                         data-feather="x"></i></span></a></td></tr> ');
-                feather.replace()
+                feather.replace();
+
+                $("select[name='acc_sel_" + x + "']").on('change', function () {
+
+                    var pp_sel = $("select[name='acc_sel_" + x + "']").val()
+                    $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
+                        $("input[name='acc_sel_uom_" + x + "']").val(result);
+                    });
+                })
 
             }
 
@@ -511,7 +560,16 @@
                         Object.keys(result)[j], '">',
                         Object.values(result)[j], '</option>');
                 }
-                $(".acc_selector").html(options.join(''));
+                $(".acc_selector_" + x + "").html(options.join(''));
+
+                // TODO
+
+                $("select[name='acc_sel_" + x + "']").html(options.join(''));
+                $("select[name='acc_sel_" + x + "']").prop("selectedIndex", 0);
+                var pp_sel = $("select[name='acc_sel_" + x + "']").val()
+                $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
+                    $("input[name='acc_sel_uom_" + x + "']").val(result);
+                });
             });
 
         });
@@ -528,7 +586,7 @@
         var wrapper_oth = $(".input_fields_wrap_oth"); //Fields wrapper
         var add_button_oth = $("#add_field_button_oth"); //Add button ID
 
-        var x = 1; //initlal text box count
+        var x = 0; //initlal text box count
         $(add_button_oth).click(function (e) { //on add input button click
             console.log("clicked")
             e.preventDefault();
@@ -536,6 +594,7 @@
                 x++; //text box increment
                 $(wrapper_oth).append('<tr> \
                     <td><div class="select"><select class="oth_selector" name="oth_sel_'+ x + '"></select></div></td>\
+                    <td><input type="text" class="input" name="oth_pr_uom_'+ x + '" disabled></td>\
                     <td><input type="text" class="input" name="oth_pr_pc_'+ x + '"/></td>\
                     <td><input type="text" class="input" name="oth_qty_req_'+ x + '"/></td> \
                     <td><input type = "text" class= "input" name = "oth_qty_iss_'+ x + '" /></td>\
@@ -543,7 +602,16 @@
                     <td><input type="text" class="input" name="oth_net_con_'+ x + '" /></td>\
                     <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i\
                                         data-feather="x"></i></span></a></td></tr> ');
-                feather.replace()
+                feather.replace();
+                $("select[name='oth_sel_" + x + "']").on('change', function () {
+
+                    // TODO 
+
+                    var pp_sel = $("select[name='oth_sel_" + x + "']").val()
+                    $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
+                        $("input[name='oth_pr__uom_" + x + "']").val(result);
+                    });
+                })
 
             }
             var options = [];
@@ -553,7 +621,12 @@
                         Object.keys(result)[j], '">',
                         Object.values(result)[j], '</option>');
                 }
-                $(".oth_selector").html(options.join(''));
+                $("select[name='oth_sel_" + x + "']").html(options.join(''));
+                $("select[name='oth_sel_" + x + "']").prop("selectedIndex", 0);
+                var pp_sel = $("select[name='oth_sel_" + x +"']").val()
+                $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
+                    $("input[name='oth_pr_uom_" + x + "']").val(result);
+                });
             });
         });
 
