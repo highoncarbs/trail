@@ -61,22 +61,22 @@
                                 $(document).ready(function () {
                                     var options = [];
                                     $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
-                                            var leng = Object.keys(result).length
-                                            for (var i = 0; i < leng; i++) {
-                                                options.push('<option value="',
-                                                    Object.keys(result)[i], '">',
-                                                    Object.values(result)[i], '</option>');
-                                            }
-                                            $("#prod_sel").html(options.join(''));
-                                            $("#prod_sel").prop("selectedIndex", 0);
-                                          
-                                            var pp_sel = $("#prod_sel").val()
-                                            $.getJSON("/get/uom/"+pp_sel, function (result) {
-                                                console.log(result)
-                                                $("#prod_uom").val(result);
-                                            });
+                                        var leng = Object.keys(result).length
+                                        for (var i = 0; i < leng; i++) {
+                                            options.push('<option value="',
+                                                Object.keys(result)[i], '">',
+                                                Object.values(result)[i], '</option>');
+                                        }
+                                        $("#prod_sel").html(options.join(''));
+                                        $("#prod_sel").prop("selectedIndex", 0);
 
+                                        var pp_sel = $("#prod_sel").val()
+                                        $.getJSON("/get/uom/" + pp_sel, function (result) {
+                                            console.log(result)
+                                            $("#prod_uom").val(result);
                                         });
+
+                                    });
                                 })
                             </script>
                             <div class="field">
@@ -90,14 +90,14 @@
                             <div class="field">
                                 <label class="label">U.O.M</label>
                                 <div class="control">
-                                        <input class="input robo" id="prod_uom" name="prod_uom" disabled >
-                                        
-                                    <script>
-                                    
-                                    $("#prod_sel").on('click' , function () {
+                                    <input class="input robo" id="prod_uom" name="prod_uom" disabled>
 
-                                        var pp_sel = $("#prod_sel").val()
-                                            $.getJSON("/get/uom/"+pp_sel, function (result) {
+                                    <script>
+
+                                        $("#prod_sel").on('click', function () {
+
+                                            var pp_sel = $("#prod_sel").val()
+                                            $.getJSON("/get/uom/" + pp_sel, function (result) {
                                                 console.log(result)
                                                 $("#prod_uom").val(result);
                                             });
@@ -220,6 +220,7 @@
                             <thead>
                                 <tr>
                                     <th>Fabric</th>
+                                    <th>U.O.M</th>
                                     <th>Per Pc. Consum.</th>
                                     <th>Qty Required</th>
                                     <th>Qty Issued</th>
@@ -237,12 +238,14 @@
                                             </select>
                                         </div>
                                     </td>
+                                    <td><input type="text" class="input" name="fab_sel_uom_0" disabled></td>
                                     <td><input type="text" class="input" name="fab_pr_pc_0" /></td>
                                     <td><input type="text" class="input" name="fab_qty_req_0" /></td>
                                     <td><input type="text" class="input" name="fab_qty_iss_0" /></td>
                                     <td><input type="text" class="input" name="fab_qty_ret_0" /></td>
                                     <td><input type="text" class="input" name="fab_net_con_0" /></td>
-                                    <td><a class="button is-text remove_field">Remove</a></td>
+                                    <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i
+                                                    data-feather="x"></i></span></a></td>
                                 </tr>
                                 <script>
                                     $(document).ready(function () {
@@ -255,6 +258,17 @@
                                                     Object.values(result)[i], '</option>');
                                             }
                                             $(".fab_sel_cls").html(options.join(''));
+                                        });
+                                    });
+
+                                </script>
+                                <script>
+                                    $("input[name=fab_sel_0]").on('click', function () {
+
+                                        var pp_sel = $("input[name=fab_sel_0]").val()
+                                        $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
+                                            console.log(result)
+                                            $("input[name=fab_sel_uom_0]").val(result);
                                         });
                                     })
                                 </script>
@@ -293,7 +307,8 @@
                                     <td><input type="text" class="input" name="acc_qty_iss_0" /></td>
                                     <td><input type="text" class="input" name="acc_qty_ret_0" /></td>
                                     <td><input type="text" class="input" name="acc_net_con_0" /></td>
-                                    <td><a class="button is-text remove_field">Remove</a></td>
+                                    <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i
+                                                    data-feather="x"></i></span></a></td>
                                 </tr>
                                 <script>
                                     $(document).ready(function () {
@@ -342,7 +357,8 @@
                                     <td><input type="text" class="input" name="oth_qty_iss_0" /></td>
                                     <td><input type="text" class="input" name="oth_qty_ret_0" /></td>
                                     <td><input type="text" class="input" name="oth_net_con_0" /></td>
-                                    <td><a class="button is-text remove_field">Remove</a></td>
+                                    <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i
+                                                    data-feather="x"></i></span></a></td>
                                 </tr>
                                 <script>
                                     $(document).ready(function () {
@@ -398,7 +414,7 @@
         e.preventDefault();
 
         var data = $("#trans_a_form").serializeJSON();
-       
+
 
         $.ajax({
             url: "{{url_for('trans_a')}}",
@@ -411,12 +427,16 @@
                 window.location.href = "{{url_for('trans_a')}}";
             }
         });
-        
+
     });
 </script>
 <script>
 
-    $('input[name*="dates"]').daterangepicker({ "singleDatePicker": true, buttonClasses: 'button', applyButtonClasses: 'is-primary', cancelButtonClasses: 'is-text' });
+    $('input[name*="dates"]').daterangepicker({
+        "locale": {
+            "format": "DD/MM/YYYY"
+        }, "singleDatePicker": true, buttonClasses: 'button', applyButtonClasses: 'is-primary', cancelButtonClasses: 'is-text'
+    });
 
     $(document).ready(function () {
         var max_fields = 10; //maximum input boxes allowed
@@ -436,7 +456,9 @@
                     <td><input type = "text" class= "input" name = "fab_qty_iss_'+ x + '" /></td>\
                     <td><input type="text" class="input" name="fab_qty_ret_'+ x + '" /></td>\
                     <td><input type="text" class="input" name="fab_net_con_'+ x + '" /></td>\
-                    <td><a href="#" class="button is-text remove_field">Remove</a></td></tr> ');
+                    <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
+                                        data-feather="x"></i></span></a></td></tr> '); feather.replace()
+
             }
 
             var options = [];
@@ -475,7 +497,10 @@
                     <td><input type = "text" class= "input" name = "acc_qty_iss_'+ x + '" /></td>\
                     <td><input type="text" class="input" name="acc_qty_ret_'+ x + '" /></td>\
                     <td><input type="text" class="input" name="acc_net_con_'+ x + '" /></td>\
-                    <td><a href="#" class="button is-text remove_field">Remove</a></td></tr> ');
+                    <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
+                                        data-feather="x"></i></span></a></td></tr> ');
+                feather.replace()
+
             }
 
 
@@ -516,7 +541,10 @@
                     <td><input type = "text" class= "input" name = "oth_qty_iss_'+ x + '" /></td>\
                     <td><input type="text" class="input" name="oth_qty_ret_'+ x + '" /></td>\
                     <td><input type="text" class="input" name="oth_net_con_'+ x + '" /></td>\
-                    <td><a href="#" class="button is-text remove_field">Remove</a></td></tr> ');
+                    <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i\
+                                        data-feather="x"></i></span></a></td></tr> ');
+                feather.replace()
+
             }
             var options = [];
             $.getJSON("{{url_for('get_oth_mat')}}", function (result) {

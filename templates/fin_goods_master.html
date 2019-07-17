@@ -65,7 +65,7 @@
                             </div>
                         </div>
                         <br>
-                       
+
                         <br>
                         <div class="field is-grouped">
                             <div class="control ">
@@ -175,10 +175,7 @@
                                                     <div class="control select select_prod_{{loop.index}} is-fullwidth">
                                                         {{fin_form.product_category()}}
                                                     </div>
-                                                    <script>
-                                                        $('.select_prod_{{loop.index}} > #product_category').val('{{row.product_category[0].id}}')
-
-                                                    </script>
+                                                   
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Fabric Combo</label>
@@ -188,18 +185,17 @@
 
                                                     </div>
                                                     <script>
-                                                            $('.select_combo_{{loop.index}} > #fabric_combo').val('{{row.fabric_combo[0].id}}')
-    
-                                                        </script>
+
+                                                    </script>
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Print Technique</label>
-                                                    <div class="control select select_print_{{loop.index}} is-fullwidth">
+                                                    <div
+                                                        class="control select select_print_{{loop.index}} is-fullwidth">
                                                         {{fin_form.print_tech()}}
 
                                                     </div>
                                                     <script>
-                                                        $('.select_print_{{loop.index}} > #print_tech').val('{{row.print_tech[0].id}}')
 
                                                     </script>
                                                 </div>
@@ -211,7 +207,6 @@
 
                                                     </div>
                                                     <script>
-                                                        $('.select_des_{{loop.index}} > #design').val('{{row.design[0].id}}')
 
                                                     </script>
                                                 </div>
@@ -223,7 +218,6 @@
 
                                                     </div>
                                                     <script>
-                                                        $('.select_uom_{{loop.index}} > #uom').val('{{row.uom[0].id}}')
 
                                                     </script>
                                                 </div>
@@ -254,8 +248,16 @@
                                                 </div>
 
                                             </div>
-                                           
 
+                                            <script>
+                                                    $(document).ready(function () {
+                                                        $('.select_prod_{{loop.index}} > #product_category').val("{{row.product_category[0].id}}");
+                                                        $('.select_combo_{{loop.index}} > #fabric_combo').val("{{row.fabric_combo[0].id}}");
+                                                        $('.select_print_{{loop.index}} > #print_tech').val('{{row.print_tech[0].id}}');
+                                                        $('.select_des_{{loop.index}} > #design').val('{{row.design[0].id}}');
+                                                        $('.select_uom_{{loop.index}} > #uom').val("{{row.uom[0].id}}");
+                                                    });
+                                                </script>
                                         </form>
                                     </div>
                                 </div>

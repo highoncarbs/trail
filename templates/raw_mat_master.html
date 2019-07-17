@@ -118,10 +118,12 @@
 
         if (selTab === '9') {
             $("li[data-tab=8] , li[data-tab=10] , li[data-tab=11] , li[data-tab=12] , li[data-tab=13] ").removeClass('is-active');
-            $("div[data-content=8] ,div[data-content=10] , div[data-content=11] ,div[data-content=12] , ,div[data-content=13]").removeClass('is-active');
+            $("div[data-content=8] ,div[data-content=10] , div[data-content=11] ,div[data-content=12] ,div[data-content=13]").removeClass('is-active');
 
             $("li[data-tab=9]").addClass('is-active');
             $("div[data-content=9]").addClass('is-active');
+
+            $('#proc').focus();
 
 
             if (selView === 'list') {
@@ -136,6 +138,7 @@
             $("li[data-tab=10]").addClass('is-active');
             $("div[data-content=10]").addClass('is-active');
 
+            $('#width').focus();
 
             if (selView === 'list') {
                 $("#width_data_entry, #width_data_view").toggle();
@@ -149,6 +152,7 @@
             $("li[data-tab=11]").addClass('is-active');
             $("div[data-content=11]").addClass('is-active');
 
+            $('#dye').focus();
 
             if (selView === 'list') {
                 $("#dye_data_entry, #dye_data_view").toggle();
@@ -162,9 +166,11 @@
             $("li[data-tab=12]").addClass('is-active');
             $("div[data-content=12]").addClass('is-active');
 
+            $('#cat').focus();
+
 
             if (selView === 'list') {
-                $("#cat_data_entry, #cat_data_view").toggle();
+                $("#rcat_data_entry, #rcat_data_view").toggle();
             }
         }
 
@@ -175,12 +181,16 @@
             $("li[data-tab=13]").addClass('is-active');
             $("div[data-content=13]").addClass('is-active');
 
+            $('#const').focus();
 
             if (selView === 'list') {
                 $("#const_data_entry, #const_data_view").toggle();
             }
         }
         if (selTab === '8') {
+
+            $('#yarn').focus();
+
 
             if (selView === 'list') {
                 $("#yarn_data_entry, #yarn_data_view").toggle();

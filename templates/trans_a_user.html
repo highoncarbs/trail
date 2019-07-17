@@ -416,7 +416,8 @@
 </script>
 <script>
 
-    $('input[name*="dates"]').daterangepicker({ "singleDatePicker": true, buttonClasses: 'button', applyButtonClasses: 'is-primary', cancelButtonClasses: 'is-text' });
+    $('input[name*="dates"]').daterangepicker({ "locale": {
+        "format": "DD/MM/YYYY"} , "singleDatePicker": true, buttonClasses: 'button', applyButtonClasses: 'is-primary', cancelButtonClasses: 'is-text' });
 
     $(document).ready(function () {
         var max_fields = 10; //maximum input boxes allowed

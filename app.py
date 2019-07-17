@@ -283,7 +283,7 @@ def customer_category():
 
     if cust_form.validate_on_submit():
         if cust_form.health_submit.data:
-            cust_name = str(cust_form.health.data).title()
+            cust_name = str(cust_form.health.data).upper()
             check_one = db.session.query(
                 CustomerCategory).filter_by(health=cust_name).first()
             if check_one is None:
@@ -314,14 +314,19 @@ def accessories():
 
     if acc_form.validate_on_submit():
         if acc_form.acc_submit.data:
-            acc_name = str(acc_form.acc.data).title()
+            acc_name = str(acc_form.acc.data).lower()
             check_one = db.session.query(
                 Accessories).filter_by(acc=acc_name).first()
             if check_one is None:
                 new_acc = Accessories(acc=acc_name)
                 db.session.add(new_acc)
                 db.session.commit()
+                session['mssg'] = "Accessory - "+acc_name+" has been added."
                 return redirect(url_for('accessories'))
+            else:
+                session['mssg'] = "Accessory - "+acc_name+" already exists."
+                return redirect(url_for('accessories'))
+
     return render_template('accessories.html', subtitle="Accessories", mssg=session['mssg'], acc_form=acc_form), 200
 
 
@@ -347,13 +352,18 @@ def other_mat():
 
     if mat_form.validate_on_submit():
         if mat_form.mat_submit.data:
-            mat_name = str(mat_form.mat.data).title()
+            mat_name = str(mat_form.mat.data).lower()
             check_one = db.session.query(
                 OtherMat).filter_by(mat=mat_name).first()
             if check_one is None:
                 new_mat = OtherMat(mat=mat_name)
                 db.session.add(new_mat)
                 db.session.commit()
+                session['mssg'] = "Material - "+mat_name+" has been added."
+                return redirect(url_for('other_mat'))
+            else:
+                session['mssg'] = "Material - "+mat_name+" already exists."
+
                 return redirect(url_for('other_mat'))
     return render_template('othermat.html', subtitle="Other Materials", mssg=session['mssg'], mat_form=mat_form), 200
 
@@ -384,7 +394,7 @@ def uom():
 
     if uom_form.validate_on_submit():
         if uom_form.uom_submit.data:
-            uom_name = str(uom_form.measure.data)
+            uom_name = str(uom_form.measure.data).lower()
             check_one = db.session.query(
                 Uom).filter_by(measure=uom_name).first()
             if check_one is None:
@@ -392,6 +402,11 @@ def uom():
                               decimal=int(uom_form.decimal.data))
                 db.session.add(new_uom)
                 db.session.commit()
+                session['mssg'] = "Measure - "+uom_name+" has been added."
+                return redirect(url_for('uom'))
+            else:
+                session['mssg'] = "Measure - "+uom_name+" already exists."
+
                 return redirect(url_for('uom'))
     return render_template('uom_master.html', subtitle="Unit of Measurement", mssg=session['mssg'], uom_form=uom_form), 200
 
@@ -412,7 +427,7 @@ def location():
             city_name = str(city_form.city.data).title()
             check_one = City.query.filter_by(city=city_form.city.data).first()
             if check_one is not None:
-                mssg = "City already exists "
+                session['mssg'] = "City already exists "
                 return redirect(url_for('location'))
 
             else:
@@ -464,10 +479,13 @@ def location():
             country_name = str(country_form.country.data).title()
             check_one = db.session.query(
                 Country).filter_by(country=country_name).first()
-            if check_one is None:
+            if check_one is not None:
+                session['mssg'] = "Country already exists "
+            else:
                 new_country = Country(country=country_name)
                 db.session.add(new_country)
                 db.session.commit()
+                session['mssg'] = "Country - "+country_name+" successfully added. "
                 return redirect('/location')    
     
     return render_template('location_master.html', subtitle="Location", mssg=session['mssg'], city_form=city_form, city_list=city_list,
@@ -492,7 +510,7 @@ def fin_goods():
 
     if cat_form.validate_on_submit():
         if cat_form.cat_submit.data:
-            cat_name = str(cat_form.cat.data)
+            cat_name = str(cat_form.cat.data).lower()
             check_one = db.session.query(
                 FinCat).filter_by(cat=cat_name).first()
             if check_one is not None:
@@ -504,7 +522,7 @@ def fin_goods():
                 db.session.commit()
                 session['mssg'] = "Fabric Category - " + \
                     cat_name+"  successfully added."
-                return redirect('/finished_goods?showTab=1')
+            return redirect('/finished_goods?showTab=1')
 
     comb_list = db.session.query(
         FabComb).all()
@@ -512,7 +530,7 @@ def fin_goods():
 
     if comb_form.validate_on_submit():
         if comb_form.comb_submit.data:
-            comb_name = str(comb_form.comb.data)
+            comb_name = str(comb_form.comb.data).lower()
             check_one = db.session.query(
                 FabComb).filter_by(comb=comb_name).first()
             if check_one is not None:
@@ -524,7 +542,7 @@ def fin_goods():
                 db.session.commit()
                 session['mssg'] = "Fabric Combination - " + \
                     comb_name+"  successfully added."
-                return redirect('/finished_goods?showTab=2')
+            return redirect('/finished_goods?showTab=2')
     
     tech_list = db.session.query(
         PrintTech).all()
@@ -532,7 +550,7 @@ def fin_goods():
 
     if tech_form.validate_on_submit():
         if tech_form.tech_submit.data:
-            tech_name = str(tech_form.tech.data)
+            tech_name = str(tech_form.tech.data).lower()
             check_one = db.session.query(
                 PrintTech).filter_by(tech=tech_name).first()
             if check_one is not None:
@@ -544,7 +562,7 @@ def fin_goods():
                 db.session.commit()
                 session['mssg'] = "Print Technique - " + \
                     tech_name+"  successfully added."
-                return redirect('/finished_goods?showTab=3')
+            return redirect('/finished_goods?showTab=3')
 
     des_list = db.session.query(
         FinDes).all()
@@ -563,7 +581,7 @@ def fin_goods():
                 db.session.commit()
                 session['mssg'] = "Design - " + \
                     des_name+" successfully added."
-                return redirect('/finished_goods?showTab=4')
+            return redirect('/finished_goods?showTab=4')
     
     size_list = db.session.query(
         FinSize).all()
@@ -571,7 +589,7 @@ def fin_goods():
 
     if size_form.validate_on_submit():
         if size_form.size_submit.data:
-            size_name = str(size_form.size.data)
+            size_name = str(size_form.size.data).upper()
             check_one = db.session.query(
                 FinSize).filter_by(size=size_name).first()
             if check_one is not None:
@@ -582,7 +600,7 @@ def fin_goods():
                 db.session.commit()
                 session['mssg'] = "Size - " + \
                     size_name+" successfully added."
-                return redirect('/finished_goods?showTab=5')
+            return redirect('/finished_goods?showTab=5')
 
     return render_template('fin_goods.html' , subtitle = "Finished Goods " , mssg = session['mssg'] , cat_list =cat_list ,cat_form = cat_form ,\
          comb_list =comb_list ,comb_form = comb_form , tech_list = tech_list , tech_form = tech_form , des_list = des_list ,des_form = des_form ,\
@@ -601,7 +619,7 @@ def pcat_edit(id):
     '''
     cat_form = FinCatForm()
     if cat_form.cat_update.data:
-        cat_name = str(cat_form.cat.data).title()
+        cat_name = str(cat_form.cat.data).lower()
         check_one = db.session.query(
             FinCat).filter_by(id=id).first()
         if check_one is not None:
@@ -646,7 +664,7 @@ def comb_edit(id):
     '''
     comb_form = FabCombForm()
     if comb_form.comb_update.data:
-        comb_name = str(comb_form.comb.data).title()
+        comb_name = str(comb_form.comb.data).lower()
         check_one = db.session.query(
             FabComb).filter_by(id=id).first()
         if check_one is not None:
@@ -691,7 +709,7 @@ def tech_edit(id):
     '''
     tech_form = PrintTechForm()
     if tech_form.tech_update.data:
-        tech_name = str(tech_form.tech.data).title()
+        tech_name = str(tech_form.tech.data).lower()
         check_one = db.session.query(
             PrintTech).filter_by(id=id).first()
         if check_one is not None:
@@ -737,7 +755,7 @@ def des_edit(id):
     '''
     des_form = FinDesForm()
     if des_form.des_update.data:
-        des_name = str(des_form.des.data).title()
+        des_name = str(des_form.des.data).lower()
         check_one = db.session.query(
             FinDes).filter_by(id=id).first()
         if check_one is not None:
@@ -764,7 +782,7 @@ def des_delete(id):
             return redirect('/finished_goods?showTab=4&view=list')
         else:
             session['mssg'] = "Cannot delete. Value is being used."
-            return redirect('/raw_materials?showTab=4&view=list')
+            return redirect('/finished_goods?showTab=4&view=list')
     else:
         session['mssg'] = "Something went wrong."
         return redirect('/finished_goods?showTab=4&view=list')
@@ -781,11 +799,11 @@ def size_edit(id):
     '''
     size_form = FinSizeForm()
     if size_form.size_update.data:
-        size_name = str(size_form.size.data).title()
+        size_name = str(size_form.size.data).upper()
         check_one = db.session.query(
             FinSize).filter_by(id=id).first()
         if check_one is not None:
-            check_one.size = size_name
+            check_one.size = size_name.upper()
             db.session.commit()
             session['mssg'] = "Fabric Size updated successfully"
             return redirect('/finished_goods?showTab=5&view=list')
@@ -810,17 +828,14 @@ def size_delete(id):
         return redirect('/finished_goods?showTab=5&view=list')
 
 
-@app.route('/other_materials', methods=['GET', 'POST'])
-@login_required
-def other_materials():
-    pass
+
 @app.route('/firms', methods=['GET', 'POST'])
 @login_required
 def firms():
     firm_form = FirmForm()
     firm_list = db.session.query(Firms).all()
     if firm_form.validate_on_submit():
-        firm_name = str(firm_form.firm_name.data).title()
+        firm_name = str(firm_form.firm_name.data).lower()
         check_one = db.session.query(Firms).filter_by(
             firm_name=firm_name).first()
         if check_one is None:
@@ -854,7 +869,7 @@ def main_master(fin_id):
     raw_goods = RawFabMain.query.all()
     
     if fin_goods_form.fin_submit.data :
-        new_fin_good = FinGoods(alt_name = fin_goods_form.alt_name.data)
+        new_fin_good = FinGoods(alt_name = str(fin_goods_form.alt_name.data).lower())
         try:
             db.session.add(new_fin_good)
             new_fin_good.product_category.append(fin_goods_form.product_category.data)
@@ -874,7 +889,7 @@ def main_master(fin_id):
         try:
             fin_g_id = int(fin_id)
             db.session.query(FinGoods).filter_by(id = fin_g_id).delete()
-            new_fin_good = FinGoods(alt_name = fin_goods_form.alt_name.data)
+            new_fin_good = FinGoods(alt_name = str(fin_goods_form.alt_name.data).lower())
 
             new_fin_good.product_category.append(fin_goods_form.product_category.data)
             
@@ -897,7 +912,7 @@ def main_master(fin_id):
     
 
     if raw_goods_form.raw_submit.data :
-        new_raw_good = RawFabMain(alt_name = raw_goods_form.alt_name.data)
+        new_raw_good = RawFabMain(alt_name = str(raw_goods_form.alt_name.data).lower())
         try:
             db.session.add(new_raw_good)
             new_raw_good.product_category.append(raw_goods_form.product_category.data)
@@ -920,7 +935,7 @@ def main_master(fin_id):
         try:
             raw_g_id = int(fin_id)
             db.session.query(RawFabMain).filter_by(id = raw_g_id).delete()
-            new_raw_good = RawFabMain(alt_name = raw_goods_form.alt_name.data)
+            new_raw_good = RawFabMain(alt_name = str(raw_goods_form.alt_name.data).lower())
 
             new_raw_good.product_category.append(raw_goods_form.product_category.data)
             new_raw_good.yarn.append(raw_goods_form.yarn.data)
@@ -955,7 +970,7 @@ def raw_materials():
 
     if yarn_form.validate_on_submit():
         if yarn_form.yarn_submit.data:
-            yarn_name = str(yarn_form.yarn.data)
+            yarn_name = str(yarn_form.yarn.data).lower()
             check_one = db.session.query(
                 Yarn).filter_by(yarn=yarn_name).first()
             if check_one is not None:
@@ -977,7 +992,7 @@ def raw_materials():
 
     if const_form.validate_on_submit():
         if const_form.const_submit.data:
-            const_name = str(const_form.const.data)
+            const_name = str(const_form.const.data).lower()
             check_one = db.session.query(
                 FabConst).filter_by(const=const_name).first()
             if check_one is not None:
@@ -1000,7 +1015,7 @@ def raw_materials():
 
     if process_form.validate_on_submit():
         if process_form.proc_submit.data:
-            process_name = str(process_form.proc.data)
+            process_name = str(process_form.proc.data).lower()
             check_one = db.session.query(
                 FabProc).filter_by(process=process_name).first()
             if check_one is not None:
@@ -1024,7 +1039,7 @@ def raw_materials():
 
     if width_form.validate_on_submit():
         if width_form.width_submit.data:
-            width_name = str(width_form.width.data)
+            width_name = str(width_form.width.data).lower()
             check_one = db.session.query(
                 FabWidth).filter_by(width=width_name).first()
             if check_one is not None:
@@ -1046,7 +1061,7 @@ def raw_materials():
 
     if dye_form.validate_on_submit():
         if dye_form.dye_submit.data:
-            dye_name = str(dye_form.dye.data)
+            dye_name = str(dye_form.dye.data).lower()
             check_one = db.session.query(
                 FabDye).filter_by(dye=dye_name).first()
             if check_one is not None:
@@ -1068,7 +1083,7 @@ def raw_materials():
 
     if cat_form.validate_on_submit():
         if cat_form.cat_submit.data:
-            cat_name = str(cat_form.cat.data)
+            cat_name = str(cat_form.cat.data).lower()
             check_one = db.session.query(
                 RawCat).filter_by(cat=cat_name).first()
             if check_one is not None:
@@ -1228,7 +1243,7 @@ def cust_edit(id):
     '''
     cust_form = CustomerCategoryForm()
     if cust_form.health_update.data:
-        cust_name = str(cust_form.health.data).title()
+        cust_name = str(cust_form.health.data).upper()
         check_one = db.session.query(
             CustomerCategory).filter_by(id=id).first()
         if check_one is not None:
@@ -1269,7 +1284,7 @@ def acc_edit(id):
     '''
     acc_form = AccessoriesForm()
     if acc_form.acc_update.data:
-        acc_name = str(acc_form.acc.data).title()
+        acc_name = str(acc_form.acc.data).lower()
         check_one = db.session.query(
             Accessories).filter_by(id=id).first()
         if check_one is not None:
@@ -1311,7 +1326,7 @@ def mat_edit(id):
     '''
     mat_form = OtherMatForm()
     if mat_form.mat_update.data:
-        mat_name = str(mat_form.mat.data).title()
+        mat_name = str(mat_form.mat.data).lower()
         check_one = db.session.query(
             OtherMat).filter_by(id=id).first()
         if check_one is not None:
@@ -1351,7 +1366,7 @@ def uom_edit(id):
     '''
     uom_form = UomForm()
     if uom_form.uom_update.data:
-        uom_name = str(uom_form.measure.data)
+        uom_name = str(uom_form.measure.data).lower()
         check_one = db.session.query(
             Uom).filter_by(id=id).first()
         if check_one is not None:
@@ -1398,7 +1413,7 @@ def yarn_edit(id):
     '''
     yarn_form = YarnForm()
     if yarn_form.yarn_update.data:
-        yarn_name = str(yarn_form.yarn.data)
+        yarn_name = str(yarn_form.yarn.data).lower()
         check_one = db.session.query(
             Yarn).filter_by(id=id).first()
         if check_one is not None:
@@ -1426,7 +1441,7 @@ def yarn_delete(id):
             return redirect('/raw_materials?showTab=8&view=list')
         else:
             session['mssg'] = "Cannot delete. Value is being used."
-            return redirect('/raw_materials?showTab=9&view=list')
+            return redirect('/raw_materials?showTab=8&view=list')
     else:
         session['mssg'] = "Something went wrong."
         return redirect('/raw_materials?showTab=8&view=list')
@@ -1444,7 +1459,7 @@ def process_edit(id):
     '''
     process_form = FabProcForm()
     if process_form.proc_update.data:
-        process_name = str(process_form.proc.data)
+        process_name = str(process_form.proc.data).lower()
         check_one = db.session.query(
             FabProc).filter_by(id=id).first()
         if check_one is not None:
@@ -1490,7 +1505,7 @@ def cat_edit(id):
     '''
     cat_form = RawCatForm()
     if cat_form.cat_update.data:
-        cat_name = str(cat_form.cat.data)
+        cat_name = str(cat_form.cat.data).lower()
         check_one = db.session.query(
             RawCat).filter_by(id=id).first()
         if check_one is not None:
@@ -1518,7 +1533,7 @@ def cat_delete(id):
             return redirect('/raw_materials?showTab=12&view=list')
         else:
             session['mssg'] = "Cannot delete. Value is being used."
-            return redirect('/raw_materials?showTab=9&view=list')
+            return redirect('/raw_materials?showTab=12&view=list')
         
     else:
         session['mssg'] = "Something went wrong."
@@ -1537,7 +1552,7 @@ def width_edit(id):
     '''
     width_form = FabWidthForm()
     if width_form.width_update.data:
-        width_name = str(width_form.width.data)
+        width_name = str(width_form.width.data).lower()
         check_one = db.session.query(
             FabWidth).filter_by(id=id).first()
         if check_one is not None:
@@ -1582,7 +1597,7 @@ def dye_edit(id):
     '''
     dye_form = FabDyeForm()
     if dye_form.dye_update.data:
-        dye_name = str(dye_form.dye.data)
+        dye_name = str(dye_form.dye.data).lower()
         check_one = db.session.query(
             FabDye).filter_by(id=id).first()
         if check_one is not None:
@@ -1627,7 +1642,7 @@ def const_edit(id):
     '''
     const_form = FabConstForm()
     if const_form.const_update.data:
-        const_name = str(const_form.const.data)
+        const_name = str(const_form.const.data).lower()
         check_one = db.session.query(
             FabConst).filter_by(id=id).first()
         if check_one is not None:
@@ -1786,6 +1801,13 @@ def get_uom():
 @login_required 
 def get_uom_by_id(fin_id):
     res = db.session.query(FinGoods).filter_by(id = int(fin_id)).first().uom[0].measure
+    print(res)
+    return jsonify(res)
+    
+@app.route('/get/uom/raw_fab/<fin_id>' , methods=["GET"])
+@login_required 
+def get_uom_by_id_raw_fab(fin_id):
+    res = db.session.query(RawFabMain).filter_by(id = int(fin_id)).first().uom[0].measure
     print(res)
     return jsonify(res)
     

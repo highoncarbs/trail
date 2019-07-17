@@ -545,7 +545,8 @@
 
             $(function () {
 
-                $('input[name*="datefilter"]').daterangepicker({
+                $('input[name*="datefilter"]').daterangepicker({ "locale": {
+        "format": "DD/MM/YYYY"} ,
                     singleDatePicker: true,
                     autoUpdateInput: false,
                     locale: {
@@ -554,7 +555,7 @@
                 });
 
                 $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-                    $(this).val(picker.startDate.format('MM/DD/YYYY'));
+                    $(this).val(picker.startDate.format('DD/MM/YYYY'));
                 });
 
                 $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
@@ -577,7 +578,8 @@
 
     $(function () {
 
-        $('input[name*="datefilter"]').daterangepicker({
+        $('input[name*="datefilter"]').daterangepicker({ "locale": {
+        "format": "DD/MM/YYYY"} ,
                     singleDatePicker: true,
                     autoUpdateInput: false,
                     locale: {
@@ -586,7 +588,7 @@
                 });
 
                 $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-                    $(this).val(picker.startDate.format('MM/DD/YYYY'));
+                    $(this).val(picker.startDate.format('DD/MM/YYYY'));
                 });
 
                 $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {

@@ -191,34 +191,25 @@
                                                     <div class="control select select_prod_{{loop.index}} is-fullwidth">
                                                         {{raw_form.product_category()}}
                                                     </div>
-                                                    <script>
-                                                        $('.select_prod_{{loop.index}} > #product_category').val('{{row.product_category[0].id}}')
-
-                                                    </script>
+                                                
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Yarn</label>
                                                     <div
-                                                        class="control select select_combo_{{loop.index}} is-fullwidth">
+                                                        class="control select select_yarn_{{loop.index}} is-fullwidth">
                                                         {{raw_form.yarn()}}
 
                                                     </div>
-                                                    <script>
-                                                        $('.select_combo_{{loop.index}} > #yarn').val('{{row.yarn[0].id}}')
-
-                                                    </script>
+                                                   
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Fabric Construction</label>
                                                     <div
-                                                        class="control select select_print_{{loop.index}} is-fullwidth">
+                                                        class="control select select_fab_const_{{loop.index}} is-fullwidth">
                                                         {{raw_form.fab_const()}}
 
                                                     </div>
-                                                    <script>
-                                                        $('.select_print_{{loop.index}} > #fab_Const').val('{{row.fab_const[0].id}}')
-
-                                                    </script>
+                                                  
                                                 </div>
                                             </div>
                                             <br>
@@ -226,14 +217,11 @@
 
                                                 <div class="field">
                                                     <label class="label">Fabric Process</label>
-                                                    <div class="control select select_des_{{loop.index}} is-fullwidth">
+                                                    <div class="control select select_proc_{{loop.index}} is-fullwidth">
                                                         {{raw_form.proc()}}
 
                                                     </div>
-                                                    <script>
-                                                        $('.select_des_{{loop.index}} > #proc').val('{{row.proc[0].id}}')
-
-                                                    </script>
+                                                  
                                                 </div>
 
                                                 <div class="field">
@@ -243,10 +231,7 @@
                                                         {{raw_form.width()}}
 
                                                     </div>
-                                                    <script>
-                                                        $('.select_width_{{loop.index}} > #width').val('{{row.width[0].id}}')
-
-                                                    </script>
+                                                 
                                                 </div>
 
                                                 <div class="field">
@@ -255,23 +240,15 @@
                                                         {{raw_form.dye()}}
 
                                                     </div>
-                                                    <script>
-                                                        $('.select_dye_{{loop.index}} > #width').val('{{row.width[0].id}}')
-
-                                                    </script>
+                                                 
                                                 </div>
 
                                                 <div class="field">
-                                                        <label class="label">U.O.M</label>
-                                                        <div class="control select select_uom_{{loop.index}} is-fullwidth">
-                                                            {{raw_form.uom()}}
-    
-                                                        </div>
-                                                        <script>
-                                                            $('.select_uom_{{loop.index}} > #uom').val('{{row.uom[0].id}}')
-    
-                                                        </script>
-                                                    </div>
+                                                    <label class="label">U.O.M</label>
+                                                    <div class="control select select_uom_{{loop.index}} is-fullwidth">
+                                                        {{raw_form.uom()}}
+
+                                                    </div>                                                </div>
 
 
                                             </div>
@@ -295,7 +272,18 @@
                                                 </div>
 
                                             </div>
+                                            <script>
+                                                $(document).ready(function () {
+                                                    $('.select_prod_{{loop.index}} > #product_category').val('{{row.product_category[0].id}}');
+                                                    $('.select_uom_{{loop.index}} > #uom').val('{{row.uom[0].id}}');
+                                                    $('.select_dye_{{loop.index}} > #dye').val('{{row.dye[0].id}}');
+                                                    $('.select_width_{{loop.index}} > #width').val('{{row.width[0].id}}');
+                                                    $('.select_proc_{{loop.index}} > #proc').val('{{row.proc[0].id}}');
+                                                    $('.select_yarn_{{loop.index}} > #yarn').val('{{row.yarn[0].id}}');
+                                                    $('.select_fab_const_{{loop.index}} > #fab_const').val('{{row.fab_const[0].id}}');
 
+                                                });
+                                            </script>
 
                                         </form>
                                     </div>

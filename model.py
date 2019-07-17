@@ -146,7 +146,7 @@ class CityForm(FlaskForm):
 class Uom(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measure = db.Column(db.String(30), unique=True, nullable=False)
-    desc = db.Column(db.String(50) , nullable= False)
+    desc = db.Column(db.String(250) , nullable= False)
     decimal = db.Column(db.Integer() , nullable= False)
     
 class UomForm(FlaskForm):
@@ -161,7 +161,7 @@ class UomForm(FlaskForm):
 class Yarn(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     yarn = db.Column(db.String(30), unique=True, nullable=False)
-    desc = db.Column(db.String(50) , nullable= False)
+    desc = db.Column(db.String(250) , nullable= False)
 
 class YarnForm(FlaskForm):
     yarn  = StringField('Yarn', validators=[InputRequired()])
@@ -184,7 +184,7 @@ class FabConstForm(FlaskForm):
 class FabProc(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     process = db.Column(db.String(30), unique=True, nullable=False)
-    desc = db.Column(db.String(50) , nullable= False)
+    desc = db.Column(db.String(250) , nullable= False)
 
 class FabProcForm(FlaskForm):
     proc  = StringField('Process', validators=[InputRequired()])
@@ -220,7 +220,7 @@ class FabDyeForm(FlaskForm):
 class RawCat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cat = db.Column(db.String(30), unique=True, nullable=False)
-    desc = db.Column(db.String(50) , nullable= False)
+    desc = db.Column(db.String(250) , nullable= False)
 
 class RawCatForm(FlaskForm):
     cat  = StringField('Category', validators=[InputRequired()])
@@ -236,7 +236,7 @@ class RawCatForm(FlaskForm):
 class FinCat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cat = db.Column(db.String(30), unique=True, nullable=False)
-    desc = db.Column(db.String(50) , nullable= False)
+    desc = db.Column(db.String(250) , nullable= False)
 
 class FinCatForm(FlaskForm):
     cat  = StringField('Category', validators=[InputRequired()])
@@ -249,7 +249,7 @@ class FinCatForm(FlaskForm):
 class FabComb(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     comb = db.Column(db.String(30), unique=True, nullable=False)
-    desc = db.Column(db.String(50) , nullable= False)
+    desc = db.Column(db.String(250) , nullable= False)
 
 class FabCombForm(FlaskForm):
     comb  = StringField('Combination', validators=[InputRequired()])
@@ -262,7 +262,7 @@ class FabCombForm(FlaskForm):
 class PrintTech(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tech = db.Column(db.String(30), unique=True, nullable=False)
-    desc = db.Column(db.String(50) , nullable= False)
+    desc = db.Column(db.String(250) , nullable= False)
 
 class PrintTechForm(FlaskForm):
     tech  = StringField('Technique', validators=[InputRequired()])
