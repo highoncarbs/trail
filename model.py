@@ -1,3 +1,5 @@
+# TODO when formatting , chenge to print_goods -> tech goods!!
+
 from wtforms import StringField, SelectField, FileField, SelectMultipleField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Optional
 from flask_wtf import FlaskForm

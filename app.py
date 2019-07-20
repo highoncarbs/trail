@@ -770,7 +770,7 @@ def tech_delete(id):
     check_one = db.session.query(
         PrintTech).filter_by(id=id)
     if check_one.first() is not None:
-        if len(check_one.first().tech_goods) is int(0):
+        if len(check_one.first().print_goods) is int(0):
             check_one.delete()
             db.session.commit()
             session['mssg'] = "Print Technique deleted successfully"

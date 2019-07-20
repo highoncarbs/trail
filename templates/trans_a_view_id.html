@@ -531,6 +531,8 @@
                     // });
 
 
+                }).done(function(){
+                    window.value = 5;
                 });
             }
 
@@ -756,6 +758,7 @@
 </script>
 <script>
     $(document).ready(function () {
+        window.value = 0;
         $.ajaxSetup({
             async: false
         });
@@ -797,7 +800,10 @@
 
         });
         console.log('#1');
-        populate('#trans_a_form_id', json2html_name_list(part_a));
+
+        setTimeout(function(){
+            populate('#trans_a_form_id', json2html_name_list(part_a));
+        } , 0.01);
 
         console.log('#2');
         function json2html_name_list(json, result, parent) {
@@ -822,9 +828,9 @@
             $.each(data, function (key, value) {
 
                 $('[name="' + key + '"]', frm).val(value);
-                $("select[name='" + key + "']").prop("option", value);
-
-
+                if (key === 'samp_iss'){
+                $('input:radio[name='+key+']').filter('[value="'+value+'"]').prop('checked', true);
+                }
                 console.log(key + '-----' + value);
             });
         }
