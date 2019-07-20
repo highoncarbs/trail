@@ -478,3 +478,9 @@ class Trans(db.Model):
     part_b = db.Column( db.JSON ,nullable =False , default = [] )
     flag = db.Column( db.Integer , default = 0)
     meta=  db.Column( db.JSON , default = [])
+
+from app import ma 
+
+class TransSchema(ma.ModelSchema):
+    class Meta:
+        model = Trans

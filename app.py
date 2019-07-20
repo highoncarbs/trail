@@ -8,12 +8,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 import json
 from flask_migrate import Migrate
+from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 db = SQLAlchemy(app)
-
+ma = Marshmallow(app)
 
 migrate = Migrate(app, db)
 
@@ -117,7 +118,6 @@ def user_roles():
     if form.validate_on_submit():
         print('Somethig up here')
         if form.submit.data:
-            print('Somethign')
             user = Users.query.filter_by(username=form.username.data).first()
             if user is None:
                 hashed_pass = generate_password_hash(
@@ -201,14 +201,51 @@ def trans_a():
     if request.method == "POST":
         print(request.json)
         payload = json.dumps(request.json)
-        new_trans = Trans(part_a = payload , part_b = "{}")
-        db.session.add(new_trans)
-        db.session.commit()
-        session['mssg'] = "Transaction - Part A with PP No. " + str(new_trans.id)+ " has been added."
-        return jsonify("success")
+        payload = json.loads(payload)
+        print(payload)
+        if 'pp_num' in payload :
+
+            check_trans = db.session.query(Trans).filter_by(id= int(payload['pp_num'])).first()
+            if check_trans is not None:
+                check_trans.part_a = json.dumps(payload['data'])
+                db.session.commit()
+                session['mssg'] = "Transaction - Part A with PP No. " + str(check_trans.id )+ " has been updated."
+                return jsonify("success")
+        else:
+            payload = json.dumps(request.json)
+            new_trans = Trans(part_a = payload , part_b = "{}")
+            db.session.add(new_trans)
+            db.session.commit()
+            session['mssg'] = "Transaction - Part A with PP No. " + str(new_trans.id)+ " has been added."
+            return jsonify("success")
     return render_template('trans_a.html' , pp_num = pp_new , mssg = session['mssg']) ,200
 
+@app.route('/trans_a_view', methods=['GET', 'POST'])
+@login_required
+def trans_a_view():
+    pp_num = db.session.query(Trans).filter_by(flag= int(0)).all()
 
+    return render_template('trans_a_view.html' , open_trans = pp_num , mssg = session['mssg']) , 200
+
+@app.route('/trans_a_view/<trans_id>', methods=['GET', 'POST'])
+@login_required
+def trans_a_view_by_id(trans_id):
+    pp_num = db.session.query(Trans).filter_by(id= int(trans_id)).all()
+    trans_schema = TransSchema()
+    res = trans_schema.dump(pp_num).data
+
+    return render_template('trans_a_view_id.html' , pp_num = trans_id ,open_trans = pp_num , mssg = session['mssg']) , 200
+
+
+from model import TransSchema
+
+@app.route('/trans_a_view_data/<trans_id>' , methods = ['POST' , 'GET'])
+@login_required
+def trans_a_api(trans_id):
+    pp_num = db.session.query(Trans).filter_by(id = int(trans_id)).first()
+    trans_schema = TransSchema()
+    res = trans_schema.dump(pp_num).data
+    return jsonify({'trans_data': res})
 
 @app.route('/trans_b', methods=['GET', 'POST'])
 @login_required
@@ -223,7 +260,7 @@ def trans_b():
         db.session.commit()
         session['mssg'] = "Transaction - Part B with PP No. " + str( pp_num.id) + " has been added."
         return jsonify("success")
-    return render_template('trans_b.html' , mssg = session['mssg']) ,200
+    return render_template('trans_b.html' ,open_trans = pp_num , mssg = session['mssg']) ,200
 
 
 
@@ -1791,6 +1828,14 @@ def get_fin_prod():
     obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     return obj
 
+@app.route('/get/fin_product/<fin_id>' , methods=["GET"])
+@login_required 
+def get_fin_prod_by_id(fin_id):
+    res = db.session.query(FinGoods).filter_by(id = int(fin_id)).first()
+
+    p_name = str(res.get_gen_name())
+    return jsonify(p_name)
+    
 @app.route('/get/uom/' , methods=["GET"])
 @login_required 
 def get_uom():
@@ -1891,4 +1936,12 @@ def close_trans():
     pp_num.flag = 1
     db.session.commit()
     session['mssg'] = "Transaction - "+str(payload['pp_num'])+" has been closed."
+    return jsonify("success")
+
+@app.route('/delete_trans/<trans_id>' , methods = ['POST'])
+@login_required
+def delete_trans(trans_id):
+    trans = db.session.query(Trans).filter_by(id = int(trans_id)).first()
+    trans.flag = 2 # flag for soft delete
+    db.session.commit()
     return jsonify("success")

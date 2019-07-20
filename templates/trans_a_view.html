@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" style="margin-top: 5rem;">
+
+    <div class="columns is-mobile is-centered animated fadeIn">
+        <div class="column is-three-quarters">
+            <nav class="level is-mobile">
+                <div class="level-left">
+
+                    <div class="level-item">
+                        <p class="is-size-5 ">
+                            <span class="robo ">Open Transactions - </span> Part A</p>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+
+                        <a href="{{ url_for('trans_a')}}" class=" button is-black"><span
+                                class="icon icon-btn-in"><i data-feather="corner-up-left"></i></span>Back</a>
+
+                    </div>
+                </div>
+            </nav>
+
+<hr>
+            <div class="field is-grouped">
+
+
+                <div class="control has-icons-left">
+                    <input class="input" name="start-dates" placeholder="Start Date">
+                    <span class="icon is-small is-left">
+                        <i data-feather="calendar"></i>
+                    </span>
+                </div>
+
+                <div class="control has-icons-left">
+                    <input class="input" name="target-dates" placeholder="Target Date">
+                    <span class="icon is-small is-left">
+                        <i data-feather="calendar"></i>
+                    </span>
+                </div>
+
+                <div class="control">
+                    <button id="filter_update" class=" button is-black"><span class="icon icon-btn-in"><i
+                                data-feather="filter"></i></span>Filter</button>
+                </div>
+            </div>
+            <hr>
+
+            {% if open_trans|length == 0 %}
+            <div class="empty has-text-centered has-text-grey-light">
+                <span class="icon"><i data-feather="info"></i></span><br>
+                <p>No Open Transactions available. <br> Create a new one.</p>
+                <hr>
+            </div>
+            {% else %}
+
+            <div class="xtable">
+                <table class="table is-fullwidth">
+                    <thead>
+                        <th>Order No.</th>
+                        <th>Product</th>
+                        <th>Start Date</th>
+                        <th>Target Date</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        {% for row in open_trans %}
+                        <tr id="data_{{row.id}}">
+                            <td class="robo"><span class="icon icon-btn has-text-grey" style="padding:3px;"><i
+                                        data-feather="hash"></i></span>{{ row.id }}</td>
+                            <td id="order_name_{{loop.index}}"></td>
+                            <td id="start_{{loop.index}}"></td>
+                            <td id="target_{{loop.index}}"></td>
+                            <td>
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <a href="{{ url_for('trans_a_view_by_id' , trans_id = row.id)}}"
+                                            class="button is-small"><span class="icon icon-btn-in-x"><i
+                                                    data-feather="eye"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="control">
+                                        <a id="edit_fin_btn_{{loop.index}}" class="button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="control">
+                                        <a id="edit_fin_btn_{{loop.index}}" class="button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="printer"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="control">
+                                        <button id="delete_trans_{{loop.index}}" class="button is-small is-danger"><span
+                                                class="icon icon-btn-in-x"><i data-feather="x"></i></span>
+                                        </button>
+
+                                        <!-- Delete Modal -->
+                                        <div class="modal" id="delete_trans_modal_{{loop.index}}">
+                                            <div class="modal-background"></div>
+                                            <div class="modal-content">
+
+                                                <div class="box">
+                                                    <p>Are you sure you want to delete <span class="robo">Product Order
+                                                            - {{row.id}}</span> ?</p>
+                                                    <br>
+                                                    <div class="field is-grouped">
+                                                        <p class="control">
+                                                            <a id="delete_trans_confirm_{{loop.index}}"
+                                                                class="button is-danger"><span
+                                                                    class="icon icon-btn-in"><i
+                                                                        data-feather="trash-2"></i></span>Delete
+                                                            </a>
+                                                        </p>
+                                                        <p class="control">
+                                                            <a class="button"
+                                                                onclick="$('.modal-close').trigger('click')"><span
+                                                                    class="icon icon-btn-in"><i
+                                                                        data-feather="x"></i></span>Cancel
+                                                            </a>
+                                                        </p>
+
+                                                        <script>
+                                                            $('#delete_trans_confirm_{{loop.index}}').on('click', function () {
+                                                                var req = $.ajax({
+                                                                    method: "POST",
+                                                                    url: "{{ url_for('delete_trans' , trans_id = row.id) }}",
+                                                                });
+                                                                req.done(function (mssg) {
+                                                                    $('#data_{{row.id}}').remove().fadeOut();
+                                                                    $('.modal-close').trigger('click')
+
+                                                                })
+                                                            })
+                                                        </script>
+
+                                                    </div>
+                                                </div>
+                                                <button class="modal-close is-large" aria-label="close"></button>
+
+                                            </div>
+                                            <script>
+                                                document.querySelector('#delete_trans_{{loop.index}}').addEventListener('click', function (event) {
+                                                    event.preventDefault();
+                                                    var modal = document.querySelector('#delete_trans_modal_{{loop.index}}');  // assuming you have only 1
+                                                    var html = document.querySelector('html');
+                                                    modal.classList.add('is-active');
+                                                    html.classList.add('is-clipped');
+
+                                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                                        e.preventDefault();
+                                                        modal.classList.remove('is-active');
+                                                        html.classList.remove('is-clipped');
+                                                    });
+
+                                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                                        e.preventDefault();
+                                                        modal.classList.remove('is-active');
+                                                        html.classList.remove('is-clipped');
+
+
+                                                    });
+
+                                                });
+
+                                            </script>
+
+                                        </div>
+                                    </div>
+                            </td>
+
+                        </tr>
+                        <script>
+                            $(document).ready(function () {
+                                $.getJSON("{{url_for('trans_a_api' ,trans_id = row.id)}}", function (result) {
+
+                                    var part_a = $.parseJSON(result['trans_data']['part_a']);
+
+                                    // Prod Sel
+                                    $.getJSON('/get/fin_product/' + part_a['prod_sel'], function (result) {
+                                        console.log(result);
+                                        $('#order_name_{{loop.index}}').html(result).hide().fadeIn();
+
+                                    });
+
+                                    $('#start_{{loop.index}}').html(part_a['start-dates']).hide().fadeIn();
+
+
+                                    $('#target_{{loop.index}}').html(part_a['target-dates']).hide().fadeIn();
+
+
+                                })
+                            });
+
+                        </script>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

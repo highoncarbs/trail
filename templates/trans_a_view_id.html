@@ -15,21 +15,31 @@
 
                     <div class="level-item">
                         <p class="is-size-5 ">
-                            <span class="robo ">New Transaction - </span> Part A</p>
+                            <span class=" robo"> Transaction <span class="icon icon-btn"
+                                    style="padding:3px; margin-left: 10px;"><i
+                                        data-feather="hash"></i></span>{{ pp_num }}</span></span></p>
                     </div>
                 </div>
                 <div class="level-right">
-                    <div class="level-item">
-                        <a href="{{ url_for('trans_a_view')}}" class=" button is-black"><span
-                                class="icon icon-btn-in"><i data-feather="eye"></i></span>View</a>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <a href="{{ url_for('trans_a_view')}}" class=" button is-black"><span
+                                    class="icon icon-btn-in"><i data-feather="edit-2"></i></span>Edit</a>
+                        </div>
+                        <div class="control">
+
+                            <a href="{{ url_for('trans_a_view')}}" class=" button is-black"><span
+                                    class="icon icon-btn-in"><i data-feather="corner-up-left"></i></span>Back</a>
+                        </div>
                     </div>
                 </div>
 
             </nav>
             <hr>
             <div class="">
+
                 <div class="form">
-                    <form id="trans_a_form">
+                    <form id="trans_a_form_id">
                         <div class="field-body is-horizontal">
                             <div class="field">
                                 <label class="label">Product Order No.</label>
@@ -78,13 +88,13 @@
                                                 Object.values(result)[i], '</option>');
                                         }
                                         $("#prod_sel").html(options.join(''));
-                                        $("#prod_sel").prop("selectedIndex", 0);
+                                        // $("#prod_sel").prop("selectedIndex", 0);
 
-                                        var pp_sel = $("#prod_sel").val()
-                                        $.getJSON("/get/uom/" + pp_sel, function (result) {
-                                            console.log(result)
-                                            $("#prod_uom").val(result);
-                                        });
+                                        // var pp_sel = $("#prod_sel").val()
+                                        // $.getJSON("/get/uom/" + pp_sel, function (result) {
+                                        //     console.log(result)
+                                        //     $("#prod_uom").val(result);
+                                        // });
 
                                     });
                                 })
@@ -102,17 +112,7 @@
                                 <div class="control">
                                     <input class="input robo" id="prod_uom" name="prod_uom" readonly>
 
-                                    <script>
 
-                                        $("#prod_sel").on('click', function () {
-
-                                            var pp_sel = $("#prod_sel").val()
-                                            $.getJSON("/get/uom/" + pp_sel, function (result) {
-                                                console.log(result)
-                                                $("#prod_uom").val(result);
-                                            });
-                                        })
-                                    </script>
                                 </div>
                             </div>
                             <div class="field">
@@ -267,11 +267,11 @@
                                                     Object.values(result)[i], '</option>');
                                             }
                                             $(".fab_sel_cls").html(options.join(''));
-                                            $(".fab_sel_cls").prop("selectedIndex", 0);
-                                            var pp_sel = $("select[name='fab_sel[0]']").val()
-                                            $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
-                                                $("input[name='fab_sel_uom[0]']").val(result);
-                                            });
+                                            // $(".fab_sel_cls").prop("selectedIndex", 0);
+                                            // var pp_sel = $("select[name='fab_sel[0]']").val()
+                                            // $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
+                                            //     $("input[name='fab_sel_uom[0]']").val(result);
+                                            // });
 
                                         });
                                     });
@@ -287,8 +287,8 @@
                                 </script>
                             </tbody>
                         </table>
-                        <button id="add_field_button_fab" class=" button is-primary"><span class="icon icon-btn-in"><i
-                                    data-feather="plus"></i></span>Add More</button>
+                        <button id="add_field_button_fab" style="display: none;" class=" button is-primary"><span
+                                class="icon icon-btn-in"><i data-feather="plus"></i></span>Add More</button>
 
 
                         <br>
@@ -335,21 +335,20 @@
                                                     Object.values(result)[j], '</option>');
                                             }
                                             $(".acc_selector").html(options.join(''));
-                                            $(".acc_selector").prop("selectedIndex", 0);
-                                            var pp_sel = $("select[name='acc_sel[0]']").val()
+                                            // $(".acc_selector").prop("selectedIndex", 0);
+                                            // var pp_sel = $("select[name='acc_sel[0]']").val()
 
-                                            // TODO:  Fix theses UOM for Other and acces
-                                            $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
-                                                $("input[name='acc_sel_uom[0]']").val(result);
-                                            });
+                                            // $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
+                                            //     $("input[name='acc_sel_uom[0]']").val(result);
+                                            // });
                                         });
 
                                     })
                                 </script>
                             </tbody>
                         </table>
-                        <button id="add_field_button_acc" class=" button is-primary"><span class="icon icon-btn-in"><i
-                                    data-feather="plus"></i></span>Add More</button>
+                        <button id="add_field_button_acc" style="display: none;" class=" button is-primary"><span
+                                class="icon icon-btn-in"><i data-feather="plus"></i></span>Add More</button>
 
 
                         <br>
@@ -394,20 +393,19 @@
                                                     Object.values(result)[j], '</option>');
                                             }
                                             $(".oth_selector").html(options.join(''));
-                                            $(".oth_selector").prop("selectedIndex", 0);
-                                            var pp_sel = $("select[name='oth_sel[0]']").val()
+                                            // $(".oth_selector").prop("selectedIndex", 0);
+                                            // var pp_sel = $("select[name='oth_sel[0]']").val()
 
-                                            // TODO:  Fix theses UOM for Other and acces
-                                            $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
-                                                $("input[name='oth_pr_uom[0]']").val(result);
-                                            });
+                                            // $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
+                                            //     $("input[name='oth_pr_uom[0]']").val(result);
+                                            // });
                                         });
                                     })
                                 </script>
                             </tbody>
                         </table>
-                        <button id="add_field_button_oth" class=" button is-primary"><span class="icon icon-btn-in"><i
-                                    data-feather="plus"></i></span>Add More</button>
+                        <button id="add_field_button_oth" style="display: none;" class=" button is-primary"><span
+                                class="icon icon-btn-in"><i data-feather="plus"></i></span>Add More</button>
 
 
                         <br>
@@ -443,8 +441,9 @@
 
     $('#submit_btn_trans_a').click(function (e) {
         e.preventDefault();
+        var formdata = $("#trans_a_form_id").serializeJSON();
 
-        var data = $("#trans_a_form").serializeJSON();
+        var data = { 'pp_num': '{{pp_num}}', 'data': formdata };
 
 
         $.ajax({
@@ -462,6 +461,7 @@
     });
 </script>
 <script>
+
 
 
     $(document).ready(function () {
@@ -489,9 +489,9 @@
                     <td><input type = "text" class= "input" name = "fab_qty_iss['+ x + ']" /></td>\
                     <td><input type="text" class="input" name="fab_qty_ret['+ x + ']" /></td>\
                     <td><input type="text" class="input" name="fab_net_con['+ x + ']" /></td>\
-                    <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
-                                        data-feather="x"></i></span></a></td></tr> ');
+                    </tr> ');
                 feather.replace();
+
                 $("input[name='fab_pr_pc[" + x + "]']").keyup(function () {
                     var prog_qty = parseFloat($('input[name="prog_qty"]').val());
                     var per_pc = parseFloat($("input[name='fab_pr_pc[" + x + "]']").val())
@@ -516,6 +516,7 @@
                 })
 
                 var options = [];
+
                 $.getJSON("{{url_for('get_raw_prod')}}", function (result) {
                     for (var j = 0; j < Object.keys(result).length; j++) {
                         options.push('<option value="',
@@ -523,11 +524,11 @@
                             Object.values(result)[j], '</option>');
                     }
                     $("select[name='fab_sel[" + x + "]']").html(options.join(''));
-                    $("select[name='fab_sel[" + x + "]']").prop("selectedIndex", 0);
-                    var pp_sel = $("select[name='fab_sel[" + x + "]']").val()
-                    $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
-                        $("input[name='fab_sel_uom[" + x + "]']").val(result);
-                    });
+                    // $("select[name='fab_sel[" + x + "]']").prop("selectedIndex", 0);
+                    // var pp_sel = $("select[name='fab_sel[" + x + "]']").val()
+                    // $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
+                    //     $("input[name='fab_sel_uom[" + x + "]']").val(result);
+                    // });
 
 
                 });
@@ -562,8 +563,7 @@
                     <td><input type = "text" class= "input" name = "acc_qty_iss['+ x + ']" /></td>\
                     <td><input type="text" class="input" name="acc_qty_ret['+ x + ']" /></td>\
                     <td><input type="text" class="input" name="acc_net_con['+ x + ']" /></td>\
-                    <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
-                                        data-feather="x"></i></span></a></td></tr> ');
+                    </tr> ');
                 feather.replace();
 
                 var options = [];
@@ -576,7 +576,7 @@
                     $(".acc_selector_" + x + "").html(options.join(''));
 
                     $("select[name='acc_sel[" + x + "]']").html(options.join(''));
-                    $("select[name='acc_sel[" + x + "]']").prop("selectedIndex", 0);
+                    // $("select[name='acc_sel[" + x + "]']").prop("selectedIndex", 0);
                     var pp_sel = $("select[name='acc_sel[" + x + "]']").val();
 
                     $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
@@ -645,9 +645,10 @@
                     <td><input type = "text" class= "input" name = "oth_qty_iss['+ x + ']" /></td>\
                     <td><input type="text" class="input" name="oth_qty_ret['+ x + ']" /></td>\
                     <td><input type="text" class="input" name="oth_net_con['+ x + ']" /></td>\
-                    <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i\
-                                        data-feather="x"></i></span></a></td></tr> ');
+                    </tr> ');
                 feather.replace();
+
+                // Math Login
                 $("input[name='oth_pr_pc[" + x + "]']").keyup(function () {
                     var prog_qty = parseFloat($('input[name="prog_qty"]').val());
                     var per_pc = parseFloat($("input[name='oth_pr_pc[" + x + "]']").val())
@@ -671,6 +672,8 @@
                     });
                 })
 
+                // End Math Logic
+
                 var options = [];
                 $.getJSON("{{url_for('get_oth_mat')}}", function (result) {
                     for (var j = 0; j < Object.keys(result).length; j++) {
@@ -679,11 +682,11 @@
                             Object.values(result)[j], '</option>');
                     }
                     $("select[name='oth_sel[" + x + "]']").html(options.join(''));
-                    $("select[name='oth_sel[" + x + "]']").prop("selectedIndex", 0);
-                    var pp_sel = $("select[name='oth_sel[" + x + "]']").val()
-                    $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
-                        $("input[name='oth_pr_uom[" + x + "]']").val(result);
-                    });
+                    // $("select[name='oth_sel[" + x + "]']").prop("selectedIndex", 0);
+                    // var pp_sel = $("select[name='oth_sel[" + x + "]']").val()
+                    // $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
+                    //     $("input[name='oth_pr_uom[" + x + "]']").val(result);
+                    // });
                 });
 
             }
@@ -751,5 +754,93 @@
         $("input[name='fab_net_con[0]']").val(total);
     });
 </script>
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({
+            async: false
+        });
 
+        var part_a;
+        $.getJSON("{{url_for('trans_a_api' ,trans_id = pp_num)}}", function (result) {
+
+            part_a = $.parseJSON(result['trans_data']['part_a']);
+
+            console.log(part_a);
+            if ($.isEmptyObject(result)) {
+
+                console.log('Boy , its empty ');
+                $('#trans_b_form').trigger("reset");
+
+            }
+            else {
+                console.log('Boy , its full ');
+
+                var extra_fld_fab = Object.keys(part_a['fab_sel']).length;
+                for (i = 1; i < extra_fld_fab; i++) {
+                    $("#add_field_button_fab").trigger('click');
+                }
+
+                var extra_fld_acc = Object.keys(part_a['acc_sel']).length;
+                for (i = 1; i < extra_fld_acc; i++) {
+                    $("#add_field_button_acc").trigger('click');
+                }
+                var extra_fld_oth = Object.keys(part_a['oth_sel']).length;
+                for (i = 1; i < extra_fld_oth; i++) {
+                    $("#add_field_button_oth").trigger('click');
+                }
+            };
+
+
+
+
+
+
+        });
+        console.log('#1');
+        populate('#trans_a_form_id', json2html_name_list(part_a));
+
+        console.log('#2');
+        function json2html_name_list(json, result, parent) {
+            if (!result) result = {};
+            if (!parent) parent = '';
+            if ((typeof json) != 'object') {
+                result[parent] = json;
+            } else {
+                for (var key in json) {
+                    var value = json[key];
+                    if (parent == '') var subparent = key;
+                    else var subparent = parent + '[' + key + ']';
+                    result = json2html_name_list(value, result, subparent);
+                }
+            }
+            return result;
+        }
+
+        //  Populates all the fields
+
+        function populate(frm, data) {
+            $.each(data, function (key, value) {
+
+                $('[name="' + key + '"]', frm).val(value);
+                $("select[name='" + key + "']").prop("option", value);
+
+
+                console.log(key + '-----' + value);
+            });
+        }
+
+    });
+
+
+    // Fucnction for JSON to html fillups
+
+
+
+
+
+</script>
+<script>
+
+
+</script>
 {% endblock %}
