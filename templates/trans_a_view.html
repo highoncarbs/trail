@@ -15,26 +15,26 @@
                 <div class="level-right">
                     <div class="level-item">
 
-                        <a href="{{ url_for('trans_a')}}" class=" button is-black"><span
-                                class="icon icon-btn-in"><i data-feather="corner-up-left"></i></span>Back</a>
+                        <a href="{{ url_for('trans_a')}}" class=" button is-black"><span class="icon icon-btn-in"><i
+                                    data-feather="corner-up-left"></i></span>Back</a>
 
                     </div>
                 </div>
             </nav>
 
-<hr>
+            <hr>
             <div class="field is-grouped">
 
 
                 <div class="control has-icons-left">
-                    <input class="input" name="start-dates" placeholder="Start Date">
+                    <input class="input" name="start-dates" placeholder="Start Date" value="">
                     <span class="icon is-small is-left">
                         <i data-feather="calendar"></i>
                     </span>
                 </div>
 
                 <div class="control has-icons-left">
-                    <input class="input" name="target-dates" placeholder="Target Date">
+                    <input class="input" name="target-dates" placeholder="Target Date" value="">
                     <span class="icon is-small is-left">
                         <i data-feather="calendar"></i>
                     </span>
@@ -43,6 +43,11 @@
                 <div class="control">
                     <button id="filter_update" class=" button is-black"><span class="icon icon-btn-in"><i
                                 data-feather="filter"></i></span>Filter</button>
+                </div>
+
+                <div class="control">
+                    <button id="filter_reset" class=" button "><span class="icon icon-btn-in"><i
+                                data-feather="x"></i></span>Clear Filter</button>
                 </div>
             </div>
             <hr>
@@ -203,5 +208,94 @@
     </div>
 
 </div>
+<script>
+    $(document).ready(function () {
+        $('input[name*="dates"]').attr('autocomplete', 'off');
+
+        $('input[name*="dates"]').daterangepicker({
+            "locale": {
+                "format": "DD/MM/YYYY"
+            },
+            buttonClasses: 'button',
+            applyButtonClasses: 'is-black',
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+
+        $('input[name*="dates"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
+        });
+
+        $('input[name*="dates"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
+        $('#filter_update').click(function () {
+            var st_date = $('input[name="start-dates"]').val().split("-");
+            var st_dt_0 = moment(st_date[0], "DD/MM/YYYY");
+            var st_dt_1 = moment(st_date[1], "DD/MM/YYYY");
+
+            var tr_date = $('input[name="target-dates"]').val().split("-");
+            var tr_dt_0 = moment(tr_date[0], "DD/MM/YYYY");
+            var tr_dt_1 = moment(tr_date[1], "DD/MM/YYYY");
+
+            // var dates
+            // compareDate.isBetween(startDate, endDate); //false in this case
+
+
+            function onlyStart() {
+                $('[id*=start]').each(function () {
+                    var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    console.log(dt._i);
+                    if (dt.isBetween(st_dt_0, st_dt_1) !== true) {
+                        $(this).parent().fadeOut();
+                    }
+
+
+                })
+            }
+
+            function onlyTarget() {
+                $('[id*=target]').each(function () {
+                    var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    console.log(dt._i);
+                    if (dt.isBetween(tr_dt_0, tr_dt_1) !== true) {
+                        $(this).parent().fadeOut();
+                    }
+
+
+                })
+            }
+
+            if ($('input[name="target-dates"]').val() === "") {
+                onlyStart()
+
+            }
+
+            if ($('input[name="start-dates"]').val() === "") {
+                onlyTarget()
+            }
+
+            if ($('input[name="start-dates"]').val() !== "" && $('input[name="target-dates"]').val() !== "" ) {
+            
+                onlyStart();
+                onlyTarget();
+
+
+            }
+        })
+
+        $('#filter_reset').click(function () {
+            $('input[name="start-dates"]').val("");
+            $('input[name="target-dates"]').val("");
+
+            $('[id*=start]').each(function () {
+                $(this).parent().fadeIn();
+            });
+        });
+    });
+</script>
 
 {% endblock %}

@@ -37,7 +37,7 @@
         <h2 class="is-size-4 has-text-centered robo ">Finished Goods</h2>
       <hr style="margin:1rem !important;">
         <ul>
-            <li class="is-active" data-tab="1">
+            <li class="" data-tab="1">
                 <a>
                     <span>Product Category</span>
                 </a>
@@ -67,7 +67,7 @@
 </div>
 
 <div id="tab-content">
-    <div class="tab-box is-active " data-content="1">
+    <div class="tab-box" data-content="1">
         {% include 'fin_cat_master.html' %}
     </div>
     <div class="tab-box " data-content="2">
@@ -160,6 +160,11 @@
         }
 
         if (selTab === '1') {
+            $("li[data-tab=5] , li[data-tab=3] , li[data-tab=4] , li[data-tab=2] ").removeClass('is-active');
+            $("div[data-content=5] ,div[data-content=3] , div[data-content=4] ,div[data-content=2]").removeClass('is-active');
+
+            $("li[data-tab=1]").addClass('is-active');
+            $("div[data-content=1]").addClass('is-active');
 
             $('#cat').focus();
             if (selView === 'list') {
@@ -167,6 +172,16 @@
             }
         }
 
+        if(selTab === ""){
+            $("li[data-tab=5] , li[data-tab=3] , li[data-tab=4] , li[data-tab=2] ").removeClass('is-active');
+            $("div[data-content=5] ,div[data-content=3] , div[data-content=4] ,div[data-content=2]").removeClass('is-active');
+
+            $("li[data-tab=1]").addClass('is-active');
+            $("div[data-content=1]").addClass('is-active');
+
+            $('#cat').focus();
+
+        }
 
 
     });

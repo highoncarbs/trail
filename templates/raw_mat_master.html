@@ -37,7 +37,7 @@
             <h2 class="is-size-4 has-text-centered robo ">Raw Materials</h2>
             <hr style="margin:1rem !important;">
         <ul>
-            <li class="is-active" data-tab="8">
+            <li class="" data-tab="8">
                 <a>
                     <span>Yarn</span>
                 </a>
@@ -72,7 +72,7 @@
 </div>
 
 <div id="tab-content">
-    <div class="tab-box is-active " data-content="8">
+    <div class="tab-box " data-content="8">
         {% include 'raw_yarn_master.html' %}
     </div>
     <div class="tab-box " data-content="9">
@@ -117,11 +117,12 @@
         var selView = params.get("view");
 
         if (selTab === '9') {
+            $("li[data-tab=9]").addClass('is-active');
+            $("div[data-content=9]").addClass('is-active');
             $("li[data-tab=8] , li[data-tab=10] , li[data-tab=11] , li[data-tab=12] , li[data-tab=13] ").removeClass('is-active');
             $("div[data-content=8] ,div[data-content=10] , div[data-content=11] ,div[data-content=12] ,div[data-content=13]").removeClass('is-active');
 
-            $("li[data-tab=9]").addClass('is-active');
-            $("div[data-content=9]").addClass('is-active');
+          
 
             $('#proc').focus();
 
@@ -188,13 +189,27 @@
             }
         }
         if (selTab === '8') {
+            $("li[data-tab=13] , li[data-tab=9] , li[data-tab=10] , li[data-tab=11] , li[data-tab=12] ").removeClass('is-active');
+            $("div[data-content=13] ,div[data-content=9] , div[data-content=10] ,div[data-content=11],div[data-content=12]").removeClass('is-active');
 
+            $("li[data-tab=8]").addClass('is-active');
+            $("div[data-content=8]").addClass('is-active');
             $('#yarn').focus();
 
 
             if (selView === 'list') {
                 $("#yarn_data_entry, #yarn_data_view").toggle();
             }
+        }
+
+        if(selTab === ""){
+            $("li[data-tab=13] , li[data-tab=9] , li[data-tab=10] , li[data-tab=11] , li[data-tab=12] ").removeClass('is-active');
+            $("div[data-content=13] ,div[data-content=9] , div[data-content=10] ,div[data-content=11],div[data-content=12]").removeClass('is-active');
+
+            $("li[data-tab=8]").addClass('is-active');
+            $("div[data-content=8]").addClass('is-active');
+            $('#yarn').focus();
+
         }
 
 
