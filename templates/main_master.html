@@ -36,7 +36,7 @@
     <div class="container">
 
         <ul>
-            <li class="is-active" data-tab="14">
+            <li class="" data-tab="14">
                 <a>
                     <span>Finished Goods Item</span>
                 </a>
@@ -51,7 +51,7 @@
 </div>
 
 <div id="tab-content">
-    <div class="tab-box is-active animated fadeIn" data-content="14">
+    <div class="tab-box animated fadeIn" data-content="14">
         {% include 'fin_goods_master.html' %}
     </div>
     <div class="tab-box animated fadeIn " data-content="15">
@@ -86,12 +86,19 @@ $(document).ready(function () {
                 $("#raw_data_entry, #raw_data_view").toggle();
             }
         }
-        if (selTab === '14') {
+        if (selTab === '14' || selTab === null) {
+            $("li[data-tab=15] ").removeClass('is-active');
+            $("div[data-content=15]").removeClass('is-active');
+
+            $("li[data-tab=14]").addClass('is-active');
+            $("div[data-content=14]").addClass('is-active');
 
             if (selView === 'list') {
                 $("#data_entry, #data_view").toggle();
             }
         }
+
+        
 
     });
 </script>
