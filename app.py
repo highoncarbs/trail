@@ -227,14 +227,53 @@ def trans_a_view():
 
     return render_template('trans_a_view.html' , open_trans = pp_num , mssg = session['mssg']) , 200
 
+import os
+
+@app.route('/trans_a/uploads/<trans_id>' , methods= ['GET' , 'POST'])
+@login_required
+def trans_a_upload(trans_id):
+    UPLOAD_FOLDER = os.path.abspath('./static/images/uploads/'+str(trans_id))
+    
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
+        try:
+            filename = request.form['name']
+            file = request.files['files[]']
+            img_temp = os.path.join(UPLOAD_FOLDER,filename) 
+            file.save(img_temp)
+            return jsonify("success")
+        except Exception as e:
+            return jsonify("Error" + str(e))
+    else:
+        try:
+            filename = request.form['name']
+            file = request.files['files[]']
+            img_temp = os.path.join(UPLOAD_FOLDER,filename) 
+            file.save(img_temp)
+            return jsonify("success")
+        except Exception as e:
+            return jsonify("Error" + str(e))
+
+import urllib
+
 @app.route('/trans_a_view/<trans_id>', methods=['GET', 'POST'])
 @login_required
 def trans_a_view_by_id(trans_id):
     pp_num = db.session.query(Trans).filter_by(id= int(trans_id)).all()
     trans_schema = TransSchema()
     res = trans_schema.dump(pp_num).data
+    img_list = []
+    UPLOAD_FOLDER = os.path.abspath('./static/images/uploads/'+str(trans_id))
+    if not os.path.exists(UPLOAD_FOLDER):
+        pass
+    else:
+        for r , d ,f in os.walk(UPLOAD_FOLDER):
+            print(r ,d ,f)
+            for file in f:
+                img_list.append(str(trans_id)+'/'+str(file))
+        print(img_list)
 
-    return render_template('trans_a_view_id.html' , pp_num = trans_id ,open_trans = pp_num , mssg = session['mssg']) , 200
+    return render_template('trans_a_view_id.html' , pp_num = trans_id ,open_trans = pp_num , mssg = session['mssg'] , img_list = img_list) , 200
 
 
 from model import TransSchema

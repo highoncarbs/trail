@@ -410,6 +410,55 @@
 
                         <br>
                         <br>
+                        <div class="notification is-light">
+                            {% if img_list|length == 0 %}
+                            <p class="has-text-centerd">No images added.</p>
+                            {% else %}
+                            <div class="columns is-3 is-multiline is-mobile">
+                                {% for image in img_list %}
+                                <div class="column is-one-quarter">
+                                    <figure class="image ">
+                                        <img class="img-has-shadow" onclick="enlargeimage_{{loop.index}}()" src="{{ url_for('static' , filename = 'images/uploads/'+image )}}">
+                                    </figure>
+                                    <div class="modal" id="image_{{loop.index}}">
+                                            <div class="modal-background"></div>
+                                            <div class="modal-content" style="width: 70%!important">
+                                                <div class="box">
+                                                        <figure class="image ">
+                                                                <img class="has-shadow"  src="{{ url_for('static' , filename = 'images/uploads/'+image )}}">
+                                                        </figure>
+                                                </div>
+                                            </div>
+                                            <button class="modal-close is-large" aria-label="close"></button>
+                                          </div>
+                                    <script>
+                                        function enlargeimage_{{loop.index}}(){
+                                            var modal = document.querySelector('#image_{{loop.index}}');  // assuming you have only 1
+                                    var html = document.querySelector('html');
+                                    modal.classList.add('is-active');
+                                    html.classList.add('is-clipped');
+
+                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+                                    });
+
+                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+
+
+                                    });
+
+                                        }
+                                    </script>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
                         <hr>
                         <div class="field is-grouped">
                             <div class="control">
@@ -531,7 +580,7 @@
                     // });
 
 
-                }).done(function(){
+                }).done(function () {
                     window.value = 5;
                 });
             }
@@ -801,9 +850,9 @@
         });
         console.log('#1');
 
-        setTimeout(function(){
+        setTimeout(function () {
             populate('#trans_a_form_id', json2html_name_list(part_a));
-        } , 0.01);
+        }, 0.01);
 
         console.log('#2');
         function json2html_name_list(json, result, parent) {
@@ -828,8 +877,8 @@
             $.each(data, function (key, value) {
 
                 $('[name="' + key + '"]', frm).val(value);
-                if (key === 'samp_iss'){
-                $('input:radio[name='+key+']').filter('[value="'+value+'"]').prop('checked', true);
+                if (key === 'samp_iss') {
+                    $('input:radio[name=' + key + ']').filter('[value="' + value + '"]').prop('checked', true);
                 }
                 console.log(key + '-----' + value);
             });

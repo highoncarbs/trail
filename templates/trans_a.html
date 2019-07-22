@@ -413,6 +413,18 @@
                         <br>
                         <br>
                         <hr>
+                        <h2 class="robo">Uploads</h2>
+                        <br>
+                        <div id="drag-drop-area">
+                        </div>
+                        <script>
+                            var uppy = Uppy.Core({ autoProceed: false })
+                            var pp_num = '{{pp_num}}'
+                            uppy.use(Uppy.Dashboard, { target: '#drag-drop-area', inline: true , width: '100%' ,height:100})
+                            uppy.use(Uppy.XHRUpload, { endpoint: '/trans_a/uploads/'+pp_num ,formData: true , method : 'POST' ,   fieldName: 'files[]'})
+                        </script>
+
+                        <hr>
                         <div class="field is-grouped">
                             <div class="control">
                                 <button id="submit_btn_trans_a" class="button is-black"><span
