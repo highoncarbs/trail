@@ -23,8 +23,12 @@
                 <div class="level-right">
                     <div class="field is-grouped">
                         <div class="control">
-                            <a href="{{ url_for('trans_a_view')}}" class=" button is-black"><span
+                            <a class=" button is-black" id="edit_form"><span
                                     class="icon icon-btn-in"><i data-feather="edit-2"></i></span>Edit</a>
+                        </div>
+                        <div class="control">
+                            <a href="{{ url_for('trans_b_view_by_id' , trans_id = pp_num )}}"  class=" button is-black" id="edit_form"><span
+                                    class="icon icon-btn-in"><i data-feather="eye"></i></span>View - Part B</a>
                         </div>
                         <div class="control">
 
@@ -393,12 +397,6 @@
                                                     Object.values(result)[j], '</option>');
                                             }
                                             $(".oth_selector").html(options.join(''));
-                                            // $(".oth_selector").prop("selectedIndex", 0);
-                                            // var pp_sel = $("select[name='oth_sel[0]']").val()
-
-                                            // $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
-                                            //     $("input[name='oth_pr_uom[0]']").val(result);
-                                            // });
                                         });
                                     })
                                 </script>
@@ -418,39 +416,41 @@
                                 {% for image in img_list %}
                                 <div class="column is-one-quarter">
                                     <figure class="image ">
-                                        <img class="img-has-shadow" onclick="enlargeimage_{{loop.index}}()" src="{{ url_for('static' , filename = 'images/uploads/'+image )}}">
+                                        <img class="img-has-shadow" onclick="enlargeimage_{{loop.index}}()"
+                                            src="{{ url_for('static' , filename = 'images/uploads/'+image )}}">
                                     </figure>
                                     <div class="modal" id="image_{{loop.index}}">
-                                            <div class="modal-background"></div>
-                                            <div class="modal-content" style="width: 70%!important">
-                                                <div class="box">
-                                                        <figure class="image ">
-                                                                <img class="has-shadow"  src="{{ url_for('static' , filename = 'images/uploads/'+image )}}">
-                                                        </figure>
-                                                </div>
+                                        <div class="modal-background"></div>
+                                        <div class="modal-content" style="width: 40% !important">
+                                            <div class="box">
+                                                <figure class="image ">
+                                                    <img class="has-shadow"
+                                                        src="{{ url_for('static' , filename = 'images/uploads/'+image )}}">
+                                                </figure>
                                             </div>
-                                            <button class="modal-close is-large" aria-label="close"></button>
-                                          </div>
+                                        </div>
+                                        <button class="modal-close is-large" aria-label="close"></button>
+                                    </div>
                                     <script>
-                                        function enlargeimage_{{loop.index}}(){
+                                        function enlargeimage_{ { loop.index } } (){
                                             var modal = document.querySelector('#image_{{loop.index}}');  // assuming you have only 1
-                                    var html = document.querySelector('html');
-                                    modal.classList.add('is-active');
-                                    html.classList.add('is-clipped');
+                                            var html = document.querySelector('html');
+                                            modal.classList.add('is-active');
+                                            html.classList.add('is-clipped');
 
-                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
-                                        e.preventDefault();
-                                        modal.classList.remove('is-active');
-                                        html.classList.remove('is-clipped');
-                                    });
+                                            document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                                e.preventDefault();
+                                                modal.classList.remove('is-active');
+                                                html.classList.remove('is-clipped');
+                                            });
 
-                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
-                                        e.preventDefault();
-                                        modal.classList.remove('is-active');
-                                        html.classList.remove('is-clipped');
+                                            modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                                e.preventDefault();
+                                                modal.classList.remove('is-active');
+                                                html.classList.remove('is-clipped');
 
 
-                                    });
+                                            });
 
                                         }
                                     </script>
@@ -514,6 +514,14 @@
 
 
     $(document).ready(function () {
+
+        $('#edit_form').click(function(){
+            $("#trans_a_form_id :input").prop("disabled", false);
+        })
+
+
+        // Datepicker Script 
+
         $('input[name*="dates"]').daterangepicker({
             "locale": {
                 "format": "DD/MM/YYYY"
@@ -521,15 +529,201 @@
         });
 
         var max_fields = 10; //maximum input boxes allowed
+
+
+        // Fab Code
+
         var wrapper_fab = $(".input_fields_wrap_fab"); //Fields wrapper
         var add_button_fab = $("#add_field_button_fab"); //Add button ID
 
-        var x = 0; //initlal text box count
+        var fab_x = 0; //initlal text box count
+
         $(add_button_fab).click(function (e) { //on add input button click
-            console.log("clicked")
             e.preventDefault();
+            add_fab_fields(fab_x);
+
+        });
+
+        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+            e.preventDefault();
+            $(this).parent('td').parent('tr').remove(); fab_x--;
+        })
+
+
+        // Acc Code
+
+        var wrapper_acc = $(".input_fields_wrap_acc"); //Fields wrapper
+        var add_button_acc = $("#add_field_button_acc"); //Add button ID
+
+        var acc_x = 0; //initlal text box count
+
+        $(add_button_acc).click(function (e) { //on add input button click
+            e.preventDefault();
+            add_acc_fields(acc_x);
+        });
+
+        $(wrapper_acc).on("click", ".remove_field", function (e) { //user click on remove text
+            e.preventDefault();
+            $(this).parent('td').parent('tr').remove(); x--;
+        })
+
+
+        // Oth Code
+
+        var wrapper_oth = $(".input_fields_wrap_oth"); //Fields wrapper
+        var add_button_oth = $("#add_field_button_oth"); //Add button ID
+
+        var oth_x = 0; //initlal text box count
+
+        $(add_button_oth).click(function (e) { //on add input button click
+            e.preventDefault();
+            add_oth_fields(acc_x);
+
+        });
+
+        $(wrapper_oth).on("click", ".remove_field", function (e) { //user click on remove text
+            e.preventDefault();
+            $(this).parent('td').parent('tr').remove(); x--;
+        })
+        
+
+
+        var part_a;
+
+        $.getJSON("{{url_for('trans_a_api' ,trans_id = pp_num)}}", function (result) {
+
+            part_a = $.parseJSON(result['trans_data']['part_a']);
+            var all_sel_load = $.Deferred();
+
+            console.log(part_a);
+            if ($.isEmptyObject(result)) {
+
+                console.log('Boy , its empty ');
+                $('#trans_b_form').trigger("reset");
+
+            }
+            else {
+                console.log('Boy , its full ');
+
+
+                var extra_fld_fab = Object.keys(part_a['fab_sel']).length;
+
+
+                for (var new_x = 1; new_x < extra_fld_fab; new_x++) {
+
+                    add_fab_fields(new_x);
+                }
+
+                var extra_fld_acc = Object.keys(part_a['acc_sel']).length;
+
+                for (var new_x = 1; new_x < extra_fld_acc; new_x++) {
+                    add_acc_fields(new_x);
+                }
+
+                var extra_fld_oth = Object.keys(part_a['oth_sel']).length;
+
+                for (var new_x = 1; new_x < extra_fld_oth; new_x++) {
+                    add_oth_fields(new_x);
+                }
+                console.log('Resolves - row add');
+
+            };
+            all_sel_load.resolve();
+
+
+            var fab_sel_load = $.Deferred();
+
+            $.getJSON("{{url_for('get_raw_prod')}}", function (result) {
+                var options = [];
+
+                for (var j = 0; j < Object.keys(result).length; j++) {
+                    options.push('<option value="',
+                        Object.keys(result)[j], '">',
+                        Object.values(result)[j], '</option>');
+                }
+                $(".fab_sel_cls").html(options.join(''));
+
+            }).done(function () {
+
+                console.log('Resolves - fab add');
+                fab_sel_load.resolve();
+            })
+
+            var acc_sel_load = $.Deferred();
+
+            $.getJSON("{{url_for('get_acc')}}", function (result) {
+                var options = [];
+
+                for (var j = 0; j < Object.keys(result).length; j++) {
+                    options.push('<option value="',
+                        Object.keys(result)[j], '">',
+                        Object.values(result)[j], '</option>');
+                }
+                $(".acc_selector").html(options.join(''));
+
+
+
+            }).done(function () {
+
+                console.log('Resolves - acc add');
+                acc_sel_load.resolve();
+            })
+
+            var oth_sel_load = $.Deferred();
+
+            $.getJSON("{{url_for('get_oth_mat')}}", function (result) {
+                var options = [];
+
+                for (var j = 0; j < Object.keys(result).length; j++) {
+                    options.push('<option value="',
+                        Object.keys(result)[j], '">',
+                        Object.values(result)[j], '</option>');
+                }
+                $(".oth_selector").html(options.join(''));
+            }).done(function () {
+
+                console.log('Resolves - oth add');
+                oth_sel_load.resolve();
+            })
+
+
+            $.when(fab_sel_load, acc_sel_load, oth_sel_load).then(function () {
+
+                var rs = json2html_name_list(part_a);
+                populate('#trans_a_form_id', rs);
+
+                $("#trans_a_form_id :input").prop("disabled", true).fadeIn();
+            });
+
+
+        })
+
+
+
+        // Flattens JSON for HTML elements
+
+        function json2html_name_list(json, result, parent) {
+            if (!result) result = {};
+            if (!parent) parent = '';
+            if ((typeof json) != 'object') {
+                result[parent] = json;
+            } else {
+                for (var key in json) {
+                    var value = json[key];
+                    if (parent == '') var subparent = key;
+                    else var subparent = parent + '[' + key + ']';
+                    result = json2html_name_list(value, result, subparent);
+                }
+            }
+            return result;
+        }
+
+        //  Populates all the fields
+
+
+        function add_fab_fields(x) {
             if (x < max_fields) { //max input box allowed
-                x++; //text box increment
+                fab_x++; //text box increment
                 $(wrapper_fab).append('<tr> \
                     <td><div class="select"><select  class="fab_sel_cls" name="fab_sel['+ x + ']"></select></div></td>\
                     <td><input type="text" class="input" name="fab_sel_uom['+ x + ']" readonly></td>\
@@ -564,48 +758,14 @@
                     });
                 })
 
-                var options = [];
-
-                $.getJSON("{{url_for('get_raw_prod')}}", function (result) {
-                    for (var j = 0; j < Object.keys(result).length; j++) {
-                        options.push('<option value="',
-                            Object.keys(result)[j], '">',
-                            Object.values(result)[j], '</option>');
-                    }
-                    $("select[name='fab_sel[" + x + "]']").html(options.join(''));
-                    // $("select[name='fab_sel[" + x + "]']").prop("selectedIndex", 0);
-                    // var pp_sel = $("select[name='fab_sel[" + x + "]']").val()
-                    // $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
-                    //     $("input[name='fab_sel_uom[" + x + "]']").val(result);
-                    // });
-
-
-                }).done(function () {
-                    window.value = 5;
-                });
             }
 
 
-        });
+        }
 
-        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
-            e.preventDefault();
-            $(this).parent('td').parent('tr').remove(); x--;
-        })
-    });
-
-
-    $(document).ready(function () {
-        var max_fields = 10; //maximum input boxes allowed
-        var wrapper_acc = $(".input_fields_wrap_acc"); //Fields wrapper
-        var add_button_acc = $("#add_field_button_acc"); //Add button ID
-
-        var x = 0; //initlal text box count
-        $(add_button_acc).click(function (e) { //on add input button click
-            console.log("clicked")
-            e.preventDefault();
+        function add_acc_fields(x) {
             if (x < max_fields) { //max input box allowed
-                x++; //text box increment
+                acc_x++; //text box increment
                 $(wrapper_acc).append('<tr> \
                     <td><div class="select"><select class="acc_selector" name="acc_sel['+ x + ']"></select></div></td>\
                     <td><input type="text" class="input" name="acc_sel_uom['+ x + ']" readonly></td> \
@@ -616,24 +776,6 @@
                     <td><input type="text" class="input" name="acc_net_con['+ x + ']" /></td>\
                     </tr> ');
                 feather.replace();
-
-                var options = [];
-                $.getJSON("{{url_for('get_acc')}}", function (result) {
-                    for (var j = 0; j < Object.keys(result).length; j++) {
-                        options.push('<option value="',
-                            Object.keys(result)[j], '">',
-                            Object.values(result)[j], '</option>');
-                    }
-                    $(".acc_selector_" + x + "").html(options.join(''));
-
-                    $("select[name='acc_sel[" + x + "]']").html(options.join(''));
-                    // $("select[name='acc_sel[" + x + "]']").prop("selectedIndex", 0);
-                    var pp_sel = $("select[name='acc_sel[" + x + "]']").val();
-
-                    $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
-                        $("input[name='acc_sel_uom[" + x + "]']").val(result);
-                    });
-                });
 
                 // Calc Logic
 
@@ -667,27 +809,11 @@
 
 
 
+        }
 
-        });
-
-        $(wrapper_acc).on("click", ".remove_field", function (e) { //user click on remove text
-            e.preventDefault();
-            $(this).parent('td').parent('tr').remove(); x--;
-        })
-    });
-
-
-    $(document).ready(function () {
-        var max_fields = 10; //maximum input boxes allowed
-        var wrapper_oth = $(".input_fields_wrap_oth"); //Fields wrapper
-        var add_button_oth = $("#add_field_button_oth"); //Add button ID
-
-        var x = 0; //initlal text box count
-        $(add_button_oth).click(function (e) { //on add input button click
-            console.log("clicked")
-            e.preventDefault();
+        function add_oth_fields(x) {
             if (x < max_fields) { //max input box allowed
-                x++; //text box increment
+                oth_x++; //text box increment
                 $(wrapper_oth).append('<tr> \
                     <td><div class="select"><select class="oth_selector" name="oth_sel['+ x + ']"></select></div></td>\
                     <td><input type="text" class="input" name="oth_pr_uom['+ x + ']" readonly></td>\
@@ -698,6 +824,7 @@
                     <td><input type="text" class="input" name="oth_net_con['+ x + ']" /></td>\
                     </tr> ');
                 feather.replace();
+
 
                 // Math Login
                 $("input[name='oth_pr_pc[" + x + "]']").keyup(function () {
@@ -719,36 +846,39 @@
                 $("select[name='oth_sel[" + x + "]']").on('change', function () {
                     var pp_sel = $("select[name='oth_sel[" + x + "]']").val()
                     $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
-                        $("input[name='oth_pr__uom[" + x + "]']").val(result);
+                        $("input[name='oth_pr_uom[" + x + "]']").val(result);
                     });
                 })
 
                 // End Math Logic
 
-                var options = [];
-                $.getJSON("{{url_for('get_oth_mat')}}", function (result) {
-                    for (var j = 0; j < Object.keys(result).length; j++) {
-                        options.push('<option value="',
-                            Object.keys(result)[j], '">',
-                            Object.values(result)[j], '</option>');
-                    }
-                    $("select[name='oth_sel[" + x + "]']").html(options.join(''));
-                    // $("select[name='oth_sel[" + x + "]']").prop("selectedIndex", 0);
-                    // var pp_sel = $("select[name='oth_sel[" + x + "]']").val()
-                    // $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
-                    //     $("input[name='oth_pr_uom[" + x + "]']").val(result);
-                    // });
-                });
+
 
             }
 
-        });
+        }
 
-        $(wrapper_oth).on("click", ".remove_field", function (e) { //user click on remove text
-            e.preventDefault();
-            $(this).parent('td').parent('tr').remove(); x--;
-        })
+
+
+        function populate(frm, data) {
+            $.each(data, function (key, value) {
+
+                $('[name="' + key + '"]', frm).val(value);
+                if (key === 'samp_iss') {
+                    $('input:radio[name=' + key + ']').filter('[value="' + value + '"]').prop('checked', true);
+                }
+            });
+        }
+
+
+
+
     });
+
+
+    // Fucnction for Adding Fabric Fields
+
+
 </script>
 
 <!-- Script for Math Logic -->
@@ -805,97 +935,5 @@
         $("input[name='fab_net_con[0]']").val(total);
     });
 </script>
-<script>
-    $(document).ready(function () {
-        window.value = 0;
-        $.ajaxSetup({
-            async: false
-        });
 
-        var part_a;
-        $.getJSON("{{url_for('trans_a_api' ,trans_id = pp_num)}}", function (result) {
-
-            part_a = $.parseJSON(result['trans_data']['part_a']);
-
-            console.log(part_a);
-            if ($.isEmptyObject(result)) {
-
-                console.log('Boy , its empty ');
-                $('#trans_b_form').trigger("reset");
-
-            }
-            else {
-                console.log('Boy , its full ');
-
-                var extra_fld_fab = Object.keys(part_a['fab_sel']).length;
-                for (i = 1; i < extra_fld_fab; i++) {
-                    $("#add_field_button_fab").trigger('click');
-                }
-
-                var extra_fld_acc = Object.keys(part_a['acc_sel']).length;
-                for (i = 1; i < extra_fld_acc; i++) {
-                    $("#add_field_button_acc").trigger('click');
-                }
-                var extra_fld_oth = Object.keys(part_a['oth_sel']).length;
-                for (i = 1; i < extra_fld_oth; i++) {
-                    $("#add_field_button_oth").trigger('click');
-                }
-            };
-
-
-
-
-
-
-        });
-        console.log('#1');
-
-        setTimeout(function () {
-            populate('#trans_a_form_id', json2html_name_list(part_a));
-        }, 0.01);
-
-        console.log('#2');
-        function json2html_name_list(json, result, parent) {
-            if (!result) result = {};
-            if (!parent) parent = '';
-            if ((typeof json) != 'object') {
-                result[parent] = json;
-            } else {
-                for (var key in json) {
-                    var value = json[key];
-                    if (parent == '') var subparent = key;
-                    else var subparent = parent + '[' + key + ']';
-                    result = json2html_name_list(value, result, subparent);
-                }
-            }
-            return result;
-        }
-
-        //  Populates all the fields
-
-        function populate(frm, data) {
-            $.each(data, function (key, value) {
-
-                $('[name="' + key + '"]', frm).val(value);
-                if (key === 'samp_iss') {
-                    $('input:radio[name=' + key + ']').filter('[value="' + value + '"]').prop('checked', true);
-                }
-                console.log(key + '-----' + value);
-            });
-        }
-
-    });
-
-
-    // Fucnction for JSON to html fillups
-
-
-
-
-
-</script>
-<script>
-
-
-</script>
 {% endblock %}

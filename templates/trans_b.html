@@ -3,7 +3,6 @@
 <!-- Date picker Script -->
 
 <!-- End imports -->
-
 <div class="container" style="margin-top: 5rem;">
 
     <div class="columns is-mobile is-centered">
@@ -33,145 +32,15 @@
                                     $('#show_noti').hide();
                                     $('.remove_field').trigger('click');
                                     $('#form_b_table  , .tracking_data').toggle();
-                                   
+
 
 
                                 });
                             });
                         </script>
                     </div>
+
                 </div>
-                <!-- <div class="level-item">
-                        <p class=" control select  ">
-                            <select id="pp_sel"></select>
-                        </p>
-                    </div>
-
-                    <div class="level-item">
-                        <p class=" control">
-                            <button class="button is-black" id="pp_update"><span class="icon icon-btn-in ">
-                                    <i data-feather="refresh-cw"></i>
-                                </span>Update</button>
-                        </p>
-                    </div>
-                    <script>
-                        $(document).ready(function () {
-                            var options = [];
-                            $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
-                                console.log(result)
-                                for (var j = 0; j < Object.keys(result).length; j++) {
-                                    options.push('<option value="',
-                                        Object.keys(result)[j], '">',
-                                        Object.values(result)[j], '</option>');
-                                }
-                                $("#pp_sel").html(options.join(''));
-                            });
-                        })
-                    </script> -->
-                <!-- <script>
-                    $('#pp_update').click(function (e) {
-                        e.preventDefault();
-                        var pp_num = $('#pp_sel').val();
-
-
-                        $.getJSON("/get/trans_pp_b?pp_num=" + pp_num, function (result) {
-                            console.log(result);
-
-                            if ($.isEmptyObject(result)) {
-
-                                $('#show_noti').show();
-                                $('#trans_b_form').trigger("reset");
-                            }
-                            else {
-                                $('#show_noti').hide();
-                                $('.tracking_data').show();
-                                $('#pp_update').hide().fadeOut(500);
-
-                                var extra_fld = Object.keys(result['datefilter']).length;
-                                var extra_fld_cut = Object.keys(result['cut_datefilter'][0]).length;
-                                var extra_fld_sth = Object.keys(result['sth_datefilter'][1]).length;
-
-                                var extra_fld_val = Object.keys(result['val_datefilter'][2]).length;
-                                var extra_fld_kaj = Object.keys(result['kaj_datefilter'][3]).length;
-                                var extra_fld_tes = Object.keys(result['tes_datefilter'][4]).length;
-                                var extra_fld_thr = Object.keys(result['thr_datefilter'][5]).length;
-                                var extra_fld_qc = Object.keys(result['qc_datefilter'][6]).length;
-
-                                var extra_fld_pre = Object.keys(result['pre_datefilter'][7]).length;
-                                var extra_fld_tag = Object.keys(result['tag_datefilter'][8]).length;
-                                var extra_fld_tra = Object.keys(result['tra_datefilter'][9]).length;
-
-
-
-                                for (i = 11; i < extra_fld; i++) {
-                                    $("#add_field_button_fg").trigger('click');
-                                }
-
-
-                                for (i = 1; i < extra_fld_cut; i++) {
-                                    $("#add_field_button_cut").trigger('click');
-                                }
-                                for (i = 1; i < extra_fld_sth; i++) {
-                                    $("#add_field_button_sth").trigger('click');
-                                }
-                                for (i = 1; i < extra_fld_val; i++) {
-                                    $("#add_field_button_val").trigger('click');
-                                }
-                                for (i = 1; i < extra_fld_kaj; i++) {
-                                    $("#add_field_button_kaj").trigger('click');
-                                }
-                                for (i = 1; i < extra_fld_tes; i++) {
-                                    $("#add_field_button_tes").trigger('click');
-                                }
-                                for (i = 1; i < extra_fld_thr; i++) {
-                                    $("#add_field_button_thr").trigger('click');
-                                }
-                                for (i = 1; i < extra_fld_qc; i++) {
-                                    $("#add_field_button_qc").trigger('click');
-                                }
-                                for (i = 1; i < extra_fld_pre; i++) {
-                                    $("#add_field_button_pre").trigger('click');
-                                }
-                                for (i = 1; i < extra_fld_tag; i++) {
-                                    $("#add_field_button_tag").trigger('click');
-                                }
-                                for (i = 1; i < extra_fld_tra; i++) {
-                                    $("#add_field_button_tra").trigger('click');
-                                }
-                                populate('#trans_b_form', json2html_name_list(result));
-
-
-                            }
-                        })
-                    });
-
-                    // Fucnction for JSON to html fillups
-
-                    function json2html_name_list(json, result, parent) {
-                        if (!result) result = {};
-                        if (!parent) parent = '';
-                        if ((typeof json) != 'object') {
-                            result[parent] = json;
-                        } else {
-                            for (var key in json) {
-                                var value = json[key];
-                                if (parent == '') var subparent = key;
-                                else var subparent = parent + '[' + key + ']';
-                                result = json2html_name_list(value, result, subparent);
-                            }
-                        }
-                        return result;
-                    }
-
-                    //  Populates all the fields
-
-                    function populate(frm, data) {
-                        $.each(data, function (key, value) {
-                            $('[name="' + key + '"]', frm).val(value);
-                        });
-                    }
-                </script> -->
-
 
             </nav>
             <hr>
@@ -179,13 +48,13 @@
                 <p>Please do the required entry and submit the form.</p>
             </div>
             <div class="tracking_data animated fadeIn" style="display:none;">
-                <div class="nav">
+                <div class="nav" id="sub_nav">
                     <div class="level-left">
                         <div class="level-item">
                             <p class="is-size-5 ">
                                 <span class=" robo"> Transaction <span class="icon icon-btn"
-                                        style="padding:3px; margin-left: 10px;"><i
-                                            data-feather="hash"></i></span><span id="trans_b_id_set"></span> </span></span></p>
+                                        style="padding:3px; margin-left: 10px;"><i data-feather="hash"></i></span><span
+                                        id="trans_b_id_set"></span> </span></span></p>
                         </div>
                     </div>
                 </div>
@@ -1495,37 +1364,38 @@
                 <hr>
             </div>
             {% else %}
-        
-           
-            <div class="xtable animated fadeIn" id="form_b_table">
-                    <div class="field is-grouped">
+
+            <!-- Table to list all trans -->
+
+            <div class="xtable animated fadeIn" id="form_b_table" style="display:none">
+                <div class="field is-grouped">
 
 
-                            <div class="control has-icons-left">
-                                <input class="input" name="start-dates" placeholder="Start Date" value="">
-                                <span class="icon is-small is-left">
-                                    <i data-feather="calendar"></i>
-                                </span>
-                            </div>
-            
-                            <div class="control has-icons-left">
-                                <input class="input" name="target-dates" placeholder="Target Date" value="">
-                                <span class="icon is-small is-left">
-                                    <i data-feather="calendar"></i>
-                                </span>
-                            </div>
-            
-                            <div class="control">
-                                <button id="filter_update" class=" button is-black"><span class="icon icon-btn-in"><i
-                                            data-feather="filter"></i></span>Filter</button>
-                            </div>
-            
-                            <div class="control">
-                                <button id="filter_reset" class=" button "><span class="icon icon-btn-in"><i
-                                            data-feather="x"></i></span>Clear Filter</button>
-                            </div>
-                        </div>
-                        <hr>
+                    <div class="control has-icons-left">
+                        <input class="input" name="start-dates" placeholder="Start Date" value="">
+                        <span class="icon is-small is-left">
+                            <i data-feather="calendar"></i>
+                        </span>
+                    </div>
+
+                    <div class="control has-icons-left">
+                        <input class="input" name="target-dates" placeholder="Target Date" value="">
+                        <span class="icon is-small is-left">
+                            <i data-feather="calendar"></i>
+                        </span>
+                    </div>
+
+                    <div class="control">
+                        <button id="filter_update" class=" button is-black"><span class="icon icon-btn-in"><i
+                                    data-feather="filter"></i></span>Filter</button>
+                    </div>
+
+                    <div class="control">
+                        <button id="filter_reset" class=" button "><span class="icon icon-btn-in"><i
+                                    data-feather="x"></i></span>Clear Filter</button>
+                    </div>
+                </div>
+                <hr>
                 <table class="table is-fullwidth">
                     <thead>
                         <th>Order No.</th>
@@ -1675,115 +1545,134 @@
 
                                     $.getJSON("/get/trans_pp_b?pp_num={{row.id}}", function (result) {
                                         console.log(result);
-                                        $('#trans_b_id_set').html({{row.id}});
+                                        $('#trans_b_id_set').html({{ row.id }});
 
 
-                                        if ($.isEmptyObject(result)) {
+                                    if ($.isEmptyObject(result)) {
 
-                                            $('#show_noti').show();
-                                            $('.tracking_data').show();
-                                            $('#trans_b_form').trigger("reset");
-                                            $('#form_b_table').hide();
-                                            $('#trans_view_b').fadeIn();
-
-
-                                        }
-                                        else {
-                                            $('#show_noti').hide();
-                                            $('#form_b_table').hide();
-                                            $('.tracking_data').show();
-                                            $('#trans_view_b').fadeIn();
+                                        $('#show_noti').show();
+                                        $('.tracking_data').show();
+                                        $('#trans_b_form').trigger("reset");
+                                        $('#form_b_table').hide();
+                                        $('#trans_view_b').fadeIn();
 
 
-                                            var extra_fld = Object.keys(result['datefilter']).length;
-                                            var extra_fld_cut = Object.keys(result['cut_datefilter'][0]).length;
-                                            var extra_fld_sth = Object.keys(result['sth_datefilter'][1]).length;
-
-                                            var extra_fld_val = Object.keys(result['val_datefilter'][2]).length;
-                                            var extra_fld_kaj = Object.keys(result['kaj_datefilter'][3]).length;
-                                            var extra_fld_tes = Object.keys(result['tes_datefilter'][4]).length;
-                                            var extra_fld_thr = Object.keys(result['thr_datefilter'][5]).length;
-                                            var extra_fld_qc = Object.keys(result['qc_datefilter'][6]).length;
-
-                                            var extra_fld_pre = Object.keys(result['pre_datefilter'][7]).length;
-                                            var extra_fld_tag = Object.keys(result['tag_datefilter'][8]).length;
-                                            var extra_fld_tra = Object.keys(result['tra_datefilter'][9]).length;
-
-
-                                            if ($.inArray('{{ row.id }}', loaded) === -1) {
-                                                for (i = 11; i < extra_fld; i++) {
-                                                    $("#add_field_button_fg").trigger('click');
-                                                }
-
-
-                                                for (i = 1; i < extra_fld_cut; i++) {
-                                                    $("#add_field_button_cut").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_sth; i++) {
-                                                    $("#add_field_button_sth").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_val; i++) {
-                                                    $("#add_field_button_val").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_kaj; i++) {
-                                                    $("#add_field_button_kaj").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tes; i++) {
-                                                    $("#add_field_button_tes").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_thr; i++) {
-                                                    $("#add_field_button_thr").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_qc; i++) {
-                                                    $("#add_field_button_qc").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_pre; i++) {
-                                                    $("#add_field_button_pre").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tag; i++) {
-                                                    $("#add_field_button_tag").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tra; i++) {
-                                                    $("#add_field_button_tra").trigger('click');
-                                                }
-                                                loaded.push('{{ row.id }}');
-
-                                            }
-                                            populate('#trans_b_form', json2html_name_list(result));
-
-
-                                        }
-                                    })
-
-
-
-
-                                    // Fucnction for JSON to html fillups
-
-                                    function json2html_name_list(json, result, parent) {
-                                        if (!result) result = {};
-                                        if (!parent) parent = '';
-                                        if ((typeof json) != 'object') {
-                                            result[parent] = json;
-                                        } else {
-                                            for (var key in json) {
-                                                var value = json[key];
-                                                if (parent == '') var subparent = key;
-                                                else var subparent = parent + '[' + key + ']';
-                                                result = json2html_name_list(value, result, subparent);
-                                            }
-                                        }
-                                        return result;
                                     }
+                                    else {
+                                        $('#show_noti').hide();
+                                        $('#form_b_table').hide();
+                                        $('.tracking_data').show();
+                                        $('#trans_view_b').fadeIn();
+                                        $('#trans_view_a').show();
 
-                                    //  Populates all the fields
 
-                                    function populate(frm, data) {
-                                        $.each(data, function (key, value) {
-                                            $('[name="' + key + '"]', frm).val(value);
-                                        });
+
+                                        // $('#sub_nav').append(` 
+                                        // <div class="level-right">
+                                        // <div class="level-item">
+                                        //                         <p class=" control">
+                                        //                             <button
+                                        //                                 class="button is-black" id="trans_view_a_{{row.id}}"><span class="icon icon-btn-in ">
+                                        //                                     <i data-feather="eye"></i>
+                                        //                                 </span>View - Part A</button>
+                                        //                         </p>
+                                        //                     </div></div>`);
+                                        // $("trans_view_a_{{row.id}}").click(function(){
+                                        //     window.location.assign(" {{ url_for('trans_a_view_by_id' , trans_id = row.id)}}")
+                                        // })
+
+
+
+
+                                        var extra_fld = Object.keys(result['datefilter']).length;
+                                        var extra_fld_cut = Object.keys(result['cut_datefilter'][0]).length;
+                                        var extra_fld_sth = Object.keys(result['sth_datefilter'][1]).length;
+
+                                        var extra_fld_val = Object.keys(result['val_datefilter'][2]).length;
+                                        var extra_fld_kaj = Object.keys(result['kaj_datefilter'][3]).length;
+                                        var extra_fld_tes = Object.keys(result['tes_datefilter'][4]).length;
+                                        var extra_fld_thr = Object.keys(result['thr_datefilter'][5]).length;
+                                        var extra_fld_qc = Object.keys(result['qc_datefilter'][6]).length;
+
+                                        var extra_fld_pre = Object.keys(result['pre_datefilter'][7]).length;
+                                        var extra_fld_tag = Object.keys(result['tag_datefilter'][8]).length;
+                                        var extra_fld_tra = Object.keys(result['tra_datefilter'][9]).length;
+
+
+                                        if ($.inArray('{{ row.id }}', loaded) === -1) {
+                                            for (i = 11; i < extra_fld; i++) {
+                                                $("#add_field_button_fg").trigger('click');
+                                            }
+
+
+                                            for (i = 1; i < extra_fld_cut; i++) {
+                                                $("#add_field_button_cut").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_sth; i++) {
+                                                $("#add_field_button_sth").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_val; i++) {
+                                                $("#add_field_button_val").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_kaj; i++) {
+                                                $("#add_field_button_kaj").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tes; i++) {
+                                                $("#add_field_button_tes").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_thr; i++) {
+                                                $("#add_field_button_thr").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_qc; i++) {
+                                                $("#add_field_button_qc").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_pre; i++) {
+                                                $("#add_field_button_pre").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tag; i++) {
+                                                $("#add_field_button_tag").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tra; i++) {
+                                                $("#add_field_button_tra").trigger('click');
+                                            }
+                                            loaded.push('{{ row.id }}');
+
+                                        }
+                                        populate('#trans_b_form', json2html_name_list(result));
+
+
                                     }
-                                });
+                                })
+
+
+
+
+                                // Fucnction for JSON to html fillups
+
+                                function json2html_name_list(json, result, parent) {
+                                    if (!result) result = {};
+                                    if (!parent) parent = '';
+                                    if ((typeof json) != 'object') {
+                                        result[parent] = json;
+                                    } else {
+                                        for (var key in json) {
+                                            var value = json[key];
+                                            if (parent == '') var subparent = key;
+                                            else var subparent = parent + '[' + key + ']';
+                                            result = json2html_name_list(value, result, subparent);
+                                        }
+                                    }
+                                    return result;
+                                }
+
+                                //  Populates all the fields
+
+                                function populate(frm, data) {
+                                    $.each(data, function (key, value) {
+                                        $('[name="' + key + '"]', frm).val(value);
+                                    });
+                                }
+                            });
                             });
                         </script>
                         {% endfor %}
@@ -1998,92 +1887,113 @@
     });
 </script>
 <script>
-        $(document).ready(function () {
-            $('input[name*="dates"]').attr('autocomplete', 'off');
-    
-            $('input[name*="dates"]').daterangepicker({
-                "locale": {
-                    "format": "DD/MM/YYYY"
-                },
-                buttonClasses: 'button',
-                applyButtonClasses: 'is-black',
-                autoUpdateInput: false,
-                locale: {
-                    cancelLabel: 'Clear'
-                }
-            });
-    
-            $('input[name*="dates"]').on('apply.daterangepicker', function (ev, picker) {
-                $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
-            });
-    
-            $('input[name*="dates"]').on('cancel.daterangepicker', function (ev, picker) {
-                $(this).val('');
-            });
-    
-            $('#filter_update').click(function () {
-                var st_date = $('input[name="start-dates"]').val().split("-");
-                var st_dt_0 = moment(st_date[0], "DD/MM/YYYY");
-                var st_dt_1 = moment(st_date[1], "DD/MM/YYYY");
-    
-                var tr_date = $('input[name="target-dates"]').val().split("-");
-                var tr_dt_0 = moment(tr_date[0], "DD/MM/YYYY");
-                var tr_dt_1 = moment(tr_date[1], "DD/MM/YYYY");
-    
-                // var dates
-                // compareDate.isBetween(startDate, endDate); //false in this case
-    
-    
-                function onlyStart() {
-                    $('[id*=start]').each(function () {
-                        var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
-                        console.log(dt._i);
-                        if (dt.isBetween(st_dt_0, st_dt_1) !== true) {
-                            $(this).parent().fadeOut();
-                        }
-    
-    
-                    })
-                }
-    
-                function onlyTarget() {
-                    $('[id*=target]').each(function () {
-                        var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
-                        console.log(dt._i);
-                        if (dt.isBetween(tr_dt_0, tr_dt_1) !== true) {
-                            $(this).parent().fadeOut();
-                        }
-    
-    
-                    })
-                }
-    
-                if ($('input[name="target-dates"]').val() === "") {
-                    onlyStart()
-    
-                }
-    
-                if ($('input[name="start-dates"]').val() === "") {
-                    onlyTarget()
-                }
-    
-                if ($('input[name="start-dates"]').val() !== "" && $('input[name="target-dates"]').val() !== "" ) {
-                
-                    onlyStart();
-                    onlyTarget();
-    
-    
-                }
-            })
-    
-            $('#filter_reset').click(function () {
-                $('input[name="start-dates"]').val("");
-                $('input[name="target-dates"]').val("");
+    $(document).ready(function () {
+        $('input[name*="dates"]').attr('autocomplete', 'off');
 
+        $('input[name*="dates"]').daterangepicker({
+            "locale": {
+                "format": "DD/MM/YYYY"
+            },
+            buttonClasses: 'button',
+            applyButtonClasses: 'is-black',
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+
+        $('input[name*="dates"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
+        });
+
+        $('input[name*="dates"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
+        $('#filter_update').click(function () {
+            var st_date = $('input[name="start-dates"]').val().split("-");
+            var st_dt_0 = moment(st_date[0], "DD/MM/YYYY");
+            var st_dt_1 = moment(st_date[1], "DD/MM/YYYY");
+
+            var tr_date = $('input[name="target-dates"]').val().split("-");
+            var tr_dt_0 = moment(tr_date[0], "DD/MM/YYYY");
+            var tr_dt_1 = moment(tr_date[1], "DD/MM/YYYY");
+
+            // var dates
+            // compareDate.isBetween(startDate, endDate); //false in this case
+
+
+            function onlyStart() {
                 $('[id*=start]').each(function () {
-                    $(this).parent().fadeIn();
-                });
+                    var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    console.log(dt._i);
+                    if (dt.isBetween(st_dt_0, st_dt_1) !== true) {
+                        $(this).parent().fadeOut();
+                    }
+
+
+                })
+            }
+
+            function onlyTarget() {
+                $('[id*=target]').each(function () {
+                    var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    console.log(dt._i);
+                    if (dt.isBetween(tr_dt_0, tr_dt_1) !== true) {
+                        $(this).parent().fadeOut();
+                    }
+
+
+                })
+            }
+
+            if ($('input[name="target-dates"]').val() === "") {
+                onlyStart()
+
+            }
+
+            if ($('input[name="start-dates"]').val() === "") {
+                onlyTarget()
+            }
+
+            if ($('input[name="start-dates"]').val() !== "" && $('input[name="target-dates"]').val() !== "") {
+
+                onlyStart();
+                onlyTarget();
+
+
+            }
+        })
+
+        $('#filter_reset').click(function () {
+            $('input[name="start-dates"]').val("");
+            $('input[name="target-dates"]').val("");
+
+            $('[id*=start]').each(function () {
+                $(this).parent().fadeIn();
             });
         });
-    </script>
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        console.log({{ view }})
+    if ("{{view}}" === "true") {
+        // Construct URL object using current browser URL
+        var url = new URL(document.location);
+        console.log({{ trans_num }});
+    // Get query parameters object
+    var params = url.searchParams;
+
+    // Get value of paper
+    var selView = params.get("view");
+
+    $('#trans_b_form_view_{{trans_num}}').trigger('click');
+            
+            }
+            else {
+        $('#form_b_table').show();
+    }
+            });
+</script>
 {% endblock %}

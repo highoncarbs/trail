@@ -286,6 +286,16 @@ def trans_a_api(trans_id):
     res = trans_schema.dump(pp_num).data
     return jsonify({'trans_data': res})
 
+@app.route('/trans_b/view/<trans_id>' , methods = ['POST' , 'GET'])
+@login_required
+def trans_b_view_by_id(trans_id):
+    all_num = db.session.query(Trans).filter_by(flag = 0 ).all()
+
+    pp_num = db.session.query(Trans).filter_by(id = int(trans_id)).first()
+    view = 'true'
+    return render_template('trans_b.html' ,open_trans = all_num , trans_num = pp_num.id , mssg = session['mssg'] , view = view) ,200
+
+
 @app.route('/trans_b', methods=['GET', 'POST'])
 @login_required
 def trans_b():
@@ -962,6 +972,7 @@ def main_master(fin_id):
             return redirect('/main_master?showTab=14')
         except Exception as e:
             session['mssg'] = "Something unexpected happened."
+            print(str(e))
             return redirect('/main_master?showTab=14')
     
     if fin_goods_form.fin_update.data:

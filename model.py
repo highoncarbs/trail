@@ -372,8 +372,8 @@ class FinGoods(db.Model):
     print_tech = db.relationship('PrintTech' ,cascade="all,delete", secondary='tech_goods' , backref='print_goods' , lazy = 'joined')
     design = db.relationship('FinDes' ,cascade="all,delete", secondary='des_goods' , backref='des_goods' , lazy = 'joined')
     uom = db.relationship('Uom' ,cascade="all,delete", secondary='uom_goods' , backref='uom_goods' , lazy = 'joined')
-    alt_name = db.Column(db.String(20))
-    gen_name = db.Column(db.String(50))
+    alt_name = db.Column(db.String(200))
+    gen_name = db.Column(db.String(100))
 
     def get_gen_name(self):
         product_category = self.product_category
@@ -428,8 +428,8 @@ class RawFabMain(db.Model):
     uom = db.relationship('Uom' ,cascade="all,delete", secondary='uom_raw_goods' , backref='uom_raw_goods' , lazy = 'joined')
     width = db.relationship('FabWidth' ,cascade="all,delete", secondary='width_goods' , backref='width_goods' , lazy = 'joined')
     dye = db.relationship('FabDye' ,cascade="all,delete", secondary='dye_goods' , backref='dye_goods' , lazy = 'joined')
-    alt_name = db.Column(db.String(20))
-    gen_name = db.Column(db.String(50))
+    alt_name = db.Column(db.String(200))
+    gen_name = db.Column(db.String(100))
 
     def get_gen_name(self):
         product_category = self.product_category
