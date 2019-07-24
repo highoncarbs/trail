@@ -34,8 +34,8 @@
 </style>
 <div class="tabs has-background-white-bis is-fullwidth" id="tabs" style="padding-top: 1rem;">
     <div class="container">
-            <h2 class="is-size-4 has-text-centered robo ">Raw Materials</h2>
-            <hr style="margin:1rem !important;">
+        <h2 class="is-size-4 has-text-centered robo ">Raw Materials</h2>
+        <hr style="margin:1rem !important;">
         <ul>
             <li class="" data-tab="8">
                 <a>
@@ -72,8 +72,16 @@
 </div>
 
 <div id="tab-content">
+    <div class="tab-box" data-content="12">
+        {% include 'raw_cat_master.html' %}
+
+    </div>
     <div class="tab-box " data-content="8">
         {% include 'raw_yarn_master.html' %}
+    </div>
+    <div class="tab-box" data-content="13">
+        {% include 'raw_const_master.html' %}
+
     </div>
     <div class="tab-box " data-content="9">
         {% include 'raw_proc_master.html' %}
@@ -87,14 +95,8 @@
         {% include 'raw_dye_master.html' %}
 
     </div>
-    <div class="tab-box" data-content="12">
-        {% include 'raw_cat_master.html' %}
 
-    </div>
-    <div class="tab-box" data-content="13">
-        {% include 'raw_const_master.html' %}
 
-    </div>
 
 
 </div>
@@ -122,7 +124,7 @@
             $("li[data-tab=8] , li[data-tab=10] , li[data-tab=11] , li[data-tab=12] , li[data-tab=13] ").removeClass('is-active');
             $("div[data-content=8] ,div[data-content=10] , div[data-content=11] ,div[data-content=12] ,div[data-content=13]").removeClass('is-active');
 
-          
+
 
             $('#proc').focus();
 

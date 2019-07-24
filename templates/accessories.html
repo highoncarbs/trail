@@ -19,42 +19,69 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('accessories')}}">
                         {{acc_form.hidden_tag()}}
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                        </div>
                         <div class="field-body is-horizontal">
+
+
                             <div class="field">
                                 <label class="label">Accessories</label>
                                 <div class="control">
+                                    {{acc_form.acc(class="input" , value = dup)}}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">U.O.M</label>
+                                <div class="control select">
+                                    {{acc_form.uom()}}
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="field-body is-horizontal">
+
+                            <div class="field">
+                                <label class="label">Accessories</label>
+                                <div class="control is-fullwidth">
                                     {{acc_form.acc(class="input" , placeholder="Enter Accessories")}}
                                 </div>
                             </div>
                             <div class="field">
-                                    <label class="label">U.O.M</label>
-                                    <div class="control select">
-                                        {{acc_form.uom()}}
-                                    </div>
+                                <label class="label">U.O.M</label>
+                                <div class="control select">
+                                    {{acc_form.uom()}}
                                 </div>
+                            </div>
                         </div>
-                        <br>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                {{acc_form.acc_submit(class="button is-black" , value="Save")}}
-                            </div>
-                            <div class="control">
-                                <a class="button is-info" href="{{ url_for('accessories_view') }}"><span
-                                        class="icon icon-btn-in"><i data-feather="eye"></i></span>View </a>
-                            </div>
-                            <div class="control ">
-                                <a class="button is-text">Clear Fields</a>
-                            </div>
-
-                        </div>
-
-                    </form>
+                        {% endif %}
                 </div>
+                <br>
+                <div class="field is-grouped">
+                    <div class="control">
+                        {{acc_form.acc_submit(class="button is-black" , value="Save")}}
+                    </div>
+                    <div class="control">
+                        <a class="button is-info" href="{{ url_for('accessories_view') }}"><span
+                                class="icon icon-btn-in"><i data-feather="eye"></i></span>View </a>
+                    </div>
+                    <div class="control ">
+                        <a class="button is-text">Clear Fields</a>
+                    </div>
+
+                </div>
+
+                </form>
             </div>
         </div>
-
-
     </div>
 
+
 </div>
+
+</div>
+<script>
+$('#acc').focus();
+</script>
 {% endblock %}

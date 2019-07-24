@@ -63,6 +63,9 @@ def login():
             return render_template('login.html', subtitle="Login", form=form, mssg=session['mssg'])
     if not hasattr(session, "mssg"):
         session['mssg'] = ""
+    
+    if not hasattr(session , "dup"):
+        session['dup'] = ""
     return render_template('login.html', subtitle="Login", form=form, mssg=session['mssg']), 200
 
 
@@ -376,8 +379,13 @@ def customer_category():
                 new_cust = CustomerCategory(health=cust_name)
                 db.session.add(new_cust)
                 db.session.commit()
+                session['mssg'] = "Customer Category "+cust_name+" added successfully."
                 return redirect(url_for('customer_category'))
-    return render_template('customer_Category.html', subtitle="Customer Category", mssg=session['mssg'], cust_form=cust_form), 200
+            else:
+                session['dup'] = check_one.health
+                return redirect(url_for('customer_category'))
+
+    return render_template('customer_Category.html', subtitle="Customer Category", mssg=session['mssg'], dup=session['dup'], cust_form=cust_form), 200
 
 
 @app.route('/raw_materials/customer_category_view', methods=['GET', 'POST'])
@@ -412,9 +420,11 @@ def accessories():
                 return redirect(url_for('accessories'))
             else:
                 session['mssg'] = "Accessory - "+acc_name+" already exists."
+                session['dup'] = acc_name
+
                 return redirect(url_for('accessories'))
 
-    return render_template('accessories.html', subtitle="Accessories", mssg=session['mssg'], acc_form=acc_form), 200
+    return render_template('accessories.html', subtitle="Accessories", mssg=session['mssg'], dup = session['dup'], acc_form=acc_form), 200
 
 
 @app.route('/raw_materials/accessories_view', methods=['GET', 'POST'])
@@ -424,7 +434,7 @@ def accessories_view():
         Accessories).all()
     acc_form = AccessoriesForm()
 
-    return render_template('accessories_view.html', subtitle="Accessories", mssg=session['mssg'], acc_list=acc_list, acc_form=acc_form), 200
+    return render_template('accessories_view.html', subtitle="Accessories", mssg=session['mssg'],dup=session['dup'], acc_list=acc_list, acc_form=acc_form), 200
 
 
 
@@ -452,9 +462,9 @@ def other_mat():
                 return redirect(url_for('other_mat'))
             else:
                 session['mssg'] = "Material - "+mat_name+" already exists."
-
+                session['dup'] = acc_name
                 return redirect(url_for('other_mat'))
-    return render_template('othermat.html', subtitle="Other Materials", mssg=session['mssg'], mat_form=mat_form), 200
+    return render_template('othermat.html', subtitle="Other Materials", mssg=session['mssg'], dup = session['dup'] , mat_form=mat_form), 200
 
 
 @app.route('/raw_materials/other_mat_view', methods=['GET', 'POST'])
@@ -495,9 +505,9 @@ def uom():
                 return redirect(url_for('uom'))
             else:
                 session['mssg'] = "Measure - "+uom_name+" already exists."
-
+                session['dup'] = uom_name
                 return redirect(url_for('uom'))
-    return render_template('uom_master.html', subtitle="Unit of Measurement", mssg=session['mssg'], uom_form=uom_form), 200
+    return render_template('uom_master.html', subtitle="Unit of Measurement", mssg=session['mssg'],dup = session['dup'] ,uom_form=uom_form), 200
 
 
 # Location Master
@@ -604,6 +614,8 @@ def fin_goods():
                 FinCat).filter_by(cat=cat_name).first()
             if check_one is not None:
                 session['mssg'] = "Fabric Category already exists "
+                session['dup'] = check_one.cat
+
             else:
                 new_cat = FinCat(
                     cat=cat_name, desc=cat_form.desc.data)
@@ -624,6 +636,8 @@ def fin_goods():
                 FabComb).filter_by(comb=comb_name).first()
             if check_one is not None:
                 session['mssg'] = "Fabric Combination already exists "
+                session['dup'] = check_one.comb
+
             else:
                 new_comb = FabComb(
                     comb=comb_name, desc=comb_form.desc.data)
@@ -644,6 +658,8 @@ def fin_goods():
                 PrintTech).filter_by(tech=tech_name).first()
             if check_one is not None:
                 session['mssg'] = "Print Technique already exists "
+                session['dup'] = tech_name
+
             else:
                 new_tech = PrintTech(
                     tech=tech_name, desc=tech_form.desc.data)
@@ -664,6 +680,8 @@ def fin_goods():
                 FinDes).filter_by(des=des_name).first()
             if check_one is not None:
                 session['mssg'] = "Design already exists "
+                session['dup'] = des_name
+
             else:
                 new_des = FinDes(des=des_name)
                 db.session.add(new_des)
@@ -683,6 +701,7 @@ def fin_goods():
                 FinSize).filter_by(size=size_name).first()
             if check_one is not None:
                 session['mssg'] = "Size already exists "
+                session['dup'] = size_name
             else:
                 new_size = FinSize(size=size_name)
                 db.session.add(new_size)
@@ -691,7 +710,7 @@ def fin_goods():
                     size_name+" successfully added."
             return redirect('/finished_goods?showTab=5')
 
-    return render_template('fin_goods.html' , subtitle = "Finished Goods " , mssg = session['mssg'] , cat_list =cat_list ,cat_form = cat_form ,\
+    return render_template('fin_goods.html' , subtitle = "Finished Goods " , mssg = session['mssg'] , dup= session['dup'], cat_list =cat_list ,cat_form = cat_form ,\
          comb_list =comb_list ,comb_form = comb_form , tech_list = tech_list , tech_form = tech_form , des_list = des_list ,des_form = des_form ,\
              size_list = size_list , size_form = size_form)
 
@@ -1065,14 +1084,13 @@ def raw_materials():
                 Yarn).filter_by(yarn=yarn_name).first()
             if check_one is not None:
                 session['mssg'] = "Yarn already exists "
-                return redirect('/raw_materials?showTab=8')
-
+                session['dup'] = yarn_name
             else:
                 new_yarn = Yarn(yarn=yarn_name, desc=yarn_form.desc.data)
                 db.session.add(new_yarn)
                 db.session.commit()
                 session['mssg'] = "Yarn - "+yarn_name+" successfully added."
-                return redirect('/raw_materials?showTab=8')
+            return redirect('/raw_materials?showTab=8')
 
     # Fabric Construction Form
 
@@ -1087,7 +1105,7 @@ def raw_materials():
                 FabConst).filter_by(const=const_name).first()
             if check_one is not None:
                 session['mssg'] = "Construction already exists "
-                return redirect('/raw_materials?showTab=13')
+                session['dup'] = const_name
 
             else:
                 new_const = FabConst(const=const_name)
@@ -1095,7 +1113,7 @@ def raw_materials():
                 db.session.commit()
                 session['mssg'] = "Construction - " + \
                     const_name+" successfully added."
-                return redirect('/raw_materials?showTab=13')
+            return redirect('/raw_materials?showTab=13')
 
     # Fabric process Form
 
@@ -1109,9 +1127,8 @@ def raw_materials():
             check_one = db.session.query(
                 FabProc).filter_by(process=process_name).first()
             if check_one is not None:
-                session['mssg'] = "Fabric Process already exists "
-                return redirect('/raw_materials?showTab=9')
-
+                session['mssg'] = "Fabric Process already exists "  
+                session['dup'] = process_name
             else:
                 new_process = FabProc(
                     process=process_name, desc=process_form.desc.data)
@@ -1119,7 +1136,7 @@ def raw_materials():
                 db.session.commit()
                 session['mssg'] = "Fabric Process - " + \
                     process_name+"  successfully added."
-                return redirect('/raw_materials?showTab=9')
+            return redirect('/raw_materials?showTab=9')
 
     # Fabric Width Form
 
@@ -1134,14 +1151,14 @@ def raw_materials():
                 FabWidth).filter_by(width=width_name).first()
             if check_one is not None:
                 session['mssg'] = "Fabric Width already exists "
-                return redirect('/raw_materials?showTab=10')
+                session['dup'] = width_name
             else:
                 new_width = FabWidth(width=width_name)
                 db.session.add(new_width)
                 db.session.commit()
                 session['mssg'] = "Fabric Width - " + \
                     width_name+"  successfully added."
-                return redirect('/raw_materials?showTab=10')
+            return redirect('/raw_materials?showTab=10')
 
     # Fabric Dye Form
 
@@ -1156,14 +1173,14 @@ def raw_materials():
                 FabDye).filter_by(dye=dye_name).first()
             if check_one is not None:
                 session['mssg'] = "Fabric Dye already exists "
-                return redirect('/raw_materials?showTab=11')
+                session['dup'] = dye_name
             else:
                 new_dye = FabDye(dye=dye_name)
                 db.session.add(new_dye)
                 db.session.commit()
                 session['mssg'] = "Fabric Dye - " + \
                     dye_name+"  successfully added."
-                return redirect('/raw_materials?showTab=11')
+            return redirect('/raw_materials?showTab=11')
 
     # Raw Mat Cateogry Form
 
@@ -1178,16 +1195,16 @@ def raw_materials():
                 RawCat).filter_by(cat=cat_name).first()
             if check_one is not None:
                 session['mssg'] = "Raw Material Category already exists "
-                return redirect('/raw_materials?showTab=12')
+                session['dup'] = cat_name
             else:
                 new_cat = RawCat(cat=cat_name, desc=cat_form.desc.data)
                 db.session.add(new_cat)
                 db.session.commit()
                 session['mssg'] = "Category - " + \
                     cat_name+"  successfully added."
-                return redirect('/raw_materials?showTab=12')
+            return redirect('/raw_materials?showTab=12')
 
-    return render_template('raw_mat_master.html', subtitle="Basic Master", mssg=session['mssg'],
+    return render_template('raw_mat_master.html', subtitle="Basic Master", mssg=session['mssg'], dup = session['dup'] ,
                            yarn_list=yarn_list,  yarn_form=yarn_form,  const_list=const_list, const_form=const_form,
                            width_list=width_list, width_form=width_form,  process_list=process_list, process_form=process_form,
                            dye_list=dye_list, dye_form=dye_form, cat_list=cat_list, cat_form=cat_form), 200
@@ -1486,7 +1503,7 @@ def uom_delete(id):
             check_one.delete()
             db.session.commit()
             session['mssg'] = "Measure deleted successfully"
-            return redirect('/uom')
+            return redirect('/raw_materials/uom_view')
         else:
             session['mssg'] = "Cannot delete. Value is being used."
             return redirect('/raw_materials/uom_view')
@@ -1789,8 +1806,9 @@ def load_user(user_id):
 @login_required
 def mssg_del():
     session['mssg'] = None
-    return jsonify({'mssg': 'Emptying session mssg'})
+    session['dup'] = ""
 
+    return jsonify({'mssg': 'Emptying session mssg'})
 
 @app.route('/firm/delete/<firm>', methods=["POST", "GET"])
 @login_required
@@ -1847,7 +1865,12 @@ def raw_goods_delete(id):
         logging.error('Error deleting Finished Goods : ' + str(e))
         session["mssg"] = "Couldn't delete Raw Fabric Material."
         return redirect('/main_master?showTab=15&view=list')
-# APIs for Transaction Masters
+
+
+
+########################################################
+########## APIs for Transaction Masters ################
+########################################################
 
 @app.route('/get/raw_product/' , methods=["GET"])
 @login_required 

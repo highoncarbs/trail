@@ -2,73 +2,89 @@
 {% block content %}
 <div class="container" style="margin-top: 5rem;">
 
-<div class="columns is-mobile is-centered animated fadeIn">
+    <div class="columns is-mobile is-centered animated fadeIn">
         <div class="column is-half">
-        <nav class="level is-mobile">
-            <div class="level-left">
+            <nav class="level is-mobile">
+                <div class="level-left">
 
-                <div class="level-item">
-                    <p class="is-size-5 robo ">
-                        New Unit of Measurement</p>
-                </div>
-            </div>
-
-        </nav>
-        <hr>
-        <div class="">
-            <div class="form">
-                <form method="POST" action="{{ url_for('uom')}}">
-                    {{uom_form.hidden_tag()}}
-                    <div class="field">
-                        <label class="label">Measurement</label>
-                        <div class="control">
-                            {{uom_form.measure(class="input" , placeholder="Enter Unit of Measurement")}}
-                        </div>
+                    <div class="level-item">
+                        <p class="is-size-5 robo ">
+                            New Unit of Measurement</p>
                     </div>
-                    <br>
+                </div>
 
-                    <div class="field-body">
+            </nav>
+            <hr>
+            <div class="">
+                <div class="form">
+                    <form method="POST" action="{{ url_for('uom')}}">
+                        {{uom_form.hidden_tag()}}
+
+                        {% if dup !="" %}
                         <div class="field">
-                            <label class="label">Description</label>
-                            <div class="control is-expanded is-left">
-                                {{uom_form.desc(class="input" , placeholder="Description of Measurement")}}
-
+                            <label class="label">Measurement</label>
+                            <div class="is-warning notification animated shake has-shadow">
+                                    <span
+                                    class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                            </div>
+                            <div class="control">
+                                {{uom_form.measure(class="input" , value= dup)}}
                             </div>
                         </div>
+                        {% else %}
                         <div class="field">
-                            <label class="label">Decimal Point</label>
+                            <label class="label">Measurement</label>
+                            <div class="control">
+                                {{uom_form.measure(class="input" , placeholder="Enter Unit of Measurement")}}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <br>
 
-                            <div class="control  is-right">
-                                <div class="select">
-                                    {{uom_form.decimal()}}
+                        <div class="field-body">
+                            <div class="field">
+                                <label class="label">Description</label>
+                                <div class="control is-expanded is-left">
+                                    {{uom_form.desc(class="input" , placeholder="Description of Measurement")}}
+
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Decimal Point</label>
+
+                                <div class="control  is-right">
+                                    <div class="select">
+                                        {{uom_form.decimal()}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <br>
+                        <br>
+                        <br>
 
-                    <div class="field is-grouped">
-                        <div class="control">
-                            {{uom_form.uom_submit(class="button is-black" , value="Save")}}
-                        </div>
-                        <div class="control">
-                                <a href="{{url_for('uom_master_view')}}" class="button is-info"><span class="icon icon-btn-in"><i
-                                    data-feather="eye"></i></span>View</a>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                {{uom_form.uom_submit(class="button is-black" , value="Save")}}
                             </div>
-                        <div class="control">
-                            <a class="button is-text">Clear Fields</a>
+                            <div class="control">
+                                <a href="{{url_for('uom_master_view')}}" class="button is-info"><span
+                                        class="icon icon-btn-in"><i data-feather="eye"></i></span>View</a>
+                            </div>
+                            <div class="control">
+                                <a class="button is-text">Clear Fields</a>
+                            </div>
+
                         </div>
 
-                    </div>
-
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
+
     </div>
-   
-</div>
 
 </div>
-
+<script>
+            $('#measure').focus();
+</script>
 {% endblock %}
