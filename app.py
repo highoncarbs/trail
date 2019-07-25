@@ -196,6 +196,8 @@ from model import Trans
 @login_required
 def trans_a():
     pp_num = db.session.query(Trans).all()
+    trans_semi = db.session.query(Trans).filter_by(flag = 3).first()
+    
     if len(pp_num) is 0:
         pp_new = int(1)
     else:
@@ -221,7 +223,7 @@ def trans_a():
             db.session.commit()
             session['mssg'] = "Transaction - Part A with PP No. " + str(new_trans.id)+ " has been added."
             return jsonify("success")
-    return render_template('trans_a.html' , pp_num = pp_new , mssg = session['mssg']) ,200
+    return render_template('trans_a.html' , pp_num = pp_new , mssg = session['mssg'] , trans_semi = trans_semi) ,200
 
 @app.route('/trans_a_view', methods=['GET', 'POST'])
 @login_required
@@ -265,6 +267,7 @@ def trans_a_view_by_id(trans_id):
     pp_num = db.session.query(Trans).filter_by(id= int(trans_id)).all()
     trans_schema = TransSchema()
     res = trans_schema.dump(pp_num).data
+    print(res)
     img_list = []
     UPLOAD_FOLDER = os.path.abspath('./static/images/uploads/'+str(trans_id))
     if not os.path.exists(UPLOAD_FOLDER):
@@ -276,7 +279,7 @@ def trans_a_view_by_id(trans_id):
                 img_list.append(str(trans_id)+'/'+str(file))
         print(img_list)
 
-    return render_template('trans_a_view_id.html' , pp_num = trans_id ,open_trans = pp_num , mssg = session['mssg'] , img_list = img_list) , 200
+    return render_template('trans_a_view_id.html' , pp_num = trans_id , mssg = session['mssg'] , img_list = img_list) , 200
 
 
 from model import TransSchema
@@ -462,7 +465,7 @@ def other_mat():
                 return redirect(url_for('other_mat'))
             else:
                 session['mssg'] = "Material - "+mat_name+" already exists."
-                session['dup'] = acc_name
+                session['dup'] = mat_name
                 return redirect(url_for('other_mat'))
     return render_template('othermat.html', subtitle="Other Materials", mssg=session['mssg'], dup = session['dup'] , mat_form=mat_form), 200
 
@@ -1871,6 +1874,20 @@ def raw_goods_delete(id):
 ########################################################
 ########## APIs for Transaction Masters ################
 ########################################################
+
+@app.route('/semi_save_trans' , methods = ['POST'])
+@login_required
+def save_trans():
+    payload = request.json
+
+    pp_num = Trans()
+    pp_num.flag = 3
+    pp_num.part_a = json.dumps(payload)
+    pp_num.part_b = "{}"
+    db.session.add(pp_num)
+    db.session.commit()
+    session['mssg'] = "Transaction - "+str(payload['PP_no'])+" saved as draft."
+    return jsonify("success")
 
 @app.route('/get/raw_product/' , methods=["GET"])
 @login_required 

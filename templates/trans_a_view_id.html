@@ -233,7 +233,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Fabric</th>
+                                    <th>Raw Material - Fabric</th>
                                     <th>U.O.M</th>
                                     <th>Per Pc. Consum.</th>
                                     <th>Qty Required</th>
@@ -271,11 +271,6 @@
                                                     Object.values(result)[i], '</option>');
                                             }
                                             $(".fab_sel_cls").html(options.join(''));
-                                            // $(".fab_sel_cls").prop("selectedIndex", 0);
-                                            // var pp_sel = $("select[name='fab_sel[0]']").val()
-                                            // $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
-                                            //     $("input[name='fab_sel_uom[0]']").val(result);
-                                            // });
 
                                         });
                                     });
@@ -298,6 +293,70 @@
                         <br>
 
                         <br>
+                        <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Finished Goods - Fabric</th>
+                                        <th>U.O.M</th>
+                                        <th>Per Pc. Consum.</th>
+                                        <th>Qty Required</th>
+                                        <th>Qty Issued</th>
+                                        <th>Qty Return</th>
+                                        <th>Net Consum.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="input_fields_wrap_fin">
+                                    <tr>
+                                        <td>
+                                            <div class="select"><select id="fin_selector" class="fin_sel_cls"
+                                                    name="fin_sel[0]">
+    
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td><input type="text" class="input" name="fin_sel_uom[0]" readonly></td>
+                                        <td><input type="text" class="input" name="fin_pr_pc[0]" /></td>
+                                        <td><input type="text" class="input" name="fin_qty_req[0]" /></td>
+                                        <td><input type="text" class="input" name="fin_qty_iss[0]" /></td>
+                                        <td><input type="text" class="input" name="fin_qty_ret[0]" /></td>
+                                        <td><input type="text" class="input" name="fin_net_con[0]" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
+                                                var leng = Object.keys(result).length
+                                                for (var i = 0; i < leng; i++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[i], '">',
+                                                        Object.values(result)[i], '</option>');
+                                                }
+                                                $(".fin_sel_cls").html(options.join(''));
+    
+                                            });
+                                        });
+    
+                                    </script>
+                                    <script>
+                                        $("select[name='fin_sel[0]']").on('change', function () {
+                                            var pp_sel = $("select[name='fin_sel[0]']").val()
+                                            $.getJSON("/get/uom/" + pp_sel, function (result) {
+                                                $("input[name='fin_sel_uom[0]']").val(result);
+                                            });
+                                        })
+                                    </script>
+                                </tbody>
+                            </table>
+                            <button id="add_field_button_fin" style="display: none;" class=" button is-primary"><span
+                                    class="icon icon-btn-in"><i data-feather="plus"></i></span>Add More</button>
+    
+    
+                            <br>
+    
+                            <br>
+    
                         <table class="table">
                             <thead>
                                 <tr>
@@ -515,6 +574,13 @@
 
     $(document).ready(function () {
 
+         // Construct URL object using current browser URL
+         var url = new URL(document.location);
+
+        // Get query parameters object
+        var params = url.searchParams;
+        var edit = params.get("edit");
+
         $('#edit_form').click(function(){
             $("#trans_a_form_id :input").prop("disabled", false);
         })
@@ -549,6 +615,23 @@
             $(this).parent('td').parent('tr').remove(); fab_x--;
         })
 
+        // Fin Code
+
+        var wrapper_fin = $(".input_fields_wrap_fin"); //Fields wrapper
+        var add_button_fin = $("#add_field_button_fin"); //Add button ID
+
+        var fin_x = 0; //initlal text box count
+
+        $(add_button_fin).click(function (e) { //on add input button click
+            e.preventDefault();
+            add_fin_fields(fin_x);
+
+        });
+
+        $(wrapper_fin).on("click", ".remove_field", function (e) { //user click on remove text
+            e.preventDefault();
+            $(this).parent('td').parent('tr').remove(); fin_x--;
+        })
 
         // Acc Code
 
@@ -614,6 +697,14 @@
                     add_fab_fields(new_x);
                 }
 
+                var extra_fld_fin = Object.keys(part_a['fin_sel']).length;
+
+
+                for (var new_x = 1; new_x < extra_fld_fin; new_x++) {
+
+                    add_fin_fields(new_x);
+                }
+
                 var extra_fld_acc = Object.keys(part_a['acc_sel']).length;
 
                 for (var new_x = 1; new_x < extra_fld_acc; new_x++) {
@@ -647,6 +738,24 @@
 
                 console.log('Resolves - fab add');
                 fab_sel_load.resolve();
+            })
+
+            var fin_sel_load = $.Deferred();
+
+            $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
+                var options = [];
+
+                for (var j = 0; j < Object.keys(result).length; j++) {
+                    options.push('<option value="',
+                        Object.keys(result)[j], '">',
+                        Object.values(result)[j], '</option>');
+                }
+                $(".fin_sel_cls").html(options.join(''));
+
+            }).done(function () {
+
+                console.log('Resolves - fin add');
+                fin_sel_load.resolve();
             })
 
             var acc_sel_load = $.Deferred();
@@ -687,12 +796,17 @@
             })
 
 
-            $.when(fab_sel_load, acc_sel_load, oth_sel_load).then(function () {
+            $.when(fab_sel_load,fin_sel_load, acc_sel_load, oth_sel_load).then(function () {
 
                 var rs = json2html_name_list(part_a);
                 populate('#trans_a_form_id', rs);
-
+                console.log("eh kai")
+                if(edit == "True"){
+                   $("#trans_a_form_id :input").prop("disabled", false);
+                }
+                else{
                 $("#trans_a_form_id :input").prop("disabled", true).fadeIn();
+                }
             });
 
 
