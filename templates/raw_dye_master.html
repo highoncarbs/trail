@@ -17,12 +17,24 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('raw_materials')}}">
                         {{dye_form.hidden_tag()}}
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                        </div>
+                        <div class="field">
+                                <label class="label">Fabric Dye</label>
+                                <div class="control">
+                                    {{dye_form.dye(class="input" , value = dup)}}
+                                </div>
+                            </div>
+                        {% else %}
                         <div class="field">
                             <label class="label">Fabric Dye</label>
                             <div class="control">
                                 {{dye_form.dye(class="input" , placeholder="Enter Fabric Dye")}}
                             </div>
                         </div>
+                        {% endif %}
                         <br>
                         <div class="field is-grouped">
                             <div class="control is-left">
@@ -110,7 +122,7 @@
                                     {{ dye_form.hidden_tag()}}
 
                                     <div class="field">
-                                        <label class="label">Edit Dye</label>
+                                        <label class="label">Dye</label>
                                         <div class="control">
                                             {{ dye_form.dye(class="input" , value=dye.dye)}}
                                         </div>

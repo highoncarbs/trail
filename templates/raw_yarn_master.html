@@ -17,12 +17,19 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('raw_materials')}}">
                         {{yarn_form.hidden_tag()}}
-                        <div class="field">
-                            <label class="label">Yarn</label>
-                            <div class="control">
-                                {{yarn_form.yarn(class="input" , placeholder="Enter Yarn Code")}}
-                            </div>
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
                         </div>
+                        <div class="field">
+                                <label class="label">Description</label>
+                                <div class="control is-expanded is-left">
+                                    {{yarn_form.desc(class="input" , value=dup)}}
+    
+                                </div>
+                            </div>
+                        {% else %}
+
                         <div class="field">
                             <label class="label">Description</label>
                             <div class="control is-expanded is-left">
@@ -30,7 +37,7 @@
 
                             </div>
                         </div>
-
+                        {% endif %}
 
                         <br>
                         <div class="field is-grouped">
@@ -132,13 +139,13 @@
                                             {{ yarn_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Edit Yarn</label>
+                                                <label class="label">Yarn</label>
                                                 <div class="control">
                                                     {{ yarn_form.yarn(class="input" , value=yarn.yarn)}}
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label class="label">Edit Description</label>
+                                                <label class="label">Description</label>
                                                 <div class="control">
                                                     {{ yarn_form.desc(class="input" , value=yarn.desc)}}
                                                 </div>

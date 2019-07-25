@@ -17,12 +17,24 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('raw_materials')}}">
                         {{process_form.hidden_tag()}}
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                        </div>
+                        <div class="field">
+                            <label class="label">Process</label>
+                            <div class="control">
+                                {{process_form.proc(class="input" ,value=dup)}}
+                            </div>
+                        </div>
+                        {% else %}
                         <div class="field">
                             <label class="label">Process</label>
                             <div class="control">
                                 {{process_form.proc(class="input" , placeholder="Enter Process Code")}}
                             </div>
                         </div>
+                        {% endif %}
                         <div class="field">
                             <label class="label">Description</label>
                             <div class="control is-expanded is-left">
@@ -133,13 +145,13 @@
                                             {{ process_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Edit Process</label>
+                                                <label class="label">Process</label>
                                                 <div class="control">
                                                     {{ process_form.proc(class="input" , value= process.process)}}
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label class="label">Edit Description</label>
+                                                <label class="label">Description</label>
                                                 <div class="control">
                                                     {{ process_form.desc(class="input" , value=process.desc)}}
                                                 </div>
@@ -198,11 +210,11 @@
 
     </div>
 
-    
-<script>
+
+    <script>
         $(".proc_view").click(function () {
             $('#proc_data_view , #proc_data_entry').toggle();
-    
+
         });
     </script>
 </div>

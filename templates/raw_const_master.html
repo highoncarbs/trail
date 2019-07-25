@@ -17,12 +17,24 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('raw_materials')}}">
                         {{const_form.hidden_tag()}}
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                        </div>
+                        <div class="field">
+                                <label class="label">Fabric Construction</label>
+                                <div class="control">
+                                    {{const_form.const(class="input" , value= dup)}}
+                                </div>
+                            </div>
+                        {% else %}
                         <div class="field">
                             <label class="label">Fabric Construction</label>
                             <div class="control">
                                 {{const_form.const(class="input" , placeholder="Enter Fabric Construction")}}
                             </div>
                         </div>
+                        {% endif %}
                         <br>
                         <div class="field is-grouped">
                             <div class="control is-left">
@@ -110,7 +122,7 @@
                                     {{ const_form.hidden_tag()}}
 
                                     <div class="field">
-                                        <label class="label">Edit Construction</label>
+                                        <label class="label">Construction</label>
                                         <div class="control">
                                             {{ const_form.const(class="input" , value=const.const)}}
                                         </div>

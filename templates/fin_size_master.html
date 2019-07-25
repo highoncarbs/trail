@@ -17,13 +17,25 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('fin_goods')}}">
                         {{size_form.hidden_tag()}}
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                        </div>
+                        <div class="field">
+                            <label class="label">Fabric Size</label>
+                            <div class="control">
+                                {{size_form.size(class="input" , value= dup)}}
+                            </div>
+                        </div>
+                        {% else %}
+
                         <div class="field">
                             <label class="label">Fabric Size</label>
                             <div class="control">
                                 {{size_form.size(class="input" , placeholder="Enter Fabric Size Code")}}
                             </div>
                         </div>
-
+                        {% endif %}
 
                         <br>
                         <div class="field is-grouped">
@@ -123,7 +135,7 @@
                                             {{ size_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Edit Fabric Size</label>
+                                                <label class="label">Fabric Size</label>
                                                 <div class="control">
                                                     {{ size_form.size(class="input" , value=size.size)}}
                                                 </div>

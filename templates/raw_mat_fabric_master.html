@@ -14,7 +14,7 @@
             </nav>
             <hr>
             <div class="">
-                <div class="form ">
+                <div class="form " id="raw_data_form">
                     <form method="POST" action="{{ url_for('main_master')}}">
                         {{raw_form.hidden_tag()}}
                         <div class="field-body is-horizontal">
@@ -85,6 +85,10 @@
                                 {{raw_form.raw_submit(class="button is-black" , value="Add")}}
                             </div>
                             <div class="control">
+                                    <a class="button is-outlined is-black" id="copy_from_last_raw"><span class="icon icon-btn-in"><i
+                                        data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                            <div class="control">
                                 <a class="button is-info raw_view"><span class="icon icon-btn-in"><i
                                             data-feather="eye"></i></span>View </a>
                             </div>
@@ -134,6 +138,7 @@
                 <table class="table is-fullwidth">
                     <thead>
                         <tr>
+                            <th>Alt Name</th>
                             <th>Product Category</th>
                             <th>Yarn</th>
                             <th>Fabric Construction</th>
@@ -149,6 +154,7 @@
                         {% for row in raw_goods_list %}
 
                         <tr>
+                            <td> {{ row.alt_name}}</td>
                             <td> {{ row.product_category[0].cat}}</td>
                             <td> {{ row.yarn[0].yarn}}</td>
                             <td> {{ row.fab_const[0].const}}</td>
@@ -191,16 +197,15 @@
                                                     <div class="control select select_prod_{{loop.index}} is-fullwidth">
                                                         {{raw_form.product_category()}}
                                                     </div>
-                                                
+
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Yarn</label>
-                                                    <div
-                                                        class="control select select_yarn_{{loop.index}} is-fullwidth">
+                                                    <div class="control select select_yarn_{{loop.index}} is-fullwidth">
                                                         {{raw_form.yarn()}}
 
                                                     </div>
-                                                   
+
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Fabric Construction</label>
@@ -209,7 +214,7 @@
                                                         {{raw_form.fab_const()}}
 
                                                     </div>
-                                                  
+
                                                 </div>
                                             </div>
                                             <br>
@@ -221,7 +226,7 @@
                                                         {{raw_form.proc()}}
 
                                                     </div>
-                                                  
+
                                                 </div>
 
                                                 <div class="field">
@@ -231,7 +236,7 @@
                                                         {{raw_form.width()}}
 
                                                     </div>
-                                                 
+
                                                 </div>
 
                                                 <div class="field">
@@ -240,7 +245,7 @@
                                                         {{raw_form.dye()}}
 
                                                     </div>
-                                                 
+
                                                 </div>
 
                                                 <div class="field">
@@ -248,7 +253,8 @@
                                                     <div class="control select select_uom_{{loop.index}} is-fullwidth">
                                                         {{raw_form.uom()}}
 
-                                                    </div>                                                </div>
+                                                    </div>
+                                                </div>
 
 
                                             </div>
@@ -270,9 +276,12 @@
                                                 <div class="control">
                                                     <a class="button is-text">Clear Fields</a>
                                                 </div>
+                                               
 
                                             </div>
                                             <script>
+                                                // Script ot edit the select fields in Edit Modal
+
                                                 $(document).ready(function () {
                                                     $('.select_prod_{{loop.index}} > #product_category').val('{{row.product_category[0].id}}');
                                                     $('.select_uom_{{loop.index}} > #uom').val('{{row.uom[0].id}}');
@@ -338,6 +347,46 @@
     </div>
 
     <script>
+        $(document).ready(function () {
+
+            $("#raw_data_form  select ").val(0);
+
+            // Construct URL object using current browser URL
+            $('#copy_from_last_raw').click(function () {
+                console.log("Daam")
+                $('#raw_data_view tr').last().children().each(function (index, value) {
+                    if (index == 0) {
+                        $("#raw_data_entry  #alt_name").val(value.innerHTML.trim());
+                    }
+                    if (index == 1) {
+                        $("#raw_data_entry  #product_category option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 2) {
+                        $("#raw_data_entry  #yarn option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 3) {
+                        $("#raw_data_entry  #fab_const option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 4) {
+                        $("#raw_data_entry  #proc option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 5) {
+                        $("#raw_data_entry  #width option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 6) {
+                        $("#raw_data_entry  #dye option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 7) {
+                        $("#raw_data_entry  #uom option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+
+
+                });
+
+            })
+
+
+        });
         $(".raw_view").click(function () {
 
             $("#raw_data_entry, #raw_data_view").toggle();

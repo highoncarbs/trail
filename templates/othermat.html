@@ -19,6 +19,28 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('other_mat')}}">
                         {{mat_form.hidden_tag()}}
+
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                        </div>
+                        <div class="field-body is-horizontal">
+                            <div class="field">
+                                <label class="label">Other Materials</label>
+                                <div class="control">
+                                    {{mat_form.mat(class="input" , value=dup)}}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">U.O.M</label>
+                                <div class="control select">
+                                    {{mat_form.uom()}}
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+
+
                         <div class="field-body is-horizontal">
                             <div class="field">
                                 <label class="label">Other Materials</label>
@@ -33,6 +55,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                         <br>
                         <div class="field is-grouped">
                             <div class="control">
@@ -57,4 +80,7 @@
     </div>
 
 </div>
+<script>
+    $("#mat").focus();
+</script>
 {% endblock %}

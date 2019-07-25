@@ -14,7 +14,9 @@
             </nav>
             <hr>
             <div class="">
-                <div class="form ">
+                <div class="form " id="entry_form">
+                   
+
                     <form method="POST" action="{{ url_for('main_master')}}">
                         {{fin_form.hidden_tag()}}
                         <div class="field-body is-horizontal">
@@ -72,6 +74,10 @@
                                 {{fin_form.fin_submit(class="button is-black" , value="Add")}}
                             </div>
                             <div class="control">
+                                    <a class="button is-outlined is-black" id="copy_from_last_fin"><span class="icon icon-btn-in"><i
+                                        data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                            <div class="control">
                                 <a class="button is-info fin_view"><span class="icon icon-btn-in"><i
                                             data-feather="eye"></i></span>View </a>
                             </div>
@@ -122,6 +128,7 @@
                 <table class="table is-fullwidth">
                     <thead>
                         <tr>
+                            <th>Alt Name</th>
                             <th>Product Category</th>
                             <th>Fabric Combo</th>
                             <th>Print Technique</th>
@@ -135,6 +142,7 @@
                         {% for row in fin_goods_list %}
 
                         <tr>
+                            <td> {{ row.alt_name}}</td>
                             <td> {{ row.product_category[0].cat}}</td>
                             <td> {{ row.fabric_combo[0].comb}}</td>
                             <td> {{ row.print_tech[0].tech}}</td>
@@ -175,7 +183,7 @@
                                                     <div class="control select select_prod_{{loop.index}} is-fullwidth">
                                                         {{fin_form.product_category()}}
                                                     </div>
-                                                   
+
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Fabric Combo</label>
@@ -232,12 +240,7 @@
                                                 </div>
                                             </div>
                                             <br>
-                                            <!-- <div class="field">
-                                                <label class="label">Generated Product Name</label>
-                                                <div class="notification">
-                                                    <p class="robo">Product Name</p>
-                                                </div>
-                                            </div> -->
+                                          
                                             <br>
                                             <div class="field is-grouped">
                                                 <div class="control ">
@@ -250,14 +253,14 @@
                                             </div>
 
                                             <script>
-                                                    $(document).ready(function () {
-                                                        $('.select_prod_{{loop.index}} > #product_category').val("{{row.product_category[0].id}}");
-                                                        $('.select_combo_{{loop.index}} > #fabric_combo').val("{{row.fabric_combo[0].id}}");
-                                                        $('.select_print_{{loop.index}} > #print_tech').val('{{row.print_tech[0].id}}');
-                                                        $('.select_des_{{loop.index}} > #design').val('{{row.design[0].id}}');
-                                                        $('.select_uom_{{loop.index}} > #uom').val("{{row.uom[0].id}}");
-                                                    });
-                                                </script>
+                                                $(document).ready(function () {
+                                                    $('.select_prod_{{loop.index}} > #product_category').val("{{row.product_category[0].id}}");
+                                                    $('.select_combo_{{loop.index}} > #fabric_combo').val("{{row.fabric_combo[0].id}}");
+                                                    $('.select_print_{{loop.index}} > #print_tech').val('{{row.print_tech[0].id}}');
+                                                    $('.select_des_{{loop.index}} > #design').val('{{row.design[0].id}}');
+                                                    $('.select_uom_{{loop.index}} > #uom').val("{{row.uom[0].id}}");
+                                                });
+                                            </script>
                                         </form>
                                     </div>
                                 </div>
@@ -305,7 +308,7 @@
 
 
 
-                {%endif%}
+                {% endif %}
             </div>
         </div>
     </div>
@@ -321,35 +324,35 @@
 
 
         $(document).ready(function () {
-            // Construct URL object using current browser URL
-            var url = new URL(document.location);
+    
+            $("#entry_form  select ").val(0);
+                        
+            $('#copy_from_last_fin').click(function () {
+                $('#data_view tr').last().children().each(function (index, value) {
+                    console.log(index, value)
+                    if (index == 0) {
+                        $("#data_entry  #alt_name").val(value.innerHTML.trim());
+                    }
+                    if (index == 1) {
+                        $("#data_entry  #product_category option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 2) {
+                        $("#data_entry  #fabric_combo option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 3) {
+                        $("#data_entry  #print_tech option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 4) {
+                        $("#data_entry  #design option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                    if (index == 5) {
+                        $("#data_entry  #uom option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                    }
+                  
 
-            // Get query parameters object
-            var params = url.searchParams;
+                });
 
-            // Get value of paper
-            var selTab = params.get("showTab");
-            var selView = params.get("view");
-
-            if (selTab === '14') {
-                $("li[data-tab=13]").removeClass('is-active');
-                $("div[data-content=13]").removeClass('is-active');
-
-                $("li[data-tab=14]").addClass('is-active');
-                $("div[data-content=14]").addClass('is-active');
-
-
-                if (selView === 'list') {
-                    $("#raw_data_entry, #raw_data_view").toggle();
-                }
-            }
-
-            if (selTab === '13') {
-
-                if (selView === 'list') {
-                    $("#data_entry, #data_view").toggle();
-                }
-            }
+            })
 
 
 

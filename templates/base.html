@@ -40,12 +40,22 @@
                             <a class="navbar-link">Transactions</a>
 
                             <div class="navbar-dropdown">
-                                <a class="navbar-item" href="{{url_for('trans_a')}}">
+                                <a class="navbar-item"><strong>Stitching</strong></a>
+                                <a class="navbar-item"  href="{{url_for('trans_a')}}">
                                     Part A
                                 </a>
-                                <a class="navbar-item" href="{{url_for('trans_b')}}">
+                                <a class="navbar-item"  href="{{url_for('trans_b')}}">
                                     Part B
                                 </a>
+                                <hr class="navbar-divider">
+                                <a class="navbar-item"><strong>Printing</strong></a>
+                                <a class="navbar-item" href="">
+                                        Part A
+                                    </a>
+                                    <a class="navbar-item" href="">
+                                        Part B
+                                    </a>
+
                             </div>
                         </div>
                         <div class="navbar-item has-dropdown is-hoverable" style="margin-right: 1rem;">
@@ -141,16 +151,24 @@
             console.log("session['mssg'] is empty")
         });
 
-       
+        $.each($(".button"), function () {
+            if ($(this)[0].innerHTML === 'Clear Fields') {
+                $(this).click(function () {
+                    location.reload();
+
+                })
+            }
+        })
+
     </script>
 
     <script>
-     
+
         feather.replace()
     </script>
     <script>
         $("form").attr('autocomplete', 'off');
-       
+
     </script>
 
 </body>

@@ -17,12 +17,24 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('fin_goods')}}">
                         {{comb_form.hidden_tag()}}
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                        </div>
+                        <div class="field">
+                            <label class="label">Fabric Combination</label>
+                            <div class="control">
+                                {{comb_form.comb(class="input" , value=dup)}}
+                            </div>
+                        </div>
+                        {% else %}
                         <div class="field">
                             <label class="label">Fabric Combination</label>
                             <div class="control">
                                 {{comb_form.comb(class="input" , placeholder="Enter Fabric Combination Code")}}
                             </div>
                         </div>
+                        {% endif %}
                         <div class="field">
                             <label class="label">Description</label>
                             <div class="control is-expanded is-left">
@@ -135,13 +147,13 @@
                                             {{ comb_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Edit Fabric Combination</label>
+                                                <label class="label">Fabric Combination</label>
                                                 <div class="control">
                                                     {{ comb_form.comb(class="input" , value=comb.comb)}}
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label class="label">Edit Description</label>
+                                                <label class="label">Description</label>
                                                 <div class="control">
                                                     {{ comb_form.desc(class="input" , value=comb.desc)}}
                                                 </div>

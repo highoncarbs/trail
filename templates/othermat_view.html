@@ -31,38 +31,44 @@
                     <hr>
                 </div>
                 {% endif %}
-                {% for mat in mat_list %}
-                <div class="level is-mobile">
-                    <div class="level-left">
-                        <div class="level-item">
-                            <p>{{mat.mat}}</p>
-                        </div>
-                        <div class="level-item">
 
-                        </div>
-                        <div class="level-item">
-
-                        </div>
-                        <div class="level-item">
-
-                            <p>{{mat.uom[0].measure}}</p>
-                        </div>
-                    </div>
-                    <div class="level-right">
-
-                        <div class="level-item">
-                            <a id="edit_mat_btn_{{loop.index}}" class="button is-small"><span
-                                    class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
-                            </a>
-                        </div>
-                        <div class="level-item">
-                            <a href="{{ url_for('mat_delete' , id = mat.id)}}" class="button is-small is-danger"><span
-                                    class="icon icon-btn-in-x"><i data-feather="x"></i></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <hr>
+                <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th class="has-text-grey">Other Material</th>
+                                <th class="has-text-grey">U.O.M</th>
+                                <th class="has-text-grey"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {% for mat in mat_list %}
+    
+                            <tr>
+                                <td>
+                                    <p>{{mat.mat}}</p>
+                                </td>
+                                <td>
+                                    <p>{{mat.uom[0].measure}}</p>
+                                </td>
+                                <td>
+                                        <div class="field is-grouped">
+                                                <div class="control">
+                                            <a id="edit_mat_btn_{{loop.index}}" class="button is-small"><span
+                                                    class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                            </a>
+                                        </div>
+                                        <div class="control">
+                                            <a href="{{ url_for('mat_delete' , id = mat.id)}}"
+                                                class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                        data-feather="x"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
+    
+                                </td>
+    
+                            </tr>
+                
 
                 <!-- City Edit Modal -->
 
@@ -79,7 +85,7 @@
                                     <div class="field-body is-horizontal">
 
                                         <div class="field">
-                                            <label class="label">Edit Other Materials</label>
+                                            <label class="label">Other Materials</label>
                                             <div class="control">
                                                 {{ mat_form.mat(class="input" , value=mat.mat)}}
                                             </div>

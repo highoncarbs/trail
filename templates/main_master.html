@@ -36,16 +36,17 @@
     <div class="container">
 
         <ul>
+                <li data-tab="15">
+                        <a>
+                            <span>Raw Material Item</span>
+                        </a>
+                    </li>
             <li class="" data-tab="14">
                 <a>
                     <span>Finished Goods Item</span>
                 </a>
             </li>
-            <li data-tab="15">
-                <a>
-                    <span>Raw Material Fabric</span>
-                </a>
-            </li>
+            
         </ul>
     </div>
 </div>
@@ -74,7 +75,7 @@ $(document).ready(function () {
         var selTab = params.get("showTab");
         var selView = params.get("view");
 
-        if (selTab === '15') {
+        if (selTab === '15' || selTab === null) {
             $("li[data-tab=14] ").removeClass('is-active');
             $("div[data-content=14]").removeClass('is-active');
 
@@ -86,7 +87,7 @@ $(document).ready(function () {
                 $("#raw_data_entry, #raw_data_view").toggle();
             }
         }
-        if (selTab === '14' || selTab === null) {
+        if (selTab === '14' ) {
             $("li[data-tab=15] ").removeClass('is-active');
             $("div[data-content=15]").removeClass('is-active');
 

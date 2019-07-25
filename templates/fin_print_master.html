@@ -17,12 +17,24 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('fin_goods')}}">
                         {{tech_form.hidden_tag()}}
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                        </div>
+                        <div class="field">
+                            <label class="label">Print Technique</label>
+                            <div class="control">
+                                {{tech_form.tech(class="input" , value= dup)}}
+                            </div>
+                        </div>
+                        {% else %}
                         <div class="field">
                             <label class="label">Print Technique</label>
                             <div class="control">
                                 {{tech_form.tech(class="input" , placeholder="Enter Print Technique Code")}}
                             </div>
                         </div>
+                        {% endif %}
                         <div class="field">
                             <label class="label">Description</label>
                             <div class="control is-expanded is-left">
@@ -133,13 +145,13 @@
                                             {{ tech_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Edit Print Technique</label>
+                                                <label class="label">Print Technique</label>
                                                 <div class="control">
                                                     {{ tech_form.tech(class="input" , value=tech.tech)}}
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label class="label">Edit Description</label>
+                                                <label class="label">Description</label>
                                                 <div class="control">
                                                     {{ tech_form.desc(class="input" , value=tech.desc)}}
                                                 </div>

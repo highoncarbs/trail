@@ -17,12 +17,24 @@
                 <div class="form">
                     <form method="POST" action="{{ url_for('raw_materials')}}">
                         {{cat_form.hidden_tag()}}
+                        {% if dup != "" %}
+                        <div class="is-warning notification animated shake has-shadow">
+                            <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
+                        </div>
+                        <div class="field">
+                                <label class="label">Category</label>
+                                <div class="control">
+                                    {{cat_form.cat(class="input" ,value = dup)}}
+                                </div>
+                            </div>
+                        {% else %}
                         <div class="field">
                             <label class="label">Category</label>
                             <div class="control">
                                 {{cat_form.cat(class="input" , placeholder="Enter Category Code")}}
                             </div>
                         </div>
+                        {% endif %}
                         <div class="field">
                             <label class="label">Description</label>
                             <div class="control is-expanded is-left">
@@ -132,13 +144,13 @@
                                             {{ cat_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Edit Category</label>
+                                                <label class="label">Category</label>
                                                 <div class="control">
                                                     {{ cat_form.cat(class="input" , value= cat.cat)}}
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label class="label">Edit Description</label>
+                                                <label class="label">Description</label>
                                                 <div class="control">
                                                     {{ cat_form.desc(class="input" , value=cat.desc)}}
                                                 </div>

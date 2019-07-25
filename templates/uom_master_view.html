@@ -85,19 +85,19 @@
                                             {{ uom_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Edit Measurement</label>
+                                                <label class="label">Measurement</label>
                                                 <div class="control">
                                                     {{ uom_form.measure(class="input" , value=uom.measure)}}
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label class="label">Edit Description</label>
+                                                <label class="label">Description</label>
                                                 <div class="control">
                                                     {{ uom_form.desc(class="input" , value=uom.desc)}}
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label class="label">Edit Description</label>
+                                                <label class="label">Decimal</label>
                                                 <div class="control select select_{{loop.index}}">
                                                     {{ uom_form.decimal()}}
 
