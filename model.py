@@ -438,7 +438,7 @@ class RawFabMain(db.Model):
         proc = self.proc
         width = self.width
         dye = self.dye
-        display_name = " {} / {} / {} / {}".format(product_category[0].cat, yarn[0].yarn ,fab_const[0].const, proc[0].process, width[0].width , dye[0].dye)
+        display_name = " {} / {} / {} / {} / {} / {} ".format(product_category[0].cat, yarn[0].yarn ,fab_const[0].const, proc[0].process, width[0].width , dye[0].dye)
         return display_name
     
 
