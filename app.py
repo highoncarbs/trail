@@ -25,7 +25,7 @@ login_manager.login_view = 'login'
 from model import Users, LoginForm, SignupForm, CustomerCategory, CustomerCategoryForm, City, State, Country,\
     CityForm, StateForm, CountryForm, Firms, FirmForm, Uom, UomForm, Yarn, YarnForm, FabConst, FabConstForm, \
     FabProc, FabProcForm,  FabWidth, FabWidthForm, FabDye, FabDyeForm, RawCat, RawCatForm , FinCat , FinCatForm ,\
-    FabComb , FabCombForm , PrintTech , PrintTechForm , FinDes , FinDesForm , FinSize , FinSizeForm
+    FabComb , FabCombForm , PrintTech , PrintTechForm , FinDes , FinDesForm , FinSize , FinSizeForm , UnitLoc ,UnitLocForm
 
 # logging.basicConfig(
 #     filename='trail.log',
@@ -480,6 +480,29 @@ def other_mat_view():
     return render_template('othermat_view.html', subtitle="Other Materials", mssg=session['mssg'], mat_list=mat_list, mat_form=mat_form), 200
 
 
+@app.route('/unit_location', methods=['GET', 'POST'])
+@login_required
+def unit_loc():
+    unit_list = db.session.query(
+        UnitLoc).all()
+    unit_form = UnitLocForm()
+
+    if unit_form.validate_on_submit():
+        if unit_form.unit_submit.data:
+            unit_name = str(unit_form.unit.data).lower()
+            check_one = db.session.query(
+                UnitLoc).filter_by(unit=unit_name).first()
+            if check_one is None:
+                new_unit = UnitLoc(unit=unit_name)
+                db.session.add(new_unit)
+                db.session.commit()
+                session['mssg'] = "Unit Location "+unit_name+" added successfully."
+                return redirect(url_for('unit_loc'))
+            else:
+                session['dup'] = check_one.unit
+                return redirect(url_for('unit_loc'))
+
+    return render_template('unit_location.html', subtitle="Unit Location", mssg=session['mssg'], dup=session['dup'],unit_list = unit_list, unit_form=unit_form), 200
 
 
 
@@ -1381,6 +1404,47 @@ def cust_delete(id):
         session['mssg'] = "Something went wrong."
         return redirect('/raw_materials/customer_category_view')
 
+# Unit Location Edits
+
+
+@app.route("/unit/update/<id>", methods=['POST'])
+@login_required
+def unit_edit(id):
+    '''
+        Edits data from the Data Display Table
+        Requires Args :
+        INPUT : item_id      
+    '''
+    unit_form = UnitLocForm()
+    if unit_form.unit_update.data:
+        unit_name = str(unit_form.unit.data).lower()
+        check_one = db.session.query(
+            UnitLoc).filter_by(id=id).first()
+        if check_one is not None:
+            check_one.unit = unit_name
+            db.session.commit()
+            session['mssg'] = "Unit Location updated successfully"
+            return redirect('/unit_location?view=list')
+        else:
+            session['mssg'] = "Something went wrong."
+            return redirect('/unit_location?view=list')
+
+
+@app.route("/unit/delete/<id>", methods=['POST', 'GET'])
+@login_required
+def unit_delete(id):
+
+    check_one = db.session.query(
+        UnitLoc).filter_by(id=id)
+    if check_one.first() is not None:
+        check_one.delete()
+        db.session.commit()
+        session['mssg'] = "Unit Location deleted successfully"
+        return redirect('/unit_location?view=list')
+    else:
+        session['mssg'] = "Something went wrong."
+        return redirect('/unit_location?view=list')
+
 # Accessories  Edits
 
 
@@ -2015,6 +2079,15 @@ def get_detail_pp():
     res = db.session.query(Trans).filter_by(id = str(pp_num)).first()
 
     payload = json.loads(res.part_b)
+    return jsonify(payload)
+
+@app.route('/get/trans_pp_a/<trans_id>' , methods=["GET"])
+@login_required 
+def get_detail_pp_a(trans_id):
+    
+    res = db.session.query(Trans).filter_by(id = int(trans_id)).first()
+
+    payload = json.loads(res.part_a)
     return jsonify(payload)
    
 @app.route('/close_trans' , methods = ['POST'])
