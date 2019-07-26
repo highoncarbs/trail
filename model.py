@@ -164,6 +164,16 @@ class CityForm(FlaskForm):
     city_submit = SubmitField('city_submit')
     city_update = SubmitField('city_update')    
 
+# Unit Location Model & Form 
+class UnitLoc(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    unit = db.Column(db.String(30), unique=True, nullable=False)
+
+class UnitLocForm(FlaskForm):
+    unit  = StringField('Unit', validators=[InputRequired()])
+    unit_submit = SubmitField('unit_submit')
+    unit_update = SubmitField('unit_update') 
+
 # UOM Model & Form
 
 class Uom(db.Model):
