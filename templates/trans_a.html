@@ -110,8 +110,8 @@
     {% endif %}
     <div class="columns is-mobile is-centered">
         <div class="column is-three-quarters">
-            <nav class="level is-mobile">
-                <div class="level-left">
+            <nav class="level ">
+                <div class="level-left ">
 
                     <div class="level-item">
                         <p class="is-size-5 ">
@@ -119,18 +119,14 @@
                     </div>
                 </div>
                 <div class="level-right">
-                    <div class="level-item">
+                    <div class="buttons is-grouped-multiline is-centered">
                         <a href="{{ url_for('trans_a_view')}}" class=" button is-black"><span
                                 class="icon icon-btn-in"><i data-feather="eye"></i></span>View</a>
-                    </div>
-                    <div class="level-item">
                         <a id="save_trans_a" class=" button is-black"><span class="icon icon-btn-in"><i
                                     data-feather="save"></i></span>Save Draft</a>
-                    </div>
-                    <div class="lavel-item">
                         <a class="button is-outlined is-black" id="copy_from_last_row"><span class="icon icon-btn-in"><i
                                     data-feather="copy"></i></span>Copy from last </a>
-                    </div>
+                </div>
                 </div>
 
             </nav>

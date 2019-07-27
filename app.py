@@ -108,7 +108,8 @@ def user_home():
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    return render_template('dash.html') , 200
+    trans_list = db.session.query(Trans).filter( Trans.flag != 2).all()
+    return render_template('dash.html' , trans_list = trans_list) , 200
 
 from model import Role , UserForm
 
@@ -2080,6 +2081,7 @@ def get_detail_pp():
 
     payload = json.loads(res.part_b)
     return jsonify(payload)
+
 
 @app.route('/get/trans_pp_a/<trans_id>' , methods=["GET"])
 @login_required 
