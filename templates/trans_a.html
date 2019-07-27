@@ -33,11 +33,13 @@
                     </p>
 
                     <script>
+                        {% if  trans_semi %}
                         $('#view_trans_draft').click(function () {
-                            document.location.href = "/trans_a_view/"+{{trans_semi.id}}+"?edit=True&semi=True";
+                            document.location.href = "/trans_a_view/" + {{ trans_semi.id }} + "?edit=True&semi=True";
 
 
                         });
+                        {% endif %}
 
                         $('#delete_trans_draft').on('click', function () {
                             var req = $.ajax({
@@ -698,7 +700,7 @@
         });
         $("input[name*='fab']").keyup(function () {
             logic_pa_fab();
-        }); 
+        });
         $("input[name*='oth']").keyup(function () {
             logic_pa_oth();
         });
@@ -1272,7 +1274,7 @@
     // Script to check against program quantity
 
 
-    $(".sub_qty").keyup(function () {
+    $("#qty_fld input").keyup(function () {
         console.log("EE")
         qty_check();
     });
@@ -1280,13 +1282,28 @@
     function qty_check() {
         var prog_qty = parseFloat($('input[name="prog_qty"]').val());
 
-        var sum = 0;
-        $(".sub_qty").each(function () {
-            sum += +$(this).val();
-        });
+        var sum =  parseFloat(0)
 
+        $("#qty_fld input").each(function (index, value) {
+            if( isNaN(parseFloat($(value).val())) ){
+            }
+            else{
+                sum += parseFloat($(value).val()) 
+            console.log(sum)
+            
+            }
+
+
+        })
+        console.log(sum)
         if (sum > prog_qty) {
-            $("#qty_check_noti").addClass("animated shake").show();
+            $("#qty_check_noti").addClass("animated shake").fadeIn();
+            $("#qty_exceed").html(''+sum-prog_qty+'');
+
+        
+        }
+        else{
+            $("#qty_check_noti").removeClass("animated shake").fadeOut();
         }
     }
 
