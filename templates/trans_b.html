@@ -1609,7 +1609,7 @@
 
                                     $.getJSON("/get/trans_pp_b?pp_num={{row.id}}", function (result) {
                                         $('.trans_b_id_set').html('{{ row.id }}');
-                                        
+
                                         console.log(result);
 
                                         if ($.isEmptyObject(result)) {
@@ -1651,68 +1651,74 @@
 
 
                                             // if ($.inArray('{{ row.id }}', loaded) === -1) {
-                                                for (i = 1; i < extra_fld; i++) {
-                                                    $("#add_field_button_fg").trigger('click');
-                                                }
+                                            for (i = 1; i < extra_fld; i++) {
+                                                $("#add_field_button_fg").trigger('click');
+                                            }
 
 
-                                                for (i = 1; i < extra_fld_cut; i++) {
-                                                    $("#add_field_button_cut").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_sth; i++) {
-                                                    $("#add_field_button_sth").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_val; i++) {
-                                                    $("#add_field_button_val").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_kaj; i++) {
-                                                    $("#add_field_button_kaj").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tes; i++) {
-                                                    $("#add_field_button_tes").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_thr; i++) {
-                                                    $("#add_field_button_thr").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_qc; i++) {
-                                                    $("#add_field_button_qc").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_pre; i++) {
-                                                    $("#add_field_button_pre").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tag; i++) {
-                                                    $("#add_field_button_tag").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tra; i++) {
-                                                    $("#add_field_button_tra").trigger('click');
-                                                }
-                                                // loaded.push('{{ row.id }}');
+                                            for (i = 1; i < extra_fld_cut; i++) {
+                                                $("#add_field_button_cut").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_sth; i++) {
+                                                $("#add_field_button_sth").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_val; i++) {
+                                                $("#add_field_button_val").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_kaj; i++) {
+                                                $("#add_field_button_kaj").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tes; i++) {
+                                                $("#add_field_button_tes").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_thr; i++) {
+                                                $("#add_field_button_thr").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_qc; i++) {
+                                                $("#add_field_button_qc").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_pre; i++) {
+                                                $("#add_field_button_pre").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tag; i++) {
+                                                $("#add_field_button_tag").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tra; i++) {
+                                                $("#add_field_button_tra").trigger('click');
+                                            }
+                                            // loaded.push('{{ row.id }}');
 
                                             // }
                                             populate('#trans_b_form', json2html_name_list(result));
 
                                             function formattedData(data) {
                                                 dataarr = []
-                                                
-                                                var check_data = JSON.parse(data)
+
+
+                                                try {
+                                                    var check_data = JSON.parse(data)
+                                                }
+                                                catch (err) {
+                                                    console.log("Random JSON error")
+                                                    check_data = data
+                                                }
                                                 var action_key = ""
 
-                                                console.log(data )
-                                                console.log(check_data)
 
-                                                if (check_data.hasOwnProperty("$replace")){
-                                                    action_key= "Addded"
+
+                                                if (check_data.hasOwnProperty("$replace")) {
+                                                    action_key = "Addded"
                                                     check_data = check_data["$replace"]
                                                 }
-                                                if (check_data.hasOwnProperty("$delete")){
-                                                    action_key= "Deleted"
+                                                if (check_data.hasOwnProperty("$delete")) {
+                                                    action_key = "Deleted"
                                                     check_data = check_data["$delete"]
                                                 }
-                                                if(check_data.hasOwnProperty("")){
+                                                if (check_data.hasOwnProperty("")) {
                                                     check_data = check_data[""]
                                                     action_key = "Added"
                                                 }
-                                                else{
+                                                else {
                                                     action_key = "Added"
 
                                                 }
@@ -1724,44 +1730,44 @@
                                                 $.each(new_data, function (k, v) {
 
                                                     if (k.toString().includes("cut") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("sth") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Stitching #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Stitching #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("val") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Value Addn #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Value Addn #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("kaj") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Kaj-Button #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Kaj-Button #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("tes") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Test Checking #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Test Checking #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("thr") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Thread Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Thread Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("qc") && v != "") {
-                                                        dataarr.push(action_key+ "Q.C #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push(action_key + "Q.C #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("pre") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Press #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Press #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
                                                     if (k.toString().includes("tag") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Tag/Pack #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Tag/Pack #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
                                                     if (k.toString().includes("tra") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
                                                     if (k.toString().includes("fg") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Detail Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Detail Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
                                                 })
                                                 return dataarr;
@@ -1775,11 +1781,12 @@
                                                     $('#meta_view_content').append($('<tr>')
                                                         .append($('<td>').append(value["username"]))
                                                         .append($('<td>').append(moment(value["timestamp"], "YYYY-MM-DD HH:mm:ssZZ").local().format("LLL")))
-                                                        .append($('<td>').append($("<p>").append(formatted_data                                                        
+                                                        .append($('<td>').append($("<p>").append(formatted_data
                                                         ))
 
+                                                        )
                                                     )
-                                                )})
+                                                })
 
                                             })
 
