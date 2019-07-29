@@ -32,10 +32,11 @@
                                     $('#show_noti').hide();
                                     $('.remove_field').trigger('click');
                                     $('#form_b_table  , .tracking_data').toggle();
-
-
-
+                                    $('trans_b_meta').fadeIn();
+                                    $("#meta_view_content").children().remove();
                                 });
+
+
                             });
                         </script>
                     </div>
@@ -44,21 +45,84 @@
 
             </nav>
             <hr>
+
             <div class="notification has-text-centered animated fadeIn" id="show_noti" style="display: none;">
                 <p>Please do the required entry and submit the form.</p>
             </div>
             <div class="tracking_data animated fadeIn" style="display:none;">
-                <div class="nav" id="sub_nav">
+                <div class="nav level" id="sub_nav">
                     <div class="level-left">
                         <div class="level-item">
                             <p class="is-size-5 ">
                                 <span class=" robo"> Transaction <span class="icon icon-btn"
                                         style="padding:3px; margin-left: 10px;"><i data-feather="hash"></i></span><span
-                                        id="trans_b_id_set"></span> </span></span></p>
+                                        class="trans_b_id_set"></span> </span></span></p>
                         </div>
                     </div>
+                    <div class="level-right">
+                        <div class="level-item">
+                            <button style="display: none;" class="button is-info" id="trans_b_meta"><span
+                                    class="icon icon-btn-in ">
+                                    <i data-feather="info"></i>
+                                </span>Info</button>
+                        </div>
+                    </div>
+                    <script>
+                        document.querySelector('#trans_b_meta').addEventListener('click', function (event) {
+                            event.preventDefault();
+                            var modal = document.querySelector('#meta_view');  // assuming you have only 1
+                            var html = document.querySelector('html');
+                            modal.classList.add('is-active');
+                            html.classList.add('is-clipped');
+
+                            document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                e.preventDefault();
+                                modal.classList.remove('is-active');
+                                html.classList.remove('is-clipped');
+                            });
+
+                            modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                e.preventDefault();
+                                modal.classList.remove('is-active');
+                                html.classList.remove('is-clipped');
+
+
+                            });
+
+                        });
+
+                    </script>
+
                 </div>
                 <hr>
+                <div class="modal" id="meta_view">
+                    <div class="modal-background"></div>
+                    <div class="modal-content">
+                        <div class="box">
+                            <p class="robo is-size-5">Transactions Entry Details - <span class="trans_b_id_set"></span>
+                            </p>
+                            <hr>
+                            <div>
+                                <div class="table-container">
+                                    <table class="table is-fullwidth">
+                                        <thead>
+                                            <th>User</th>
+                                            <th>Date</th>
+                                            <th>Entry</th>
+                                        </thead>
+                                        <tbody id="meta_view_content">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close"></button>
+                </div>
                 <form id="trans_b_form">
                     <div class="table-container">
                         <table class="table">
@@ -78,7 +142,7 @@
                                     <td class="robo">Cutting </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="cut_dat" name="cut_datefilter[0][0]" value="">
+                                            <input class="input" id="cut_dat" name="cut_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -110,7 +174,7 @@
                                                                         <td class="robo">Cutting #`+ x + `</td>
                                                                         <td>
                                                                             <div class="control has-icons-left">
-                                                                                <input class="input" id="cut_dat" name="cut_datefilter[0][`+ x + `]" value="">
+                                                                                <input class="input" id="cut_dat" name="cut_datefilter[`+ x + `]" value="">
                                                                                 <span class="icon is-small is-left">
                                                                                     <i data-feather="calendar"></i>
                                                                                 </span>
@@ -197,7 +261,7 @@
                                     <td class="robo">Stitching </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="sth_dat" name="sth_datefilter[1][0]" value="">
+                                            <input class="input" id="sth_dat" name="sth_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -226,7 +290,7 @@
                                                                             <td class="robo">Stitching #`+ x + `</td>
                                                                             <td>
                                                                                 <div class="control has-icons-left">
-                                                                                    <input class="input" id="sth_dat" name="sth_datefilter[1][`+ x + `]" value="">
+                                                                                    <input class="input" id="sth_dat" name="sth_datefilter[`+ x + `]" value="">
                                                                                     <span class="icon is-small is-left">
                                                                                         <i data-feather="calendar"></i>
                                                                                     </span>
@@ -312,7 +376,7 @@
                                     <td class="robo">Value Addition</td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="val_dat" name="val_datefilter[2][0]" value="">
+                                            <input class="input" id="val_dat" name="val_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -342,7 +406,7 @@
                                                                             <td class="robo">Value Addition #`+ x + `</td>
                                                                             <td>
                                                                                 <div class="control has-icons-left">
-                                                                                    <input class="input" id="val_dat" name="val_datefilter[1][`+ x + `]" value="">
+                                                                                    <input class="input" id="val_dat" name="val_datefilter[`+ x + `]" value="">
                                                                                     <span class="icon is-small is-left">
                                                                                         <i data-feather="calendar"></i>
                                                                                     </span>
@@ -429,7 +493,7 @@
                                     <td class="robo">Kaj -Button </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="kaj_dat" name="kaj_datefilter[3][0]" value="">
+                                            <input class="input" id="kaj_dat" name="kaj_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -459,7 +523,7 @@
                                                                             <td class="robo">Kaj -Button #`+ x + `</td>
                                                                             <td>
                                                                                 <div class="control has-icons-left">
-                                                                                    <input class="input" id="kaj_dat" name="kaj_datefilter[3][`+ x + `]" value="">
+                                                                                    <input class="input" id="kaj_dat" name="kaj_datefilter[`+ x + `]" value="">
                                                                                     <span class="icon is-small is-left">
                                                                                         <i data-feather="calendar"></i>
                                                                                     </span>
@@ -545,7 +609,7 @@
                                     <td class="robo">Test Checking by HOD </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="tes_dat" name="tes_datefilter[4][0]" value="">
+                                            <input class="input" id="tes_dat" name="tes_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -575,7 +639,7 @@
                                                                             <td class="robo">Test Checking by HOD #`+ x + `</td>
                                                                             <td>
                                                                                 <div class="control has-icons-left">
-                                                                                    <input class="input" id="tes_dat" name="tes_datefilter[4][`+ x + `]" value="">
+                                                                                    <input class="input" id="tes_dat" name="tes_datefilter[`+ x + `]" value="">
                                                                                     <span class="icon is-small is-left">
                                                                                         <i data-feather="calendar"></i>
                                                                                     </span>
@@ -659,7 +723,7 @@
                                     <td class="robo">Thread Cutting </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="thr_dat" name="thr_datefilter[5][0]" value="">
+                                            <input class="input" id="thr_dat" name="thr_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -689,7 +753,7 @@
                                                                                 <td class="robo">Thread Cutting #`+ x + `</td>
                                                                                 <td>
                                                                                     <div class="control has-icons-left">
-                                                                                        <input class="input" id="thr_dat" name="thr_datefilter[5][`+ x + `]" value="">
+                                                                                        <input class="input" id="thr_dat" name="thr_datefilter[`+ x + `]" value="">
                                                                                         <span class="icon is-small is-left">
                                                                                             <i data-feather="calendar"></i>
                                                                                         </span>
@@ -774,7 +838,7 @@
                                     <td class="robo">Q.C / Measurement </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="qc_dat" name="qc_datefilter[6][0]" value="">
+                                            <input class="input" id="qc_dat" name="qc_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -804,7 +868,7 @@
                                                                                 <td class="robo">Q.C / Measurement #`+ x + `</td>
                                                                                 <td>
                                                                                     <div class="control has-icons-left">
-                                                                                        <input class="input" id="qc_dat" name="qc_datefilter[6][`+ x + `]" value="">
+                                                                                        <input class="input" id="qc_dat" name="qc_datefilter[`+ x + `]" value="">
                                                                                         <span class="icon is-small is-left">
                                                                                             <i data-feather="calendar"></i>
                                                                                         </span>
@@ -889,7 +953,7 @@
                                     <td class="robo">Press </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="pre_dat" name="pre_datefilter[7][0]" value="">
+                                            <input class="input" id="pre_dat" name="pre_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -919,7 +983,7 @@
                                                                                 <td class="robo">Press #`+ x + `</td>
                                                                                 <td>
                                                                                     <div class="control has-icons-left">
-                                                                                        <input class="input" id="pre_dat" name="pre_datefilter[7][`+ x + `]" value="">
+                                                                                        <input class="input" id="pre_dat" name="pre_datefilter[`+ x + `]" value="">
                                                                                         <span class="icon is-small is-left">
                                                                                             <i data-feather="calendar"></i>
                                                                                         </span>
@@ -1004,7 +1068,7 @@
                                     <td class="robo">Tagging / Packing </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="tag_dat" name="tag_datefilter[8][0]" value="">
+                                            <input class="input" id="tag_dat" name="tag_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -1034,7 +1098,7 @@
                                                                                 <td class="robo">Tagging / Packing #`+ x + `</td>
                                                                                 <td>
                                                                                     <div class="control has-icons-left">
-                                                                                        <input class="input" id="tag_dat" name="tag_datefilter[8][`+ x + `]" value="">
+                                                                                        <input class="input" id="tag_dat" name="tag_datefilter[`+ x + `]" value="">
                                                                                         <span class="icon is-small is-left">
                                                                                             <i data-feather="calendar"></i>
                                                                                         </span>
@@ -1119,7 +1183,7 @@
                                     <td class="robo">Transfer to F.G Dept. </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="tra_dat" name="tra_datefilter[9][0]" value="">
+                                            <input class="input" id="tra_dat" name="tra_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -1149,7 +1213,7 @@
                                                                                 <td class="robo">Transfer to F.G Dept. #`+ x + `</td>
                                                                                 <td>
                                                                                     <div class="control has-icons-left">
-                                                                                        <input class="input" id="tra_dat" name="tra_datefilter[9][`+ x + `]" value="">
+                                                                                        <input class="input" id="tra_dat" name="tra_datefilter[`+ x + `]" value="">
                                                                                         <span class="icon is-small is-left">
                                                                                             <i data-feather="calendar"></i>
                                                                                         </span>
@@ -1227,7 +1291,7 @@
                                 <div class="field-body">
                                     <div class="field">
                                         <div class="control has-icons-left">
-                                            <input class="input" name="datefilter[10]" value="">
+                                            <input class="input" name="fg_dept_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -1338,7 +1402,7 @@
                         $('#close_btn_trans_b').click(function (e) {
                             e.preventDefault();
 
-                            var payload = { 'pp_num': $('#trans_b_id_set').html() };
+                            var payload = { 'pp_num': $('.trans_b_id_set').html() };
 
                             $.ajax({
                                 url: "{{url_for('close_trans')}}",
@@ -1536,7 +1600,7 @@
                             $(document).ready(function () {
 
                                 // Loading Managerment 
-                                var loaded = [];
+                                // var loaded = [];
 
                                 $('#trans_b_form_view_{{row.id}}').click(function (e) {
                                     e.preventDefault();
@@ -1544,135 +1608,215 @@
 
 
                                     $.getJSON("/get/trans_pp_b?pp_num={{row.id}}", function (result) {
+                                        $('.trans_b_id_set').html('{{ row.id }}');
+                                        
                                         console.log(result);
-                                        $('#trans_b_id_set').html({{ row.id }});
+
+                                        if ($.isEmptyObject(result)) {
+
+                                            $('#show_noti').show();
+                                            $('.tracking_data').show();
+                                            $('#trans_b_form').trigger("reset");
+                                            $('#form_b_table').hide();
+                                            $('#trans_view_b').fadeIn();
+                                            $('#trans_b_meta').fadeIn();
 
 
-                                    if ($.isEmptyObject(result)) {
-
-                                        $('#show_noti').show();
-                                        $('.tracking_data').show();
-                                        $('#trans_b_form').trigger("reset");
-                                        $('#form_b_table').hide();
-                                        $('#trans_view_b').fadeIn();
-
-
-                                    }
-                                    else {
-                                        $('#show_noti').hide();
-                                        $('#form_b_table').hide();
-                                        $('.tracking_data').show();
-                                        $('#trans_view_b').fadeIn();
-                                        $('#trans_view_a').show();
-
-
-
-                                        // $('#sub_nav').append(` 
-                                        // <div class="level-right">
-                                        // <div class="level-item">
-                                        //                         <p class=" control">
-                                        //                             <button
-                                        //                                 class="button is-black" id="trans_view_a_{{row.id}}"><span class="icon icon-btn-in ">
-                                        //                                     <i data-feather="eye"></i>
-                                        //                                 </span>View - Part A</button>
-                                        //                         </p>
-                                        //                     </div></div>`);
-                                        // $("trans_view_a_{{row.id}}").click(function(){
-                                        //     window.location.assign(" {{ url_for('trans_a_view_by_id' , trans_id = row.id)}}")
-                                        // })
-
-
-
-
-                                        var extra_fld = Object.keys(result['datefilter']).length;
-                                        var extra_fld_cut = Object.keys(result['cut_datefilter'][0]).length;
-                                        var extra_fld_sth = Object.keys(result['sth_datefilter'][1]).length;
-
-                                        var extra_fld_val = Object.keys(result['val_datefilter'][2]).length;
-                                        var extra_fld_kaj = Object.keys(result['kaj_datefilter'][3]).length;
-                                        var extra_fld_tes = Object.keys(result['tes_datefilter'][4]).length;
-                                        var extra_fld_thr = Object.keys(result['thr_datefilter'][5]).length;
-                                        var extra_fld_qc = Object.keys(result['qc_datefilter'][6]).length;
-
-                                        var extra_fld_pre = Object.keys(result['pre_datefilter'][7]).length;
-                                        var extra_fld_tag = Object.keys(result['tag_datefilter'][8]).length;
-                                        var extra_fld_tra = Object.keys(result['tra_datefilter'][9]).length;
-
-
-                                        if ($.inArray('{{ row.id }}', loaded) === -1) {
-                                            for (i = 11; i < extra_fld; i++) {
-                                                $("#add_field_button_fg").trigger('click');
-                                            }
-
-
-                                            for (i = 1; i < extra_fld_cut; i++) {
-                                                $("#add_field_button_cut").trigger('click');
-                                            }
-                                            for (i = 1; i < extra_fld_sth; i++) {
-                                                $("#add_field_button_sth").trigger('click');
-                                            }
-                                            for (i = 1; i < extra_fld_val; i++) {
-                                                $("#add_field_button_val").trigger('click');
-                                            }
-                                            for (i = 1; i < extra_fld_kaj; i++) {
-                                                $("#add_field_button_kaj").trigger('click');
-                                            }
-                                            for (i = 1; i < extra_fld_tes; i++) {
-                                                $("#add_field_button_tes").trigger('click');
-                                            }
-                                            for (i = 1; i < extra_fld_thr; i++) {
-                                                $("#add_field_button_thr").trigger('click');
-                                            }
-                                            for (i = 1; i < extra_fld_qc; i++) {
-                                                $("#add_field_button_qc").trigger('click');
-                                            }
-                                            for (i = 1; i < extra_fld_pre; i++) {
-                                                $("#add_field_button_pre").trigger('click');
-                                            }
-                                            for (i = 1; i < extra_fld_tag; i++) {
-                                                $("#add_field_button_tag").trigger('click');
-                                            }
-                                            for (i = 1; i < extra_fld_tra; i++) {
-                                                $("#add_field_button_tra").trigger('click');
-                                            }
-                                            loaded.push('{{ row.id }}');
 
                                         }
-                                        populate('#trans_b_form', json2html_name_list(result));
+                                        else {
+                                            $('#show_noti').hide();
+                                            $('#form_b_table').hide();
+                                            $('.tracking_data').show();
+                                            $('#trans_view_b').fadeIn();
+                                            $('#trans_view_a').show();
+                                            $('#trans_b_meta').fadeIn();
 
 
+
+
+                                            var extra_fld = Object.keys(result['fg_dept_datefilter']).length;
+                                            var extra_fld_cut = Object.keys(result['cut_datefilter']).length;
+                                            var extra_fld_sth = Object.keys(result['sth_datefilter']).length;
+
+                                            var extra_fld_val = Object.keys(result['val_datefilter']).length;
+                                            var extra_fld_kaj = Object.keys(result['kaj_datefilter']).length;
+                                            var extra_fld_tes = Object.keys(result['tes_datefilter']).length;
+                                            var extra_fld_thr = Object.keys(result['thr_datefilter']).length;
+                                            var extra_fld_qc = Object.keys(result['qc_datefilter']).length;
+
+                                            var extra_fld_pre = Object.keys(result['pre_datefilter']).length;
+                                            var extra_fld_tag = Object.keys(result['tag_datefilter']).length;
+                                            var extra_fld_tra = Object.keys(result['tra_datefilter']).length;
+
+
+                                            // if ($.inArray('{{ row.id }}', loaded) === -1) {
+                                                for (i = 1; i < extra_fld; i++) {
+                                                    $("#add_field_button_fg").trigger('click');
+                                                }
+
+
+                                                for (i = 1; i < extra_fld_cut; i++) {
+                                                    $("#add_field_button_cut").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_sth; i++) {
+                                                    $("#add_field_button_sth").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_val; i++) {
+                                                    $("#add_field_button_val").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_kaj; i++) {
+                                                    $("#add_field_button_kaj").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_tes; i++) {
+                                                    $("#add_field_button_tes").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_thr; i++) {
+                                                    $("#add_field_button_thr").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_qc; i++) {
+                                                    $("#add_field_button_qc").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_pre; i++) {
+                                                    $("#add_field_button_pre").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_tag; i++) {
+                                                    $("#add_field_button_tag").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_tra; i++) {
+                                                    $("#add_field_button_tra").trigger('click');
+                                                }
+                                                // loaded.push('{{ row.id }}');
+
+                                            // }
+                                            populate('#trans_b_form', json2html_name_list(result));
+
+                                            function formattedData(data) {
+                                                dataarr = []
+                                                
+                                                var check_data = JSON.parse(data)
+                                                var action_key = ""
+
+                                                console.log(data )
+                                                console.log(check_data)
+
+                                                if (check_data.hasOwnProperty("$replace")){
+                                                    action_key= "Addded"
+                                                    check_data = check_data["$replace"]
+                                                }
+                                                if (check_data.hasOwnProperty("$delete")){
+                                                    action_key= "Deleted"
+                                                    check_data = check_data["$delete"]
+                                                }
+                                                if(check_data.hasOwnProperty("")){
+                                                    check_data = check_data[""]
+                                                    action_key = "Added"
+                                                }
+                                                else{
+                                                    action_key = "Added"
+
+                                                }
+                                                new_data = json2html_name_list(check_data)
+
+                                                // check_data = JSON.parse(json2html_name_list(check_data))
+                                                console.log(check_data)
+
+                                                $.each(new_data, function (k, v) {
+
+                                                    if (k.toString().includes("cut") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("sth") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Stitching #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("val") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Value Addn #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("kaj") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Kaj-Button #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("tes") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Test Checking #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("thr") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Thread Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("qc") && v != "") {
+                                                        dataarr.push(action_key+ "Q.C #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("pre") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Press #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                    if (k.toString().includes("tag") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Tag/Pack #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                    if (k.toString().includes("tra") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                    if (k.toString().includes("fg") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Detail Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                })
+                                                return dataarr;
+                                            }
+
+                                            $.getJSON("/get/trans_pp/meta?pp_num={{row.id}}", function (result) {
+                                                console.log(result)
+                                                $(result).each(function (index, value) {
+
+                                                    var formatted_data = formattedData(value["diff"])
+                                                    $('#meta_view_content').append($('<tr>')
+                                                        .append($('<td>').append(value["username"]))
+                                                        .append($('<td>').append(moment(value["timestamp"], "YYYY-MM-DD HH:mm:ssZZ").local().format("LLL")))
+                                                        .append($('<td>').append($("<p>").append(formatted_data                                                        
+                                                        ))
+
+                                                    )
+                                                )})
+
+                                            })
+
+
+                                        }
+
+
+
+                                    })
+
+                                    // Fucnction for JSON to html fillups
+
+                                    function json2html_name_list(json, result, parent) {
+                                        if (!result) result = {};
+                                        if (!parent) parent = '';
+                                        if ((typeof json) != 'object') {
+                                            result[parent] = json;
+                                        } else {
+                                            for (var key in json) {
+                                                var value = json[key];
+                                                if (parent == '') var subparent = key;
+                                                else var subparent = parent + '[' + key + ']';
+                                                result = json2html_name_list(value, result, subparent);
+                                            }
+                                        }
+                                        return result;
                                     }
+
+                                    //  Populates all the fields
+
+                                    function populate(frm, data) {
+                                        $.each(data, function (key, value) {
+                                            $('[name="' + key + '"]', frm).val(value);
+                                        });
+                                    }
+
                                 })
-
-
-
-
-                                // Fucnction for JSON to html fillups
-
-                                function json2html_name_list(json, result, parent) {
-                                    if (!result) result = {};
-                                    if (!parent) parent = '';
-                                    if ((typeof json) != 'object') {
-                                        result[parent] = json;
-                                    } else {
-                                        for (var key in json) {
-                                            var value = json[key];
-                                            if (parent == '') var subparent = key;
-                                            else var subparent = parent + '[' + key + ']';
-                                            result = json2html_name_list(value, result, subparent);
-                                        }
-                                    }
-                                    return result;
-                                }
-
-                                //  Populates all the fields
-
-                                function populate(frm, data) {
-                                    $.each(data, function (key, value) {
-                                        $('[name="' + key + '"]', frm).val(value);
-                                    });
-                                }
-                            });
                             });
                         </script>
                         {% endfor %}
@@ -1708,7 +1852,7 @@
                                 <div class="field-body">
                                     <div class="field">
                                         <div class="control has-icons-left">
-                                            <input class="input" name="datefilter[`+ y + `]" value="">
+                                            <input class="input" name="fg_dept_datefilter[`+ x + `]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -1870,7 +2014,7 @@
         e.preventDefault();
 
         var formdata = $("#trans_b_form").serializeJSON();
-        var payload = { 'pp_num': $('#trans_b_id_set').html(), 'data': formdata };
+        var payload = { 'pp_num': $('.trans_b_id_set').html(), 'data': formdata };
 
         $.ajax({
             url: "{{url_for('trans_b')}}",
@@ -1977,23 +2121,21 @@
 </script>
 <script>
     $(document).ready(function () {
-        console.log({{ view }})
-    if ("{{view}}" === "true") {
-        // Construct URL object using current browser URL
-        var url = new URL(document.location);
-        console.log({{ trans_num }});
-    // Get query parameters object
-    var params = url.searchParams;
+        if ("{{view}}" === "true") {
+            // Construct URL object using current browser URL
+            var url = new URL(document.location);
+            // Get query parameters object
+            var params = url.searchParams;
 
-    // Get value of paper
-    var selView = params.get("view");
+            // Get value of paper
+            var selView = params.get("view");
 
-    $('#trans_b_form_view_{{trans_num}}').trigger('click');
-            
-            }
-            else {
-        $('#form_b_table').show();
-    }
-            });
+            $('#trans_b_form_view_{{trans_num}}').trigger('click');
+
+        }
+        else {
+            $('#form_b_table').show();
+        }
+    });
 </script>
 {% endblock %}

@@ -3,7 +3,6 @@
 <!-- Date picker Script -->
 
 <!-- End imports -->
-
 <div class="container" style="margin-top: 5rem;">
 
     <div class="columns is-mobile is-centered">
@@ -13,93 +12,117 @@
 
                     <div class="level-item">
                         <p class="is-size-5 ">
-                            <span class="robo ">Transaction - </span> Part B - <span class="robo "> Tracking for -
-                            </span> </p>
+                            <span class="robo ">Open Transaction - </span> Part B </p>
                     </div>
 
-                    <div class="level-item">
-                        <p class=" control select  ">
-                            <select id="pp_sel"></select>
-                        </p>
-                    </div>
-
+                </div>
+                <div class="level-right">
                     <div class="level-item">
                         <p class=" control">
-                            <button class="button is-black" id="pp_update"><span class="icon icon-btn-in ">
-                                    <i data-feather="refresh-cw"></i>
-                                </span>Update</button>
+                            <button style="display: none;" class="button is-black" id="trans_view_b"><span
+                                    class="icon icon-btn-in ">
+                                    <i data-feather="corner-up-left"></i>
+                                </span>Back</button>
                         </p>
-                    </div>
-                    <script>
-                        $(document).ready(function () {
-                            var options = [];
-                            $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
-                                console.log(result)
-                                for (var j = 0; j < Object.keys(result).length; j++) {
-                                    options.push('<option value="',
-                                        Object.keys(result)[j], '">',
-                                        Object.values(result)[j], '</option>');
-                                }
-                                $("#pp_sel").html(options.join(''));
-                            });
-                        })
-                    </script>
-                    <script>
-                        $('#pp_update').click(function (e) {
-                            e.preventDefault();
-                            var pp_num = $('#pp_sel').val();
+                        <script>
+                            $(document).ready(function () {
 
-
-                            $.getJSON("/get/trans_pp_b?pp_num=" + pp_num, function (result) {
-                                console.log(result);
-
-                                if ($.isEmptyObject(result)) {
-                                
-                                    $('#show_noti').show();
-                                    $('#trans_b_form').trigger("reset");
-                                }
-                                else {
+                                $('#trans_view_b').click(function () {
+                                    $('#trans_view_b').hide();
                                     $('#show_noti').hide();
-                                    var extra_fld = Object.keys(result['datefilter']).length;
-                                    for (i = 11; i < extra_fld; i++) {
-                                        $("#add_field_button_fg").trigger('click');
-                                    }
-                                    populate('#trans_b_form', json2html_name_list(result))
+                                    $('.remove_field').trigger('click');
+                                    $('#form_b_table  , .tracking_data').toggle();
+                                    $('trans_b_meta').fadeIn();
+                                    $("#meta_view_content").children().remove();
+                                });
 
-                                }
-                            })
-                        });
 
-                        function json2html_name_list(json, result, parent) {
-                            if (!result) result = {};
-                            if (!parent) parent = '';
-                            if ((typeof json) != 'object') {
-                                result[parent] = json;
-                            } else {
-                                for (var key in json) {
-                                    var value = json[key];
-                                    if (parent == '') var subparent = key;
-                                    else var subparent = parent + '[' + key + ']';
-                                    result = json2html_name_list(value, result, subparent);
-                                }
-                            }
-                            return result;
-                        }
-
-                        function populate(frm, data) {
-                            $.each(data, function (key, value) {
-                                $('[name="' + key + '"]', frm).val(value);
                             });
-                        }
-                    </script>
+                        </script>
+                    </div>
+
                 </div>
 
             </nav>
             <hr>
+
             <div class="notification has-text-centered animated fadeIn" id="show_noti" style="display: none;">
                 <p>Please do the required entry and submit the form.</p>
             </div>
-            <div class="tracking_data">
+            <div class="tracking_data animated fadeIn" style="display:none;">
+                <div class="nav level" id="sub_nav">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <p class="is-size-5 ">
+                                <span class=" robo"> Transaction <span class="icon icon-btn"
+                                        style="padding:3px; margin-left: 10px;"><i data-feather="hash"></i></span><span
+                                        class="trans_b_id_set"></span> </span></span></p>
+                        </div>
+                    </div>
+                    <div class="level-right">
+                        <div class="level-item">
+                            <button style="display: none;" class="button is-info" id="trans_b_meta"><span
+                                    class="icon icon-btn-in ">
+                                    <i data-feather="info"></i>
+                                </span>Info</button>
+                        </div>
+                    </div>
+                    <script>
+                        document.querySelector('#trans_b_meta').addEventListener('click', function (event) {
+                            event.preventDefault();
+                            var modal = document.querySelector('#meta_view');  // assuming you have only 1
+                            var html = document.querySelector('html');
+                            modal.classList.add('is-active');
+                            html.classList.add('is-clipped');
+
+                            document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                e.preventDefault();
+                                modal.classList.remove('is-active');
+                                html.classList.remove('is-clipped');
+                            });
+
+                            modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                e.preventDefault();
+                                modal.classList.remove('is-active');
+                                html.classList.remove('is-clipped');
+
+
+                            });
+
+                        });
+
+                    </script>
+
+                </div>
+                <hr>
+                <div class="modal" id="meta_view">
+                    <div class="modal-background"></div>
+                    <div class="modal-content">
+                        <div class="box">
+                            <p class="robo is-size-5">Transactions Entry Details - <span class="trans_b_id_set"></span>
+                            </p>
+                            <hr>
+                            <div>
+                                <div class="table-container">
+                                    <table class="table is-fullwidth">
+                                        <thead>
+                                            <th>User</th>
+                                            <th>Date</th>
+                                            <th>Entry</th>
+                                        </thead>
+                                        <tbody id="meta_view_content">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close"></button>
+                </div>
                 <form id="trans_b_form">
                     <div class="table-container">
                         <table class="table">
@@ -110,321 +133,1701 @@
                                     <th>Qty</th>
                                     <th>Location</th>
                                     <th>Remark</th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="input_fields_wrap_cut">
+
                                 <tr>
-                                    <td class="robo">Cutting</td>
+                                    <td class="robo">Cutting </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="cut_dat" name="datefilter[0]" value="">
+                                            <input class="input" id="cut_dat" name="cut_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
                                         </div>
                                     </td>
-                                    <td><input class="input" name="cut_qty"></td>
-                                    <td><input class="input" name="cut_loc"></td>
+                                    <td><input class="input" name="cut_qty[0]"></td>
+                                    <td><input class="input" name="cut_loc[0]"></td>
 
-                                    <td><input class="input" name="cut_rem"></td>
+                                    <td><input class="input" name="cut_rem[0]"></td>
+
+
 
                                 </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_cut"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_cut"); //Add button ID
 
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                
+                                                                    <tr>
+                                                                        <td class="robo">Cutting #`+ x + `</td>
+                                                                        <td>
+                                                                            <div class="control has-icons-left">
+                                                                                <input class="input" id="cut_dat" name="cut_datefilter[`+ x + `]" value="">
+                                                                                <span class="icon is-small is-left">
+                                                                                    <i data-feather="calendar"></i>
+                                                                                </span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td><input class="input" name="cut_qty[`+ x + `]"></td>
+                                                                        <td><input class="input" name="cut_loc[`+ x + `]"></td>
+                
+                                                                        <td><input class="input" name="cut_rem[`+ x + `]"></td>
+                                                                        
+                                                                        <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                        </td>
+                
+                                                                    </tr>
+                
+                                                                
+                                                                `);
+
+
+                                                $(function () {
+
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
+
+                                                });
+
+                                                feather.replace();
+
+
+
+                                            }
+
+
+                                        });
+
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
+
+
+                                </script>
+
+                            </tbody>
+                        </table>
+
+                        <a class="button is-primary" id="add_field_button_cut"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+                    <br>
+                    <br>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td class="robo">Stitching</td>
+                                    <th>Particulars</th>
+                                    <th>Date</th>
+                                    <th>Qty</th>
+                                    <th>Location</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_sth">
+                                <tr>
+                                    <td class="robo">Stitching </td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="sth_dat" name="datefilter[1]" value="">
+                                            <input class="input" id="sth_dat" name="sth_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
                                         </div>
                                     </td>
-                                    <td><input class="input" name="sth_qty"></td>
-                                    <td><input class="input" name="sth_loc"></td>
-
-                                    <td><input class="input" name="sth_rem"></td>
+                                    <td><input class="input" name="sth_qty[0]"></td>
+                                    <td><input class="input" name="sth_loc[0]"></td>
+                                    <td><input class="input" name="sth_rem[0]"></td>
 
                                 </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_sth"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_sth"); //Add button ID
 
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                    
+                                                                        <tr>
+                                                                            <td class="robo">Stitching #`+ x + `</td>
+                                                                            <td>
+                                                                                <div class="control has-icons-left">
+                                                                                    <input class="input" id="sth_dat" name="sth_datefilter[`+ x + `]" value="">
+                                                                                    <span class="icon is-small is-left">
+                                                                                        <i data-feather="calendar"></i>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td><input class="input" name="sth_qty[`+ x + `]"></td>
+                                                                            <td><input class="input" name="sth_loc[`+ x + `]"></td>
+                    
+                                                                            <td><input class="input" name="sth_rem[`+ x + `]"></td>
+                                                                            
+                                                                            <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                            </td>
+                    
+                                                                        </tr>
+                    
+                                                                    
+                                                                    `);
+
+
+                                                $(function () {
+
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
+
+                                                });
+
+                                                feather.replace();
+
+
+
+                                            }
+
+
+                                        });
+
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
+
+
+                                </script>
+                            </tbody>
+
+                        </table>
+                        <a class="button is-primary" id="add_field_button_sth"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+                    <br>
+                    <br>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Particulars</th>
+                                    <th>Date</th>
+                                    <th>Qty</th>
+                                    <th>Location</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_val">
                                 <tr>
                                     <td class="robo">Value Addition</td>
                                     <td>
                                         <div class="control has-icons-left">
-                                            <input class="input" id="val_dat" name="datefilter[2]" value="">
+                                            <input class="input" id="val_dat" name="val_datefilter[0]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
                                         </div>
                                     </td>
-                                    <td><input class="input" name="val_qty"></td>
-                                    <td><input class="input" name="val_loc"></td>
+                                    <td><input class="input" name="val_qty[0]"></td>
+                                    <td><input class="input" name="val_loc[0]"></td>
 
-                                    <td><input class="input" name="val_rem"></td>
-
-                                </tr>
-                                <tr>
-                                    <td class="robo">Kaj - Button</td>
-                                    <td>
-                                        <div class="control has-icons-left">
-                                            <input class="input" id="kaj_dat" name="datefilter[3]" value="">
-                                            <span class="icon is-small is-left">
-                                                <i data-feather="calendar"></i>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td><input class="input" name="kaj_qty"></td>
-                                    <td><input class="input" name="kaj_loc"></td>
-
-                                    <td><input class="input" name="kaj_rem"></td>
+                                    <td><input class="input" name="val_rem[0]"></td>
 
                                 </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_val"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_val"); //Add button ID
 
-                                <tr>
-                                    <td class="robo">Test Checking by HOD</td>
-                                    <td>
-                                        <div class="control has-icons-left">
-                                            <input class="input" id="tes_dat" name="datefilter[4]" value="">
-                                            <span class="icon is-small is-left">
-                                                <i data-feather="calendar"></i>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td><input class="input" name="tes_qty"></td>
-                                    <td><input class="input" name="tes_loc"></td>
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                    
+                                                                        <tr>
+                                                                            <td class="robo">Value Addition #`+ x + `</td>
+                                                                            <td>
+                                                                                <div class="control has-icons-left">
+                                                                                    <input class="input" id="val_dat" name="val_datefilter[`+ x + `]" value="">
+                                                                                    <span class="icon is-small is-left">
+                                                                                        <i data-feather="calendar"></i>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td><input class="input" name="val_qty[`+ x + `]"></td>
+                                                                            <td><input class="input" name="val_loc[`+ x + `]"></td>
+                    
+                                                                            <td><input class="input" name="val_rem[`+ x + `]"></td>
+                                                                            
+                                                                            <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                            </td>
+                    
+                                                                        </tr>
+                    
+                                                                    
+                                                                    `);
 
-                                    <td><input class="input" name="tes_rem"></td>
 
-                                </tr>
+                                                $(function () {
 
-                                <tr>
-                                    <td class="robo">Thread Cutting</td>
-                                    <td>
-                                        <div class="control has-icons-left">
-                                            <input class="input" id="thr_dat" name="datefilter[5]" value="">
-                                            <span class="icon is-small is-left">
-                                                <i data-feather="calendar"></i>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td><input class="input" name="thr_qty"></td>
-                                    <td><input class="input" name="thr_loc"></td>
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
 
-                                    <td><input class="input" name="thr_rem"></td>
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
 
-                                </tr>
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
 
-                                <tr>
-                                    <td class="robo">Q.C / Measurement</td>
-                                    <td>
-                                        <div class="control has-icons-left">
-                                            <input class="input" id="qc_dat" name="datefilter[6]" value="">
-                                            <span class="icon is-small is-left">
-                                                <i data-feather="calendar"></i>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td><input class="input" name="qc_qty"></td>
-                                    <td><input class="input" name="qc_loc"></td>
+                                                });
 
-                                    <td><input class="input" name="qc_rem"></td>
+                                                feather.replace();
 
-                                </tr>
-                                <tr>
-                                    <td class="robo">Press</td>
-                                    <td>
-                                        <div class="control has-icons-left">
-                                            <input class="input" id="pre_dat" name="datefilter[7]" value="">
-                                            <span class="icon is-small is-left">
-                                                <i data-feather="calendar"></i>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td><input class="input" name="pre_qty"></td>
-                                    <td><input class="input" name="pre_loc"></td>
 
-                                    <td><input class="input" name="pre_rem"></td>
 
-                                </tr>
-                                <tr>
-                                    <td class="robo">Tagging / Packing</td>
-                                    <td>
-                                        <div class="control has-icons-left">
-                                            <input class="input" id="tag_dat" name="datefilter[8]" value="">
-                                            <span class="icon is-small is-left">
-                                                <i data-feather="calendar"></i>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td><input class="input" name="tag_qty"></td>
-                                    <td><input class="input" name="tag_loc"></td>
+                                            }
 
-                                    <td><input class="input" name="tag_rem"></td>
 
-                                </tr>
+                                        });
 
-                                <tr>
-                                    <td class="robo">Transfer to F.G Dept.</td>
-                                    <td>
-                                        <div class="control has-icons-left">
-                                            <input class="input" id="tra_dat" name="datefilter[9]" value="">
-                                            <span class="icon is-small is-left">
-                                                <i data-feather="calendar"></i>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td><input class="input" name="tra_qty"></td>
-                                    <td><input class="input" name="tra_loc"></td>
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
 
-                                    <td><input class="input" name="tra_rem"></td>
 
-                                </tr>
+                                </script>
                             </tbody>
+
                         </table>
-                        <hr>
-                        <p class="robo is-size-5">Details of goods transferred to F.G Dept</p>
-                        <hr>
-                        <div class="input_fields_wrap_fg">
-                            <div id="fg-form-0" class="notification">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Date </label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="control has-icons-left">
-                                                <input class="input" name="datefilter[10]" value="">
-                                                <span class="icon is-small is-left">
-                                                    <i data-feather="calendar"></i>
-                                                </span>
-                                            </div>
+                        <a class="button is-primary" id="add_field_button_val"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+
+                    <br>
+
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Particulars</th>
+                                    <th>Date</th>
+                                    <th>Qty</th>
+                                    <th>Location</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_kaj">
+                                <tr>
+                                    <td class="robo">Kaj -Button </td>
+                                    <td>
+                                        <div class="control has-icons-left">
+                                            <input class="input" id="kaj_dat" name="kaj_datefilter[0]" value="">
+                                            <span class="icon is-small is-left">
+                                                <i data-feather="calendar"></i>
+                                            </span>
                                         </div>
-                                    </div>
+                                    </td>
+                                    <td><input class="input" name="kaj_qty[0]"></td>
+                                    <td><input class="input" name="kaj_loc[0]"></td>
+
+                                    <td><input class="input" name="kaj_rem[0]"></td>
+
+                                </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_kaj"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_kaj"); //Add button ID
+
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                    
+                                                                        <tr>
+                                                                            <td class="robo">Kaj -Button #`+ x + `</td>
+                                                                            <td>
+                                                                                <div class="control has-icons-left">
+                                                                                    <input class="input" id="kaj_dat" name="kaj_datefilter[`+ x + `]" value="">
+                                                                                    <span class="icon is-small is-left">
+                                                                                        <i data-feather="calendar"></i>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td><input class="input" name="kaj_qty[`+ x + `]"></td>
+                                                                            <td><input class="input" name="kaj_loc[`+ x + `]"></td>
+                    
+                                                                            <td><input class="input" name="kaj_rem[`+ x + `]"></td>
+                                                                            
+                                                                            <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                            </td>
+                    
+                                                                        </tr>
+                    
+                                                                    
+                                                                    `);
+
+
+                                                $(function () {
+
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
+
+                                                });
+
+                                                feather.replace();
+
+
+
+                                            }
+
+
+                                        });
+
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
+
+
+                                </script>
+                            </tbody>
+
+                        </table>
+                        <a class="button is-primary" id="add_field_button_kaj"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+                    <br>
+
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Particulars</th>
+                                    <th>Date</th>
+                                    <th>Qty</th>
+                                    <th>Location</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_tes">
+                                <tr>
+                                    <td class="robo">Test Checking by HOD </td>
+                                    <td>
+                                        <div class="control has-icons-left">
+                                            <input class="input" id="tes_dat" name="tes_datefilter[0]" value="">
+                                            <span class="icon is-small is-left">
+                                                <i data-feather="calendar"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td><input class="input" name="tes_qty[0]"></td>
+                                    <td><input class="input" name="tes_loc[0]"></td>
+
+                                    <td><input class="input" name="tes_rem[0]"></td>
+
+                                </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_tes"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_tes"); //Add button ID
+
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                    
+                                                                        <tr>
+                                                                            <td class="robo">Test Checking by HOD #`+ x + `</td>
+                                                                            <td>
+                                                                                <div class="control has-icons-left">
+                                                                                    <input class="input" id="tes_dat" name="tes_datefilter[`+ x + `]" value="">
+                                                                                    <span class="icon is-small is-left">
+                                                                                        <i data-feather="calendar"></i>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td><input class="input" name="tes_qty[`+ x + `]"></td>
+                                                                            <td><input class="input" name="tes_loc[`+ x + `]"></td>
+                    
+                                                                            <td><input class="input" name="tes_rem[`+ x + `]"></td>
+                                                                            
+                                                                            <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                            </td>
+                    
+                                                                        </tr>
+                    
+                                                                    
+                                                                    `);
+
+
+                                                $(function () {
+
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
+
+                                                });
+
+                                                feather.replace();
+
+
+
+                                            }
+
+
+                                        });
+
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
+
+
+                                </script>
+                            </tbody>
+
+                        </table>
+                        <a class="button is-primary" id="add_field_button_tes"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+                    <br>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Particulars</th>
+                                    <th>Date</th>
+                                    <th>Qty</th>
+                                    <th>Location</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_thr">
+                                <tr>
+                                    <td class="robo">Thread Cutting </td>
+                                    <td>
+                                        <div class="control has-icons-left">
+                                            <input class="input" id="thr_dat" name="thr_datefilter[0]" value="">
+                                            <span class="icon is-small is-left">
+                                                <i data-feather="calendar"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td><input class="input" name="thr_qty[0]"></td>
+                                    <td><input class="input" name="thr_loc[0]"></td>
+
+                                    <td><input class="input" name="thr_rem[0]"></td>
+
+                                </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_thr"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_thr"); //Add button ID
+
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                        
+                                                                            <tr>
+                                                                                <td class="robo">Thread Cutting #`+ x + `</td>
+                                                                                <td>
+                                                                                    <div class="control has-icons-left">
+                                                                                        <input class="input" id="thr_dat" name="thr_datefilter[`+ x + `]" value="">
+                                                                                        <span class="icon is-small is-left">
+                                                                                            <i data-feather="calendar"></i>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td><input class="input" name="thr_qty[`+ x + `]"></td>
+                                                                                <td><input class="input" name="thr_loc[`+ x + `]"></td>
+                        
+                                                                                <td><input class="input" name="thr_rem[`+ x + `]"></td>
+                                                                                
+                                                                                <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                                </td>
+                        
+                                                                            </tr>
+                        
+                                                                        
+                                                                        `);
+
+
+                                                $(function () {
+
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
+
+                                                });
+
+                                                feather.replace();
+
+
+
+                                            }
+
+
+                                        });
+
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
+
+
+                                </script>
+                            </tbody>
+
+                        </table>
+                        <a class="button is-primary" id="add_field_button_thr"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+
+                    <br>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Particulars</th>
+                                    <th>Date</th>
+                                    <th>Qty</th>
+                                    <th>Location</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_qc">
+                                <tr>
+                                    <td class="robo">Q.C / Measurement </td>
+                                    <td>
+                                        <div class="control has-icons-left">
+                                            <input class="input" id="qc_dat" name="qc_datefilter[0]" value="">
+                                            <span class="icon is-small is-left">
+                                                <i data-feather="calendar"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td><input class="input" name="qc_qty[0]"></td>
+                                    <td><input class="input" name="qc_loc[0]"></td>
+
+                                    <td><input class="input" name="qc_rem[0]"></td>
+
+                                </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_qc"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_qc"); //Add button ID
+
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                        
+                                                                            <tr>
+                                                                                <td class="robo">Q.C / Measurement #`+ x + `</td>
+                                                                                <td>
+                                                                                    <div class="control has-icons-left">
+                                                                                        <input class="input" id="qc_dat" name="qc_datefilter[`+ x + `]" value="">
+                                                                                        <span class="icon is-small is-left">
+                                                                                            <i data-feather="calendar"></i>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td><input class="input" name="qc_qty[`+ x + `]"></td>
+                                                                                <td><input class="input" name="qc_loc[`+ x + `]"></td>
+                        
+                                                                                <td><input class="input" name="qc_rem[`+ x + `]"></td>
+                                                                                
+                                                                                <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                                </td>
+                        
+                                                                            </tr>
+                        
+                                                                        
+                                                                        `);
+
+
+                                                $(function () {
+
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
+
+                                                });
+
+                                                feather.replace();
+
+
+
+                                            }
+
+
+                                        });
+
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
+
+
+                                </script>
+                            </tbody>
+
+                        </table>
+                        <a class="button is-primary" id="add_field_button_qc"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+
+                    <br>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Particulars</th>
+                                    <th>Date</th>
+                                    <th>Qty</th>
+                                    <th>Location</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_pre">
+                                <tr>
+                                    <td class="robo">Press </td>
+                                    <td>
+                                        <div class="control has-icons-left">
+                                            <input class="input" id="pre_dat" name="pre_datefilter[0]" value="">
+                                            <span class="icon is-small is-left">
+                                                <i data-feather="calendar"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td><input class="input" name="pre_qty[0]"></td>
+                                    <td><input class="input" name="pre_loc[0]"></td>
+
+                                    <td><input class="input" name="pre_rem[0]"></td>
+
+                                </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_pre"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_pre"); //Add button ID
+
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                        
+                                                                            <tr>
+                                                                                <td class="robo">Press #`+ x + `</td>
+                                                                                <td>
+                                                                                    <div class="control has-icons-left">
+                                                                                        <input class="input" id="pre_dat" name="pre_datefilter[`+ x + `]" value="">
+                                                                                        <span class="icon is-small is-left">
+                                                                                            <i data-feather="calendar"></i>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td><input class="input" name="pre_qty[`+ x + `]"></td>
+                                                                                <td><input class="input" name="pre_loc[`+ x + `]"></td>
+                        
+                                                                                <td><input class="input" name="pre_rem[`+ x + `]"></td>
+                                                                                
+                                                                                <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                                </td>
+                        
+                                                                            </tr>
+                        
+                                                                        
+                                                                        `);
+
+
+                                                $(function () {
+
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
+
+                                                });
+
+                                                feather.replace();
+
+
+
+                                            }
+
+
+                                        });
+
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
+
+
+                                </script>
+                            </tbody>
+
+                        </table>
+                        <a class="button is-primary" id="add_field_button_pre"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+
+                    <br>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Particulars</th>
+                                    <th>Date</th>
+                                    <th>Qty</th>
+                                    <th>Location</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_tag">
+                                <tr>
+                                    <td class="robo">Tagging / Packing </td>
+                                    <td>
+                                        <div class="control has-icons-left">
+                                            <input class="input" id="tag_dat" name="tag_datefilter[0]" value="">
+                                            <span class="icon is-small is-left">
+                                                <i data-feather="calendar"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td><input class="input" name="tag_qty[0]"></td>
+                                    <td><input class="input" name="tag_loc[0]"></td>
+
+                                    <td><input class="input" name="tag_rem[0]"></td>
+
+                                </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_tag"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_tag"); //Add button ID
+
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                        
+                                                                            <tr>
+                                                                                <td class="robo">Tagging / Packing #`+ x + `</td>
+                                                                                <td>
+                                                                                    <div class="control has-icons-left">
+                                                                                        <input class="input" id="tag_dat" name="tag_datefilter[`+ x + `]" value="">
+                                                                                        <span class="icon is-small is-left">
+                                                                                            <i data-feather="calendar"></i>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td><input class="input" name="tag_qty[`+ x + `]"></td>
+                                                                                <td><input class="input" name="tag_loc[`+ x + `]"></td>
+                        
+                                                                                <td><input class="input" name="tag_rem[`+ x + `]"></td>
+                                                                                
+                                                                                <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                                </td>
+                        
+                                                                            </tr>
+                        
+                                                                        
+                                                                        `);
+
+
+                                                $(function () {
+
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
+
+                                                });
+
+                                                feather.replace();
+
+
+
+                                            }
+
+
+                                        });
+
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
+
+
+                                </script>
+                            </tbody>
+
+                        </table>
+                        <a class="button is-primary" id="add_field_button_tag"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+
+                    <br>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Particulars</th>
+                                    <th>Date</th>
+                                    <th>Qty</th>
+                                    <th>Location</th>
+                                    <th>Remark</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="input_fields_wrap_tra">
+                                <tr>
+                                    <td class="robo">Transfer to F.G Dept. </td>
+                                    <td>
+                                        <div class="control has-icons-left">
+                                            <input class="input" id="tra_dat" name="tra_datefilter[0]" value="">
+                                            <span class="icon is-small is-left">
+                                                <i data-feather="calendar"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td><input class="input" name="tra_qty[0]"></td>
+                                    <td><input class="input" name="tra_loc[0]"></td>
+
+                                    <td><input class="input" name="tra_rem[0]"></td>
+
+                                </tr>
+                                <script>
+                                    $(document).ready(function () {
+                                        var max_fields = 10; //maximum input boxes allowed
+                                        var wrapper_fab = $(".input_fields_wrap_tra"); //Fields wrapper
+                                        var add_button_cut = $("#add_field_button_tra"); //Add button ID
+
+                                        var x = 0; //initlal text box count
+                                        $(add_button_cut).click(function (e) { //on add input button click
+                                            e.preventDefault();
+                                            if (x < max_fields) { //max input box allowed
+                                                x++; //text box increment
+                                                $(wrapper_fab).append(`
+                                                                        
+                                                                            <tr>
+                                                                                <td class="robo">Transfer to F.G Dept. #`+ x + `</td>
+                                                                                <td>
+                                                                                    <div class="control has-icons-left">
+                                                                                        <input class="input" id="tra_dat" name="tra_datefilter[`+ x + `]" value="">
+                                                                                        <span class="icon is-small is-left">
+                                                                                            <i data-feather="calendar"></i>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td><input class="input" name="tra_qty[`+ x + `]"></td>
+                                                                                <td><input class="input" name="tra_loc[`+ x + `]"></td>
+                        
+                                                                                <td><input class="input" name="tra_rem[`+ x + `]"></td>
+                                                                                
+                                                                                <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                                </td>
+                        
+                                                                            </tr>
+                        
+                                                                        
+                                                                        `);
+
+
+                                                $(function () {
+
+                                                    $('input[name*="datefilter"]').daterangepicker({
+                                                        "locale": {
+                                                            "format": "MM/DD/YYYY"
+                                                        },
+                                                        singleDatePicker: true,
+                                                        autoUpdateInput: false,
+                                                        locale: {
+                                                            cancelLabel: 'Clear'
+                                                        }
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+                                                        $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                                                    });
+
+                                                    $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                                                        $(this).val('');
+                                                    });
+
+                                                });
+
+                                                feather.replace();
+
+
+
+                                            }
+
+
+                                        });
+
+                                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                            e.preventDefault();
+                                            $(this).parent('td').parent('tr').remove(); x--;
+                                        })
+                                    });
+
+
+                                </script>
+                            </tbody>
+
+                        </table>
+                        <a class="button is-primary" id="add_field_button_tra"><span class="icon icon-btn-in"><i
+                                    data-feather="plus"></i></span>Add More</a>
+                    </div>
+                    <hr>
+                    <p class="robo is-size-5">Details of goods transferred to F.G Dept</p>
+                    <hr>
+                    <div class="input_fields_wrap_fg">
+                        <div id="fg-form-0" class="notification">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Date </label>
                                 </div>
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Size/Design </label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="s_0_0" placeholder="Size">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="s_0_1" placeholder="Size">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="s_0_2" placeholder="Size">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="s_0_3" placeholder="Size">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="s_0_4" placeholder="Size">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="s_0_5" placeholder="Size">
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Qty </label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="q_0_0" placeholder="Qty">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="q_0_1" placeholder="Qty">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="q_0_2" placeholder="Qty">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="q_0_3" placeholder="Qty">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="q_0_4" placeholder="Qty">
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <p class="control is-expanded">
-                                                <input class="input" type="text" name="q_0_5" placeholder="Qty">
-                                            </p>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="control has-icons-left">
+                                            <input class="input" name="fg_dept_datefilter[0]" value="">
+                                            <span class="icon is-small is-left">
+                                                <i data-feather="calendar"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Size/Design </label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="s_0_0" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="s_0_1" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="s_0_2" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="s_0_3" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="s_0_4" placeholder="Size">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="s_0_5" placeholder="Size">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Qty </label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="q_0_0" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="q_0_1" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="q_0_2" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="q_0_3" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="q_0_4" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                    <div class="field">
+                                        <p class="control is-expanded">
+                                            <input class="input" type="text" name="q_0_5" placeholder="Qty">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <br>
-                        <button class="is-primary button" id="add_field_button_fg"><span class="icon icon-btn-in">
-                                <i data-feather="plus"></i>
-                            </span>Add More</button>
+                    </div>
+                    <br>
+                    <button class="is-primary button" id="add_field_button_fg"><span class="icon icon-btn-in">
+                            <i data-feather="plus"></i>
+                        </span>Add More</button>
+                </form>
+
+
+
+                <hr>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button id="submit_btn_trans_b" class="button is-black robo"><span class="icon icon-btn-in"><i
+                                    data-feather="check"></i></span>Submit</button>
                     </div>
 
-                    <hr>
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <button id="submit_btn_trans_b" class="button is-black robo"><span
-                                    class="icon icon-btn-in"><i data-feather="check"></i></span>Submit</button>
-                        </div>
+                    <div class="control ">
+                        <a class="button is-text">Clear Fields</a>
+                    </div>
 
-                        <div class="control ">
-                            <a class="button is-text">Clear Fields</a>
-                        </div>
+                    <div class="control">
+                        <button class="button is-danger robo" id="close_btn_trans_b"><span class="icon icon-btn-in"><i
+                                    data-feather="x"></i></span>Close Report</button>
+                    </div>
+                    <script>
+                        $('#close_btn_trans_b').click(function (e) {
+                            e.preventDefault();
 
-                        <!-- <div class="control">
-                            <button class="button is-danger robo" id="close_btn_trans_b"><span
-                                    class="icon icon-btn-in"><i data-feather="x"></i></span>Close Report</button>
-                        </div> -->
+                            var payload = { 'pp_num': $('.trans_b_id_set').html() };
+
+                            $.ajax({
+                                url: "{{url_for('close_trans')}}",
+                                type: 'POST',
+                                data: JSON.stringify(payload),
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                async: true,
+                                success: function (msg) {
+                                    window.location.href = "{{url_for('trans_b_user')}}";
+                                }
+                            });
+
+                        });
+                    </script>
+                </div>
+                <hr>
+            </div>
+            {% if open_trans|length == 0 %}
+            <div class="empty has-text-centered has-text-grey-light">
+                <span class="icon"><i data-feather="info"></i></span><br>
+                <p>No Open Transactions available. <br> Create a new one.</p>
+                <hr>
+            </div>
+            {% else %}
+
+            <!-- Table to list all trans -->
+
+            <div class="xtable animated fadeIn" id="form_b_table" style="display:none">
+                <div class="field is-grouped">
+
+
+                    <div class="control has-icons-left">
+                        <input class="input" name="start-dates" placeholder="Start Date" value="">
+                        <span class="icon is-small is-left">
+                            <i data-feather="calendar"></i>
+                        </span>
+                    </div>
+
+                    <div class="control has-icons-left">
+                        <input class="input" name="target-dates" placeholder="Target Date" value="">
+                        <span class="icon is-small is-left">
+                            <i data-feather="calendar"></i>
+                        </span>
+                    </div>
+
+                    <div class="control">
+                        <button id="filter_update" class=" button is-black"><span class="icon icon-btn-in"><i
+                                    data-feather="filter"></i></span>Filter</button>
+                    </div>
+
+                    <div class="control">
+                        <button id="filter_reset" class=" button "><span class="icon icon-btn-in"><i
+                                    data-feather="x"></i></span>Clear Filter</button>
+                    </div>
+                </div>
+                <hr>
+                <table class="table is-fullwidth">
+                    <thead>
+                        <th>Order No.</th>
+                        <th>Product</th>
+                        <th>Start Date</th>
+                        <th>Target Date</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        {% for row in open_trans %}
+                        <tr id="data_{{row.id}}">
+                            <td class="robo"><span class="icon icon-btn has-text-grey" style="padding:3px;"><i
+                                        data-feather="hash"></i></span>{{ row.id }}</td>
+                            <td id="order_name_{{loop.index}}"></td>
+                            <td id="start_{{loop.index}}"></td>
+                            <td id="target_{{loop.index}}"></td>
+                            <td>
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <a id="trans_b_form_view_{{row.id}}" class="view_trans_b button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="eye"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="control">
+                                        <a id="edit_fin_btn_{{loop.index}}" class="button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="control">
+                                        <a id="edit_fin_btn_{{loop.index}}" class="button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="printer"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="control">
+                                        <button id="delete_trans_{{loop.index}}" class="button is-small is-danger"><span
+                                                class="icon icon-btn-in-x"><i data-feather="x"></i></span>
+                                        </button>
+
+                                        <!-- Delete Modal -->
+                                        <div class="modal" id="delete_trans_modal_{{loop.index}}">
+                                            <div class="modal-background"></div>
+                                            <div class="modal-content">
+
+                                                <div class="box">
+                                                    <p>Are you sure you want to delete <span class="robo">Product Order
+                                                            - {{row.id}}</span> ?</p>
+                                                    <br>
+                                                    <div class="field is-grouped">
+                                                        <p class="control">
+                                                            <a id="delete_trans_confirm_{{loop.index}}"
+                                                                class="button is-danger"><span
+                                                                    class="icon icon-btn-in"><i
+                                                                        data-feather="trash-2"></i></span>Delete
+                                                            </a>
+                                                        </p>
+                                                        <p class="control">
+                                                            <a class="button"
+                                                                onclick="$('.modal-close').trigger('click')"><span
+                                                                    class="icon icon-btn-in"><i
+                                                                        data-feather="x"></i></span>Cancel
+                                                            </a>
+                                                        </p>
+
+                                                        <script>
+                                                            $('#delete_trans_confirm_{{loop.index}}').on('click', function () {
+                                                                var req = $.ajax({
+                                                                    method: "POST",
+                                                                    url: "{{ url_for('delete_trans' , trans_id = row.id) }}",
+                                                                });
+                                                                req.done(function (mssg) {
+                                                                    $('#data_{{row.id}}').remove().fadeOut();
+                                                                    $('.modal-close').trigger('click')
+
+                                                                })
+                                                            })
+                                                        </script>
+
+                                                    </div>
+                                                </div>
+                                                <button class="modal-close is-large" aria-label="close"></button>
+
+                                            </div>
+                                            <script>
+                                                document.querySelector('#delete_trans_{{loop.index}}').addEventListener('click', function (event) {
+                                                    event.preventDefault();
+                                                    var modal = document.querySelector('#delete_trans_modal_{{loop.index}}');  // assuming you have only 1
+                                                    var html = document.querySelector('html');
+                                                    modal.classList.add('is-active');
+                                                    html.classList.add('is-clipped');
+
+                                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                                        e.preventDefault();
+                                                        modal.classList.remove('is-active');
+                                                        html.classList.remove('is-clipped');
+                                                    });
+
+                                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                                        e.preventDefault();
+                                                        modal.classList.remove('is-active');
+                                                        html.classList.remove('is-clipped');
+
+
+                                                    });
+
+                                                });
+
+                                            </script>
+
+                                        </div>
+                                    </div>
+                            </td>
+
+                        </tr>
                         <script>
-                            $('#close_btn_trans_b').click(function (e) {
-                                e.preventDefault();
+                            $(document).ready(function () {
+                                $.getJSON("{{url_for('trans_a_api' ,trans_id = row.id)}}", function (result) {
 
-                                var payload = { 'pp_num': $('#pp_sel').val() };
+                                    var part_a = $.parseJSON(result['trans_data']['part_a']);
 
-                                $.ajax({
-                                    url: "{{url_for('close_trans')}}",
-                                    type: 'POST',
-                                    data: JSON.stringify(payload),
-                                    contentType: 'application/json; charset=utf-8',
-                                    dataType: 'json',
-                                    async: true,
-                                    success: function (msg) {
-                                        window.location.href = "{{url_for('trans_b')}}";
+                                    // Prod Sel
+                                    $.getJSON('/get/fin_product/' + part_a['prod_sel'], function (result) {
+                                        $('#order_name_{{loop.index}}').html(result).hide().fadeIn();
+
+                                    });
+
+                                    $('#start_{{loop.index}}').html(part_a['start-dates']).hide().fadeIn();
+
+
+                                    $('#target_{{loop.index}}').html(part_a['target-dates']).hide().fadeIn();
+
+
+                                })
+                            });
+
+                        </script>
+                        <script>
+                            $(document).ready(function () {
+
+                                // Loading Managerment 
+                                // var loaded = [];
+
+                                $('#trans_b_form_view_{{row.id}}').click(function (e) {
+                                    e.preventDefault();
+                                    // var pp_num = $('#pp_sel').val();
+
+                                    $.getJSON("/get/trans_pp_b?pp_num={{row.id}}", function (result) {
+                                        $('.trans_b_id_set').html('{{ row.id }}');
+                                        
+                                        
+                                        console.log(result)
+                                        if ($.isEmptyObject(result)) {
+
+                                            $('#show_noti').show();
+                                            $('.tracking_data').show();
+                                            $('#trans_b_form').trigger("reset");
+                                            $('#form_b_table').hide();
+                                            $('#trans_view_b').fadeIn();
+                                            $('#trans_b_meta').fadeIn();
+
+
+
+                                        }
+                                        else {
+                                            $('#show_noti').hide();
+                                            $('#form_b_table').hide();
+                                            $('.tracking_data').show();
+                                            $('#trans_view_b').fadeIn();
+                                            $('#trans_view_a').show();
+                                            $('#trans_b_meta').fadeIn();
+
+
+
+
+                                            var extra_fld = Object.keys(result['fg_dept_datefilter']).length;
+                                            var extra_fld_cut = Object.keys(result['cut_datefilter']).length;
+                                            var extra_fld_sth = Object.keys(result['sth_datefilter']).length;
+
+                                            var extra_fld_val = Object.keys(result['val_datefilter']).length;
+                                            var extra_fld_kaj = Object.keys(result['kaj_datefilter']).length;
+                                            var extra_fld_tes = Object.keys(result['tes_datefilter']).length;
+                                            var extra_fld_thr = Object.keys(result['thr_datefilter']).length;
+                                            var extra_fld_qc = Object.keys(result['qc_datefilter']).length;
+
+                                            var extra_fld_pre = Object.keys(result['pre_datefilter']).length;
+                                            var extra_fld_tag = Object.keys(result['tag_datefilter']).length;
+                                            var extra_fld_tra = Object.keys(result['tra_datefilter']).length;
+
+                                            // , loaded) === -1
+                                            // if ($.inArray('{{ row.id }}') {
+                                                for (i = 1; i < extra_fld; i++) {
+                                                    $("#add_field_button_fg").trigger('click');
+                                                }
+
+
+                                                for (i = 1; i < extra_fld_cut; i++) {
+                                                    $("#add_field_button_cut").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_sth; i++) {
+                                                    $("#add_field_button_sth").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_val; i++) {
+                                                    $("#add_field_button_val").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_kaj; i++) {
+                                                    $("#add_field_button_kaj").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_tes; i++) {
+                                                    $("#add_field_button_tes").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_thr; i++) {
+                                                    $("#add_field_button_thr").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_qc; i++) {
+                                                    $("#add_field_button_qc").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_pre; i++) {
+                                                    $("#add_field_button_pre").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_tag; i++) {
+                                                    $("#add_field_button_tag").trigger('click');
+                                                }
+                                                for (i = 1; i < extra_fld_tra; i++) {
+                                                    $("#add_field_button_tra").trigger('click');
+                                                }
+                                                // loaded.push('{{ row.id }}');
+                                        // }
+                                            
+                                            populate('#trans_b_form', json2html_name_list(result));
+
+                                            function formattedData(data) {
+                                                dataarr = []
+
+                                                // console.log(data)
+                                                try{
+                                                var check_data = JSON.parse(data)
+                                                }
+                                                catch(err){
+                                                    console.log("Random JSON error")
+                                                    check_data = data
+                                                }
+                                                
+                                                // console.log("PArsed JSON")
+                                                // console.log(check_data)
+                                                var action_key = ""
+
+                                                
+                                                if (check_data.hasOwnProperty("$replace")){
+                                                    action_key= "Addded"
+                                                    check_data = check_data["$replace"]
+                                                }
+                                                if (check_data.hasOwnProperty("$delete")){
+                                                    action_key= "Deleted"
+                                                    check_data = check_data["$delete"]
+                                                }
+                                                if(check_data.hasOwnProperty("")){
+                                                    check_data = check_data[""]
+                                                    action_key = "Added"
+                                                }
+                                                else{
+                                                    action_key = "Added"
+
+                                                }
+                                                new_data = json2html_name_list(check_data)
+
+                                                
+
+                                                $.each(new_data, function (k, v) {
+
+                                                    if (k.toString().includes("cut") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("sth") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Stitching #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("val") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Value Addn #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("kaj") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Kaj-Button #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("tes") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Test Checking #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("thr") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Thread Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("qc") && v != "") {
+                                                        dataarr.push(action_key+ "Q.C #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+
+                                                    if (k.toString().includes("pre") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Press #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                    if (k.toString().includes("tag") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Tag/Pack #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                    if (k.toString().includes("tra") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                    if (k.toString().includes("fg") && v != "") {
+                                                        dataarr.push( "<strong>"+action_key+"</strong> Detail Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                })
+                                                return dataarr;
+                                            }
+
+                                            $.getJSON("/get/trans_pp/meta?pp_num={{row.id}}", function (result) {
+                                                $(result).each(function (index, value) {
+                                                    // console.log(index , value["diff"])
+                                                    var formatted_data = formattedData(value["diff"])
+                                                    $('#meta_view_content').append($('<tr>')
+                                                        .append($('<td>').append(value["username"]))
+                                                        .append($('<td>').append(moment(value["timestamp"], "YYYY-MM-DD HH:mm:ssZZ").local().format("LLL")))
+                                                        .append($('<td>').append($("<p>").append(formatted_data                                                        
+                                                        ))
+
+                                                    )
+                                                )})
+
+                                            })
+
+
+                                        }
+
+
+
+                                    })
+
+                                    // Fucnction for JSON to html fillups
+
+                                    function json2html_name_list(json, result, parent) {
+                                        if (!result) result = {};
+                                        if (!parent) parent = '';
+                                        if ((typeof json) != 'object') {
+                                            result[parent] = json;
+                                        } else {
+                                            for (var key in json) {
+                                                var value = json[key];
+                                                if (parent == '') var subparent = key;
+                                                else var subparent = parent + '[' + key + ']';
+                                                result = json2html_name_list(value, result, subparent);
+                                            }
+                                        }
+                                        return result;
                                     }
-                                });
 
+                                    //  Populates all the fields
+
+                                    function populate(frm, data) {
+                                        $.each(data, function (key, value) {
+                                            $('[name="' + key + '"]', frm).val(value);
+                                        });
+                                    }
+
+                                })
                             });
                         </script>
-                    </div>
-                    <hr>
-
-                </form>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
+            {% endif %}
 
         </div>
+
     </div>
 </div>
 
@@ -437,7 +1840,6 @@
         var x = 0; //initlal text box count
         var y = 11; // datefilter count
         $(add_button_fg).click(function (e) { //on add input button click
-            console.log("clicked")
             e.preventDefault();
             if (x < max_fields) { //max input box allowed
                 x++; //text box increment
@@ -450,7 +1852,7 @@
                                 <div class="field-body">
                                     <div class="field">
                                         <div class="control has-icons-left">
-                                            <input class="input" name="datefilter[`+ y + `]" value="">
+                                            <input class="input" name="fg_dept_datefilter[`+ x + `]" value="">
                                             <span class="icon is-small is-left">
                                                 <i data-feather="calendar"></i>
                                             </span>
@@ -543,10 +1945,14 @@
 
             }
 
+            // Date filter init after addition
+
             $(function () {
 
-                $('input[name*="datefilter"]').daterangepicker({ "locale": {
-        "format": "DD/MM/YYYY"} ,
+                $('input[name*="datefilter"]').daterangepicker({
+                    "locale": {
+                        "format": "MM/DD/YYYY"
+                    },
                     singleDatePicker: true,
                     autoUpdateInput: false,
                     locale: {
@@ -578,25 +1984,27 @@
 
     $(function () {
 
-        $('input[name*="datefilter"]').daterangepicker({ "locale": {
-        "format": "DD/MM/YYYY"} ,
-                    singleDatePicker: true,
-                    autoUpdateInput: false,
-                    locale: {
-                        cancelLabel: 'Clear'
-                    }
-                });
+        $('input[name*="datefilter"]').daterangepicker({
+            "locale": {
+                "format": "DD/MM/YYYY"
+            },
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
 
-                $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-                    $(this).val(picker.startDate.format('DD/MM/YYYY'));
-                });
+        $('input[name*="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY'));
+        });
 
-                $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
-                    $(this).val('');
-                });
+        $('input[name*="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
 
 
-     
+
     });
 </script>
 
@@ -606,24 +2014,126 @@
         e.preventDefault();
 
         var formdata = $("#trans_b_form").serializeJSON();
-
-
-        console.log(formdata);
-
-        var payload = { 'pp_num': $('#pp_sel').val(), 'data': formdata };
+        var payload = { 'pp_num': $('.trans_b_id_set').html(), 'data': formdata };
 
         $.ajax({
-            url: "{{url_for('trans_b')}}",
+            url: "{{url_for('trans_b_user')}}",
             type: 'POST',
             data: JSON.stringify(payload),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             async: true,
             success: function (msg) {
-                window.location.href = "{{url_for('trans_b')}}";
+                window.location.href = "{{url_for('trans_b_user')}}";
             }
         });
 
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('input[name*="dates"]').attr('autocomplete', 'off');
+
+        $('input[name*="dates"]').daterangepicker({
+            "locale": {
+                "format": "DD/MM/YYYY"
+            },
+            buttonClasses: 'button',
+            applyButtonClasses: 'is-black',
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+
+        $('input[name*="dates"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
+        });
+
+        $('input[name*="dates"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
+        $('#filter_update').click(function () {
+            var st_date = $('input[name="start-dates"]').val().split("-");
+            var st_dt_0 = moment(st_date[0], "DD/MM/YYYY");
+            var st_dt_1 = moment(st_date[1], "DD/MM/YYYY");
+
+            var tr_date = $('input[name="target-dates"]').val().split("-");
+            var tr_dt_0 = moment(tr_date[0], "DD/MM/YYYY");
+            var tr_dt_1 = moment(tr_date[1], "DD/MM/YYYY");
+
+            // var dates
+            // compareDate.isBetween(startDate, endDate); //false in this case
+
+
+            function onlyStart() {
+                $('[id*=start]').each(function () {
+                    var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    if (dt.isBetween(st_dt_0, st_dt_1) !== true) {
+                        $(this).parent().fadeOut();
+                    }
+
+
+                })
+            }
+
+            function onlyTarget() {
+                $('[id*=target]').each(function () {
+                    var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    if (dt.isBetween(tr_dt_0, tr_dt_1) !== true) {
+                        $(this).parent().fadeOut();
+                    }
+
+
+                })
+            }
+
+            if ($('input[name="target-dates"]').val() === "") {
+                onlyStart()
+
+            }
+
+            if ($('input[name="start-dates"]').val() === "") {
+                onlyTarget()
+            }
+
+            if ($('input[name="start-dates"]').val() !== "" && $('input[name="target-dates"]').val() !== "") {
+
+                onlyStart();
+                onlyTarget();
+
+
+            }
+        })
+
+        $('#filter_reset').click(function () {
+            $('input[name="start-dates"]').val("");
+            $('input[name="target-dates"]').val("");
+
+            $('[id*=start]').each(function () {
+                $(this).parent().fadeIn();
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        if ("{{view}}" === "true") {
+            // Construct URL object using current browser URL
+            var url = new URL(document.location);
+            // Get query parameters object
+            var params = url.searchParams;
+
+            // Get value of paper
+            var selView = params.get("view");
+
+            $('#trans_b_form_view_{{trans_num}}').trigger('click');
+
+        }
+        else {
+            $('#form_b_table').show();
+        }
     });
 </script>
 {% endblock %}

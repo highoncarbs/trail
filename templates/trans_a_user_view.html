@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_user.html' %}
 {% block content %}
 
 
@@ -18,12 +18,12 @@
                 </div>
                 <div class="level-right">
                     <div class="field is-grouped">
-                        <div class="control">
+                        <!-- <div class="control">
                             <a class=" button is-black" id="edit_form"><span class="icon icon-btn-in"><i
                                         data-feather="edit-2"></i></span>Edit</a>
-                        </div>
+                        </div> -->
                         <div class="control">
-                            <a href="{{ url_for('trans_b_view_by_id' , trans_id = pp_num )}}" class=" button is-black"
+                            <a href="{{ url_for('trans_b_user_view' , trans_id = pp_num )}}" class=" button is-black"
                                 id="trans_b_btn"><span class="icon icon-btn-in"><i data-feather="eye"></i></span>View -
                                 Part B</a>
                         </div>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="control">
 
-                            <a href="{{ url_for('trans_a_view')}}" class=" button is-black"><span
+                            <a href="{{ url_for('trans_a_user')}}" class=" button is-black"><span
                                     class="icon icon-btn-in"><i data-feather="corner-up-left"></i></span>Back</a>
                         </div>
                     </div>
@@ -93,13 +93,7 @@
                                                 Object.values(result)[i], '</option>');
                                         }
                                         $("#prod_sel").html(options.join(''));
-                                        // $("#prod_sel").prop("selectedIndex", 0);
-
-                                        // var pp_sel = $("#prod_sel").val()
-                                        // $.getJSON("/get/uom/" + pp_sel, function (result) {
-                                        //     console.log(result)
-                                        //     $("#prod_uom").val(result);
-                                        // });
+                                       
 
                                     });
                                 })
@@ -401,12 +395,7 @@
                                                     Object.values(result)[j], '</option>');
                                             }
                                             $(".acc_selector").html(options.join(''));
-                                            // $(".acc_selector").prop("selectedIndex", 0);
-                                            // var pp_sel = $("select[name='acc_sel[0]']").val()
-
-                                            // $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
-                                            //     $("input[name='acc_sel_uom[0]']").val(result);
-                                            // });
+                                         
                                         });
 
                                     })
@@ -528,18 +517,18 @@
                             {% endif %}
                         </div>
                         <br>
-                        <div id="drag-drop-area" style="display:none;">
+                        <!-- <div id="drag-drop-area" style="display:none;">
                         </div>
                         <script>
                             var uppy = Uppy.Core({ autoProceed: false })
                             var pp_num = '{{pp_num}}'
                             uppy.use(Uppy.Dashboard, { target: '#drag-drop-area', inline: true, width: '100%', height: 100 })
                             uppy.use(Uppy.XHRUpload, { endpoint: '/trans_a/uploads/' + pp_num, formData: true, method: 'POST', fieldName: 'files[]' })
-                        </script>
+                        </script> -->
 
 
                         <hr>
-                        <div class="field is-grouped">
+                        <!-- <div class="field is-grouped">
                             <div class="control">
                                 <button id="submit_btn_trans_a" class="button is-black"><span
                                         class="icon icon-btn-in"><i data-feather="check"></i></span>Save</button>
@@ -550,7 +539,7 @@
                                 <a class="button is-text">Clear Fields</a>
                             </div>
 
-                        </div>
+                        </div> -->
 
                     </form>
                 </div>
@@ -565,7 +554,7 @@
 <br>
 <br>
 
-<script>
+<!-- <script>
 
     // Submit Save form
 
@@ -589,7 +578,7 @@
         });
 
     });
-</script>
+</script> -->
 <script>
 
 
@@ -604,13 +593,13 @@
         var edit = params.get("edit");
         var semi = params.get("semi");
 
-        $('#edit_form').click(function () {
-            $("#trans_a_form_id :input").prop("disabled", false);
-            $("#drag-drop-area").fadeIn();
-            $("#edit_form").addClass('is-static');
-            $('.add_flds').fadeIn();
-            $('.remove_field').removeClass('is-static');
-        })
+        // $('#edit_form').click(function () {
+        //     $("#trans_a_form_id :input").prop("disabled", false);
+        //     $("#drag-drop-area").fadeIn();
+        //     $("#edit_form").addClass('is-static');
+        //     $('.add_flds').fadeIn();
+        //     $('.remove_field').removeClass('is-static');
+        // })
 
 
         // Datepicker Script 
@@ -1187,30 +1176,30 @@
 
     });
 
-    $('#save_trans_a').click(function (e) {
-        e.preventDefault();
+    // $('#save_trans_a').click(function (e) {
+    //     e.preventDefault();
 
-        var get_data = $.Deferred();
-        var data = $("#trans_a_form").serializeJSON();
-        get_data.resolve();
-        console.log(data);
-        get_data.done(function () {
-            $.ajax({
-                url: "{{url_for('save_trans')}}",
-                type: 'POST',
-                data: JSON.stringify(data),
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                async: false,
-                success: function (msg) {
-                    console.log("Saved state");
-                }
-            });
+    //     var get_data = $.Deferred();
+    //     var data = $("#trans_a_form").serializeJSON();
+    //     get_data.resolve();
+    //     console.log(data);
+    //     get_data.done(function () {
+    //         $.ajax({
+    //             url: "{{url_for('save_trans')}}",
+    //             type: 'POST',
+    //             data: JSON.stringify(data),
+    //             contentType: 'application/json; charset=utf-8',
+    //             dataType: 'json',
+    //             async: false,
+    //             success: function (msg) {
+    //                 console.log("Saved state");
+    //             }
+    //         });
 
-        })
+    //     })
 
 
 
-    });
+    // });
 </script>
 {% endblock %}

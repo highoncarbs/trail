@@ -219,7 +219,7 @@ def trans_a():
                 return jsonify("success")
         else:
             payload = json.dumps(request.json)
-            new_trans = Trans(part_a = payload , part_b = "{}")
+            new_trans = Trans(part_a = payload , part_b = "{}" )
             db.session.add(new_trans)
             db.session.commit()
             session['mssg'] = "Transaction - Part A with PP No. " + str(new_trans.id)+ " has been added."
@@ -282,6 +282,26 @@ def trans_a_view_by_id(trans_id):
 
     return render_template('trans_a_view_id.html' , pp_num = trans_id , mssg = session['mssg'] , img_list = img_list) , 200
 
+@app.route('/trans_a_user_view/<trans_id>', methods=['GET', 'POST'])
+@login_required
+def trans_a_user_view(trans_id):
+    pp_num = db.session.query(Trans).filter_by(id= int(trans_id)).all()
+    trans_schema = TransSchema()
+    res = trans_schema.dump(pp_num).data
+    print(res)
+    img_list = []
+    UPLOAD_FOLDER = os.path.abspath('./static/images/uploads/'+str(trans_id))
+    if not os.path.exists(UPLOAD_FOLDER):
+        pass
+    else:
+        for r , d ,f in os.walk(UPLOAD_FOLDER):
+            print(r ,d ,f)
+            for file in f:
+                img_list.append(str(trans_id)+'/'+str(file))
+        print(img_list)
+
+    return render_template('trans_a_user_view.html' , pp_num = trans_id , mssg = session['mssg'] , img_list = img_list) , 200
+
 
 from model import TransSchema
 
@@ -309,13 +329,30 @@ def trans_b():
     
     pp_num = db.session.query(Trans).filter_by(flag = 0 ).all()
     if request.method == "POST":
-        payload = request.json
-        pp_num = db.session.query(Trans).filter_by(id = int(payload['pp_num'])).first()
-        dump = json.dumps(payload['data'])
-        pp_num.part_b = dump  
-        db.session.commit()
-        session['mssg'] = "Transaction - Part B with PP No. " + str( pp_num.id) + " has been added."
-        return jsonify("success")
+        try:
+            payload = request.json
+            pp_num = db.session.query(Trans).filter_by(id = int(payload['pp_num'])).first()
+            update_obj = {}
+            old_obj = json.loads(pp_num.part_b)
+            new_obj = payload['data']
+            update_obj["username"] = current_user.username
+            update_obj["diff"] = json.dumps(diff(old_obj , new_obj , marshal = True) )
+            update_obj["timestamp"] = str(moment.utcnow())
+            dump = json.dumps(payload['data'])
+            pp_num.part_b = dump  
+            if len(pp_num.meta) is 0 :
+                meta = []
+                meta.append(update_obj)
+                pp_num.meta = json.dumps(meta)
+            else:
+                temp_meta = json.loads(pp_num.meta)
+                temp_meta.append(update_obj)
+                pp_num.meta = json.dumps(temp_meta)
+            db.session.commit()
+            session['mssg'] = "Transaction - Part B with PP No. " + str( pp_num.id) + " updated."
+            return jsonify("success")
+        except Exception as e:
+            print(str(e))
     return render_template('trans_b.html' ,open_trans = pp_num , mssg = session['mssg']) ,200
 
 
@@ -326,39 +363,52 @@ def trans_b():
 @app.route('/trans_a_user', methods=['GET', 'POST'])
 @login_required
 def trans_a_user():
-    pp_num = db.session.query(Trans).all()
-    if len(pp_num) is 0:
-        pp_new = int(1)
-    else:
-        pp_new = int(pp_num[-1].id) + 1
+    pp_num = db.session.query(Trans).filter_by(flag= int(0)).all()
 
-    if request.method == "POST":
-        print(request.json)
-        payload = json.dumps(request.json)
-        new_trans = Trans(part_a = payload , part_b = "{}")
-        db.session.add(new_trans)
-        db.session.commit()
-        session['mssg'] = "Transaction - Part A with PP No. " + str(new_trans.id)+ " has been added."
-        return jsonify("success")
-    return render_template('trans_a_user.html' , pp_num = pp_new , mssg = session['mssg']) ,200
+    return render_template('trans_a_user.html' , open_trans = pp_num , mssg = session['mssg']) , 200
 
 
+from jsondiff import diff 
+import moment
 
 @app.route('/trans_b_user', methods=['GET', 'POST'])
 @login_required
 def trans_b_user():
     
-    pp_num = db.session.query(Trans).all()
+    pp_num = db.session.query(Trans).filter_by(flag = 0 ).all()
     if request.method == "POST":
-        print(request.json)
         payload = request.json
         pp_num = db.session.query(Trans).filter_by(id = int(payload['pp_num'])).first()
+        update_obj = {}
+        old_obj = json.loads(pp_num.part_b)
+        new_obj = payload['data']
+        update_obj["username"] = current_user.username
+        update_obj["diff"] = diff(old_obj , new_obj)
+        update_obj["timestamp"] = str(moment.utcnow())
         dump = json.dumps(payload['data'])
         pp_num.part_b = dump  
+        if len(pp_num.meta) is 0 :
+            meta = []
+            meta.append(update_obj)
+            pp_num.meta = json.dumps(meta)
+        else:
+            temp_meta = json.loads(pp_num.meta)
+            temp_meta.append(update_obj)
+            pp_num.meta = json.dumps(temp_meta)
         db.session.commit()
-        session['mssg'] = "Transaction - Part B with PP No. " + str( pp_num.id) + " has been added."
+        session['mssg'] = "Transaction - Part B with PP No. " + str( pp_num.id) + " updated."
         return jsonify("success")
-    return render_template('trans_b_user.html' , mssg = session['mssg']) ,200    
+    return render_template('trans_b_user.html' ,open_trans = pp_num , mssg = session['mssg']) ,200
+
+@app.route('/trans_b_user/view/<trans_id>' , methods = ['POST' , 'GET'])
+@login_required
+def trans_b_user_view(trans_id):
+    all_num = db.session.query(Trans).filter_by(flag = 0 ).all()
+
+    pp_num = db.session.query(Trans).filter_by(id = int(trans_id)).first()
+    view = 'true'
+    return render_template('trans_b_user.html' ,open_trans = all_num , trans_num = pp_num.id , mssg = session['mssg'] , view = view) ,200
+
 
 # Basic Master Views
 #
@@ -2080,6 +2130,16 @@ def get_detail_pp():
     res = db.session.query(Trans).filter_by(id = str(pp_num)).first()
 
     payload = json.loads(res.part_b)
+    return jsonify(payload)
+
+
+@app.route('/get/trans_pp/meta' , methods=["GET"])
+@login_required 
+def get_meta_pp():
+    pp_num = request.args.get('pp_num')
+    res = db.session.query(Trans).filter_by(id = str(pp_num)).first()
+
+    payload = json.loads(res.meta)
     return jsonify(payload)
 
 
