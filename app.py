@@ -833,7 +833,7 @@ def pcat_delete(id):
             return redirect('/finished_goods?showTab=1&view=list')
         else:
             session['mssg'] = "Cannot delete. Value is being used."
-            return redirect('/raw_materials?showTab=1&view=list')
+            return redirect('/finished_goods?showTab=1&view=list')
     else:
         session['mssg'] = "Something went wrong."
         return redirect('/finished_goods?showTab=1&view=list')
@@ -923,7 +923,7 @@ def tech_delete(id):
             return redirect('/finished_goods?showTab=3&view=list')
         else:
             session['mssg'] = "Cannot delete. Value is being used."
-            return redirect('/raw_materials?showTab=3&view=list')
+            return redirect('/finished_goods?showTab=3&view=list')
     else:
         session['mssg'] = "Something went wrong."
         return redirect('/finished_goods?showTab=3&view=list')
