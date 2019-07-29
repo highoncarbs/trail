@@ -878,7 +878,7 @@ def comb_delete(id):
             return redirect('/finished_goods?showTab=2&view=list')
         else:
             session['mssg'] = "Cannot delete. Value is being used."
-            return redirect('/raw_materials?showTab=2&view=list')
+            return redirect('/finished_goods?showTab=2&view=list')
     else:
         session['mssg'] = "Something went wrong."
         return redirect('/finished_goods?showTab=2&view=list')
