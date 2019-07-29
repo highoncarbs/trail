@@ -100,10 +100,11 @@ def forgot():
     return render_template('login.html', subtitle="Forgot", mssg=session['mssg']), 200
 
 
-@app.route('/user_home' , methods = ['GET' , 'POST'])
+@app.route('/user/home' , methods = ['GET' , 'POST'])
 @login_required
 def user_home():
-    return render_template('base_user.html') , 200
+    trans_list = db.session.query(Trans).filter( Trans.flag != 2).all()
+    return render_template('dash_user.html' , trans_list = trans_list) , 200
 
 @app.route('/', methods=['GET', 'POST'])
 @login_required
@@ -113,7 +114,7 @@ def home():
 
 from model import Role , UserForm
 
-@app.route('/user-roles', methods=['GET', 'POST'])
+@app.route('/user/roles', methods=['GET', 'POST'])
 @login_required
 def user_roles():
 

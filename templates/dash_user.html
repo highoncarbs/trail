@@ -1,0 +1,342 @@
+{% extends  'base_user.html' %}
+{% block content %}
+<div class="section">
+    <div class="container">
+        <div class="columns is-centered animated fadeIn">
+            <div class="column">
+                <nav class="level is-mobile">
+                    <div class="level-left">
+
+                        <div class="level-item">
+                            <p class="is-size-5 robo">
+                                Reports</p>
+                        </div>
+                    </div>
+
+                </nav>
+
+                <hr>
+
+                <div class="field is-grouped is-grouped-multiline" id="filter_box">
+                    <div class="control">
+                        <div class="buttons has-addons" id="status_select">
+                            <span class="button st_sel is-black is-selected">All</span>
+                            <span class="button st_sel">Open</span>
+                            <span class="button st_sel">Closed</span>
+                        </div>
+                    </div>
+                    <script>
+                        $("#status_select").children().each(function () {
+                            $(this).click(function () {
+                                $(".st_sel").removeClass("is-black is-selected");
+                                $(this).addClass("is-black is-selected");
+                                if ($(".is-selected")[0].innerText == "Open") {
+                                    $(".xtable tbody tr").each(function (index, value) {
+                                        $(this).fadeIn();
+                                        if ($(this).children()[1].innerHTML != 0) {
+                                            $(this).fadeOut();
+                                        };
+
+
+
+                                    })
+                                }
+
+                                if ($(".is-selected")[0].innerText == "All") {
+                                    $(".xtable tbody tr").each(function (index, value) {
+
+                                        $(this).fadeIn();
+
+
+
+                                    })
+                                }
+
+                                if ($(".is-selected")[0].innerText == "Closed") {
+                                    $(".xtable tbody tr").each(function (index, value) {
+                                        $(this).fadeIn();
+                                        if ($(this).children()[1].innerHTML != 1) {
+                                            $(this).fadeOut();
+                                        };
+
+
+
+                                    })
+                                }
+
+                            })
+                        })
+                    </script>
+
+                    <div class="control has-icons-left">
+                        <input class="input" name="start-dates" placeholder="Start Date" value="">
+                        <span class="icon is-small is-left">
+                            <i data-feather="calendar"></i>
+                        </span>
+                    </div>
+
+                    <div class="control has-icons-left">
+                        <input class="input" name="target-dates" placeholder="Target Date" value="">
+                        <span class="icon is-small is-left">
+                            <i data-feather="calendar"></i>
+                        </span>
+                    </div>
+
+                    <div class="control">
+                        <button id="filter_update" class=" button is-black"><span class="icon icon-btn-in"><i
+                                    data-feather="filter"></i></span>Filter</button>
+                    </div>
+
+                    <div class="control">
+                        <button id="filter_reset" class=" button "><span class="icon icon-btn-in"><i
+                                    data-feather="x"></i></span>Clear Filter</button>
+                    </div>
+                </div>
+                <hr>
+
+                {% if trans_list|length == 0 %}
+                <div class="empty has-text-centered has-text-grey-light">
+                    <span class="icon"><i data-feather="info"></i></span><br>
+                    <p>No Transactions available. <br> Create a new one.</p>
+                    <hr>
+                </div>
+                {% else %}
+
+                <div class="xtable table-container">
+                    <table class="table is-fullwidth is-hoverable">
+                        <thead>
+                            <th>Order No.</th>
+                            <th hidden>status</th>
+                            <th>Start Date</th>
+                            <th>Product</th>
+                            <th>Prog. Qty</th>
+                            <th>U.O.M</th>
+                            <th>Prog. By</th>
+                            <th>Cut Qty</th>
+                            <th>Stitch Qty</th>
+                            <th>Val Addn Qty</th>
+                            <th>Kaj-Btn Qty</th>
+                            <th>Thread Cut Qty</th>
+                            <th>Final Check Qty</th>
+                            <th>Press Qty</th>
+                            <th>Tag/Pack Qty</th>
+                            <th>Tansfer to F.G Dept. Qty</th>
+
+
+
+                            <th>Actions</th>
+                        </thead>
+                        <tbody>
+                            {% for row in trans_list %}
+                            <tr id="data_{{row.id}}">
+                                <td class="robo"><span class="icon icon-btn has-text-grey" style="padding:3px;"><i
+                                            data-feather="hash"></i></span>{{ row.id }}</td>
+                                <td hidden id="status_{{row.id}}">{{ row.flag}}</td>
+                                <td id="start_{{loop.index}}"></td>
+                                <td id="order_name_{{loop.index}}"></td>
+                                <td id="prog_qty_{{loop.index}}"></td>
+                                <td id="uom_{{loop.index}}"></td>
+                                <td id="prog_by_{{loop.index}}"></td>
+                                <td id="cut_{{loop.index}}"></td>
+                                <td id="stitch_{{loop.index}}"></td>
+                                <td id="val_add_{{loop.index}}"></td>
+                                <td id="kaj_{{loop.index}}"></td>
+                                <td id="thread_{{loop.index}}"></td>
+                                <td id="final_{{loop.index}}"></td>
+                                <td id="press_{{loop.index}}"></td>
+                                <td id="tag_{{loop.index}}"></td>
+                                <td id="transfer_{{loop.index}}"></td>
+
+
+                                <td>
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            <a href="{{ url_for('trans_a_user_view' , trans_id = row.id)}}"
+                                                class="button is-small"><span class="icon icon-btn-in-x"><i
+                                                        data-feather="eye"></i></span>
+                                            </a>
+                                        </div>
+                                        <!-- <div class="control">
+                                            <a href="{{ url_for('trans_a_user_view' , trans_id = row.id , edit= True)}}"
+                                                id="edit_fin_btn_{{loop.index}}" class="button is-small"><span
+                                                    class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                            </a>
+                                        </div> -->
+                                        <!-- <div class="control">
+                                            <a id="edit_fin_btn_{{loop.index}}" class="button is-small"><span
+                                                    class="icon icon-btn-in-x"><i data-feather="printer"></i></span>
+                                            </a>
+                                        </div> -->
+                                      
+                                </td>
+
+                            </tr>
+                            <script>
+                                $(document).ready(function () {
+                                    $.getJSON("{{url_for('trans_a_api' ,trans_id = row.id)}}", function (result) {
+
+                                        var part_a = $.parseJSON(result['trans_data']['part_a']);
+                                        var part_b = $.parseJSON(result['trans_data']['part_b']);
+                                        console.log(part_b)
+                                        // Prod Sel
+                                        $.getJSON('/get/fin_product/' + part_a['prod_sel'], function (result) {
+                                            console.log(result);
+                                            $('#order_name_{{loop.index}}').html(result).hide().fadeIn();
+
+                                        });
+
+                                        $('#start_{{loop.index}}').html(part_a['start-dates']).hide().fadeIn();
+
+                                        $('#prog_qty_{{loop.index}}').html(part_a['prog_qty']).hide().fadeIn();
+                                        $('#uom_{{loop.index}}').html(part_a['prod_uom']).hide().fadeIn();
+
+
+                                        $('#prog_by_{{loop.index}}').html(part_a['prog_by']).hide().fadeIn();
+
+                                        var cut_qty = 0;
+                                        $.each(part_b["cut_qty"], function (index, value) { cut_qty += parseFloat(value) || 0 })
+                                        $("#cut_{{loop.index}}").html(cut_qty).hide().fadeIn();
+
+                                        var stitch_qty = 0;
+                                        $.each(part_b["sth_qty"], function (index, value) { stitch_qty += parseFloat(value) || 0 })
+                                        $("#stitch_{{loop.index}}").html(stitch_qty).hide().fadeIn();
+
+                                        var val_qty = 0;
+                                        $.each(part_b["val_qty"], function (index, value) { val_qty += parseFloat(value) || 0 })
+                                        $("#val_add_{{loop.index}}").html(val_qty).hide().fadeIn();
+
+                                        var kaj_qty = 0;
+                                        $.each(part_b["kaj_qty"], function (index, value) { kaj_qty += parseFloat(value) || 0 })
+                                        $("#kaj_{{loop.index}}").html(kaj_qty).hide().fadeIn();
+
+                                        var thr_qty = 0;
+                                        $.each(part_b["thr_qty"], function (index, value) { thr_qty += parseFloat(value) || 0 })
+                                        $("#thread_{{loop.index}}").html(thr_qty).hide().fadeIn();
+
+                                        var tes_qty = 0;
+                                        $.each(part_b["tes_qty"], function (index, value) { tes_qty += parseFloat(value) || 0 })
+                                        $("#final_{{loop.index}}").html(tes_qty).hide().fadeIn();
+
+                                        var pre_qty = 0;
+                                        $.each(part_b["pre_qty"], function (index, value) { pre_qty += parseFloat(value) || 0 })
+                                        $("#press_{{loop.index}}").html(pre_qty).hide().fadeIn();
+
+                                        var tag_qty = 0;
+                                        $.each(part_b["tag_qty"], function (index, value) { tag_qty += parseFloat(value) || 0 })
+                                        $("#tag_{{loop.index}}").html(tag_qty).hide().fadeIn();
+
+
+                                        var tra_qty = 0;
+                                        $.each(part_b["tra_qty"], function (index, value) { tra_qty += parseFloat(value) || 0 })
+                                        $("#transfer_{{loop.index}}").html(tra_qty).hide().fadeIn();
+
+                                    })
+                                });
+
+
+                            </script>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+    <script>
+        $(document).ready(function () {
+            $('input[name*="dates"]').attr('autocomplete', 'off');
+
+            $('input[name*="dates"]').daterangepicker({
+                "locale": {
+                    "format": "DD/Month/YYYY"
+                },
+                buttonClasses: 'button',
+                applyButtonClasses: 'is-black',
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            $('input[name*="dates"]').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
+            });
+
+            $('input[name*="dates"]').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+            });
+
+
+
+            $('#filter_update').click(function () {
+                var st_date = $('input[name="start-dates"]').val().split("-");
+                var st_dt_0 = moment(st_date[0], "DD/MM/YYYY");
+                var st_dt_1 = moment(st_date[1], "DD/MM/YYYY");
+
+                var tr_date = $('input[name="target-dates"]').val().split("-");
+                var tr_dt_0 = moment(tr_date[0], "DD/MM/YYYY");
+                var tr_dt_1 = moment(tr_date[1], "DD/MM/YYYY");
+
+                // var dates
+                // compareDate.isBetween(startDate, endDate); //false in this case
+
+
+                function onlyStart() {
+                    $('[id*=start]').each(function () {
+                        var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                        console.log(dt._i);
+                        if (dt.isBetween(st_dt_0, st_dt_1) !== true) {
+                            $(this).parent().fadeOut();
+                        }
+
+
+                    })
+                }
+
+                function onlyTarget() {
+                    $('[id*=target]').each(function () {
+                        var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                        console.log(dt._i);
+                        if (dt.isBetween(tr_dt_0, tr_dt_1) !== true) {
+                            $(this).parent().fadeOut();
+                        }
+
+
+                    })
+                }
+
+                if ($('input[name="target-dates"]').val() === "") {
+                    onlyStart()
+
+                }
+
+                if ($('input[name="start-dates"]').val() === "") {
+                    onlyTarget()
+                }
+
+                if ($('input[name="start-dates"]').val() !== "" && $('input[name="target-dates"]').val() !== "") {
+
+                    onlyStart();
+                    onlyTarget();
+
+
+                }
+            })
+
+            $('#filter_reset').click(function () {
+                $('input[name="start-dates"]').val("");
+                $('input[name="target-dates"]').val("");
+
+                $('[id*=start]').each(function () {
+                    $(this).parent().fadeIn();
+                });
+            });
+        });
+    </script>
+
+    {% endblock %}
