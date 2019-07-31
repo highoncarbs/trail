@@ -1,0 +1,215 @@
+<div id="navMenu" class="is-hidden-desktop navbar-menu has-background-white-bis animated fadeIn"
+    style="box-shadow: none;">
+
+    <div class="navbar-end is-size-5 is-center">
+        <hr>
+        <aside class="menu">
+            <p class="menu-label">
+                MENU
+            </p>
+            <!-- <div class="project-select rubik " style="margin-bottom:2rem;">
+                <div class="dropdown is-hoverable">
+                    <div class="dropdown-trigger">
+                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span class="rubik">Baah</span>
+                            <span class="icon is-small">
+                                <i data-feather="arrow-down" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                   
+                </div>
+            </div> -->
+
+            <ul class="menu-list ">
+                <li><a href="{{url_for('home')}}">
+                        Reports</a></li>
+
+            </ul>
+            <hr>
+            <li class="dropdown is-fullwidth" id="trans_drop" style="z-index: auto;">
+                <div class="dropdown-trigger">
+                    <button class="button is-fullwidth" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span class="">Transactions</span>
+                        <span class="icon is-small">
+                            <i data-feather="arrow-down" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content ">
+                        <a class="dropdown-item "><strong>Stitching</strong></a>
+                        <a class="dropdown-item" href="{{url_for('trans_a')}}">
+                            Part A
+                        </a>
+                        <a class="dropdown-item" href="{{url_for('trans_b')}}">
+                            Part B
+                        </a>
+                        <hr class="navbar-divider">
+                        <a class="dropdown-item"><strong>Printing</strong></a>
+                        <a class="dropdown-item" href="">
+                            Part A
+                        </a>
+                        <a class="dropdown-item" href="">
+                            Part B
+                        </a>
+                    </div>
+                </div>
+
+            </li>
+            <hr>
+            <li class="dropdown is-fullwidth" id="entry_drop" style="z-index: auto;">
+                <div class="dropdown-trigger">
+                    <button class="button is-fullwidth" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span class="">Entry By Dept</span>
+                        <span class="icon is-small">
+                            <i data-feather="arrow-down" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content ">
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='cut' )}}">
+                            Cutting
+                        </a>
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='sth' )}}">
+                            Stitching
+                        </a>
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='val' )}}">
+                            Value Addition </a>
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='kaj' )}}">
+                            Kaj - Button
+                        </a>
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='tes' )}}">
+                            Test Checking
+                        </a>
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='thr' )}}">
+                            Thread Cutting
+                        </a>
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='qc' )}}">
+                            Q.C /Measurement
+                        </a>
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='pre' )}}">
+                            Press
+                        </a>
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='tag' )}}">
+                            Tagging / Packing
+                        </a>
+                        <a class="dropdown-item" href="{{ url_for('dept_entry' , dept='tra' )}}">
+                            Transfer to F.G Dept
+                        </a>
+                    </div>
+                </div>
+
+            </li>
+            <hr>
+            <li class="dropdown is-fullwidth" id="basic_drop">
+                <div class="dropdown-trigger">
+                    <button class="button is-fullwidth" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span class="">Basic Master</span>
+                        <span class="icon is-small">
+                            <i data-feather="arrow-down" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu" style="z-index: 10;">
+                    <div class="dropdown-content ">
+                        <a class="dropdown-item" href="{{url_for('fin_goods')}}">
+                            Finished Goods
+                        </a>
+                        <a class="dropdown-item" href="{{url_for('raw_materials')}}">
+                            Raw Materials
+                        </a>
+                        <a class="dropdown-item" href="{{url_for('uom')}}">
+                            Unit of Measurement
+                        </a>
+                        <a class="dropdown-item" href="{{url_for('customer_category')}}">
+                            Customer Category
+                        </a>
+                        <a class="dropdown-item" href="{{url_for('unit_loc')}}">
+                            Location
+                        </a>
+                        <a class="dropdown-item" href="{{url_for('firms')}}">
+                            Firms
+                        </a>
+                        <a class="dropdown-item" href="{{url_for('accessories')}}">
+                            Accesories
+                        </a>
+                        <a class="dropdown-item" href="{{url_for('other_mat')}}">
+                            Other Materials
+                        </a>
+                    </div>
+                </div>
+
+            </li>
+            <hr>
+            <ul class="menu-list ">
+                <li><a href="{{ url_for('main_master')}}"> Main Master
+                    </a></li>
+            </ul>
+        </aside>
+        <br>
+        <aside class="menu">
+            <p class="menu-label">
+                USER - {{current_user.username}}
+            </p>
+            <ul class="menu-list ">
+
+
+                <li>
+                    <a href="{{url_for('user_roles')}}">
+                        Users
+                    </a>
+                </li>
+                <hr>
+                <li>
+                    <a href="{{url_for('logout')}}" class="button is-black" >
+                            <span class="icon icon icon-btn">
+                                    <i data-feather="log-out" aria-hidden="true"></i>
+                                </span>Logout
+                    </a>
+                </li>
+
+            </ul>
+
+
+        </aside>
+
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function () {
+        var burger = document.querySelector('.burger');
+        var nav = document.querySelector('#' + burger.dataset.target);
+        burger.addEventListener('click', function () {
+            burger.classList.toggle('is-active');
+            nav.classList.toggle('is-active');
+        });
+
+        $("#trans_drop").click(function () {
+            $(this).toggleClass('is-active')
+        })
+        $("#basic_drop").click(function () {
+            $(this).toggleClass('is-active')
+        })
+        $("#entry_drop").click(function () {
+            $(this).toggleClass('is-active')
+        })
+
+    })();
+
+</script>
+<style>
+    .dropdown.is-fullwidth {
+        display: flex;
+        width: 100%;
+
+    }
+
+    .dropdown-trigger,
+    .dropdown-menu {
+        width: 100%;
+    }
+</style>

@@ -1,0 +1,268 @@
+<form id="entry_form_pre">
+    <h2 class="is-size-5 robo ">Press Form</h2><br>
+
+    <div class="control has-icons-left">
+        <input class="input" name="pre_date" value="">
+        <span class="icon is-small is-left">
+            <i data-feather="calendar"></i>
+        </span>
+    </div> <br>
+    <br>
+    <div class="table-container box">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Particulars</th>
+                    <th>Date</th>
+                    <th>Qty</th>
+                    <th>Location</th>
+                    <th>Remark</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="input_fields_wrap_pre">
+                <tr>
+                    <td>
+                        <div class="select"><select class="pre_pp_sel_cls" name="pp_sel[0]">
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="control has-icons-left">
+                            <input class="input" name="pre_datefilter[0]" value="" readonly>
+                            <span class="icon is-small is-left">
+                                <i data-feather="calendar"></i>
+                            </span>
+                        </div>
+                    </td>
+                    <td><input class="input" name="pre_qty[0]" class="pre_qty"></td>
+                    <td>
+                        <div class="select"><select name=unit_loc[0] class="unit_loc">
+                            </select>
+                        </div>
+                    </td>
+
+                    <td><input class="input" name=pre_rem[0] class="pre_rem"></td>
+
+                    <td>
+                    </td>
+
+                </tr>
+
+                <script>
+                    $(document).ready(function () {
+
+                        var date_set;
+                        $(".pre_pp_sel_cls").on('change', function () {
+
+                            date_set = $("[name='pre_date']").val()
+                            console.log(date_set);
+                            $("[name*='datefilter']").val(date_set)
+
+
+                        })
+
+                        $(function () {
+
+                            $('input[name="pre_date"]').daterangepicker({
+                                "locale": {
+                                    "format": "DD/MM/YYYY"
+                                },
+                                singleDatePicker: true,
+                                autoUpdateInput: false,
+                                locale: {
+                                    cancelLabel: 'Clear'
+                                }
+                            });
+
+                            $('input[name="pre_date"]').on('apply.daterangepicker', function (ev, picker) {
+                                $(this).val(picker.startDate.format('DD/MM/YYYY'));
+                            });
+
+                            $('input[name="pre_date"]').on('cancel.daterangepicker', function (ev, picker) {
+                                $(this).val('');
+                            });
+
+                        });
+
+                        feather.replace();
+
+                        // Location load
+                        var loc_loaded = $.Deferred()
+
+                        var options = [];
+                        $.getJSON("{{url_for('get_location')}}", function (result) {
+                            var leng = Object.keys(result).length
+                            for (var i = 0; i < leng; i++) {
+                                options.push('<option value="',
+                                    Object.keys(result)[i], '">',
+                                    Object.values(result)[i], '</option>');
+                            }
+                            $('[name="unit_loc[0]"]').html(options.join(''));
+                            $('[name="unit_loc[0]"]').prop("selectedIndex", -1)
+
+                        }).done(function () {
+                            loc_loaded.resolve();
+                        });
+
+                        $.when(loc_loaded).then(function () {
+                            $("unit_loc").html(options.join(''));
+                        });
+
+                        // End location load
+
+                        // PP_sel load
+
+                        var pp_options = [];
+                        $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
+                            var leng = Object.keys(result).length
+                            for (var i = 0; i < leng; i++) {
+                                pp_options.push('<option value="',
+                                    Object.keys(result)[i], '">',
+                                    Object.values(result)[i], '</option>');
+                            }
+                            $('[name="pp_sel[0]"]').html(pp_options.join(''));
+                            $('[name="pp_sel[0]"]').prop("selectedIndex", -1)
+                        })
+
+
+                        var max_fields = 10; //maximum input boxes allowed
+                        var wrapper_fab = $(".input_fields_wrap_pre"); //Fields wrapper
+                        var add_button_pre = $("#add_field_button_pre"); //Add button ID
+
+
+                        var x = 0; //initlal text box count
+
+                        $(add_button_pre).click(function (e) { //on add input button click
+                            console.log("clicked");
+                            e.preventDefault();
+                            date_set = $("[name='pre_date']").val()
+
+                            if (x < max_fields) { //max input box allowed
+                                x++; //text box increment
+                                $(wrapper_fab).append(`
+                                                    
+                                                        <tr>
+                                                            <td ><div class="select"><select class="pre_pp_sel_cls" name="pp_sel[` + x + `]">
+                            </select>
+                        </div></td>
+                        <td>
+                                                                <div class="control has-icons-left">
+                                                                    <input class="input" name="pre_datefilter[` + x + `]" value="" readonly>
+                                                                    <span class="icon is-small is-left">
+                                                                        <i data-feather="calendar"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td><input class="input" name="pre_qty[` + x + `]" class="pre_qty"></td>
+                                                                                        <td>  <div class="select"><select name=unit_loc[` + x + `] class="unit_loc" >
+                                                            </select>
+                                                        </div></td>
+    
+                                                            <td><input class="input" name=pre_rem[` + x + `] class="pre_rem"></td>
+                                                            
+                                                            <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                            </td>
+   
+                                                        </tr>
+    
+                                                    
+                                                    `);
+
+                                // Date picekr init
+
+
+                                feather.replace();
+
+                                $("[name*='pre_datefilter']").val(date_set)
+
+                                // Location load
+                                var loc_loaded = $.Deferred()
+
+                                var options = [];
+                                $.getJSON("{{url_for('get_location')}}", function (result) {
+                                    var leng = Object.keys(result).length
+                                    for (var i = 0; i < leng; i++) {
+                                        options.push('<option value="',
+                                            Object.keys(result)[i], '">',
+                                            Object.values(result)[i], '</option>');
+                                    }
+                                    $('[name="unit_loc[' + x + ']"]').html(options.join(''));
+                                    $('[name="unit_loc[' + x + ']"]').prop("selectedIndex", -1)
+
+                                }).done(function () {
+                                    loc_loaded.resolve();
+                                });
+
+                                $.when(loc_loaded).then(function () {
+                                    $("unit_loc").html(options.join(''));
+                                });
+
+                                // End location load
+
+                                // PP_sel load
+
+                                var pp_options = [];
+                                $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
+                                    var leng = Object.keys(result).length
+                                    for (var i = 0; i < leng; i++) {
+                                        pp_options.push('<option value="',
+                                            Object.keys(result)[i], '">',
+                                            Object.values(result)[i], '</option>');
+                                    }
+                                    $('[name="pp_sel[' + x + ']"]').html(pp_options.join(''));
+                                    $('[name="pp_sel[' + x + ']"]').prop("selectedIndex", -1)
+                                })
+
+                            }
+
+                            // End pp_sel load
+
+
+                        })
+
+                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                            e.preventDefault();
+                            $(this).parent('td').parent('tr').remove(); x--;
+                        })
+                    });
+
+
+                </script>
+
+            </tbody>
+        </table>
+
+        <a class="button is-primary" id="add_field_button_pre"><span class="icon icon-btn-in"><i
+                    data-feather="plus"></i></span>Add More</a>
+    </div>
+    <br>
+    <div class="field is-grouped">
+        <div class="control">
+            <button id="submit_pre_data" class="is-black button"><span class="icon icon-btn-in"><i
+                        data-feather="check"></i></span>Save</button>
+        </div>
+        <div class="control">
+            <button id="filter_reset" class=" button "><span class="icon icon-btn-in"><i
+                        data-feather="x"></i></span>Clear Filter</button>
+        </div>
+    </div>
+    <script>
+        $("#submit_pre_data").click( function(e){
+            e.preventDefault();
+            var formdata =  $("#entry_form_pre").serializeJSON()
+        $.ajax({
+            url: '{{ url_for("add_dept_pre")}}',
+            type: 'POST',
+            data: JSON.stringify($("#entry_form_pre").serializeJSON()),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: true,
+            success: function (msg) {
+                window.location.href = "{{url_for('dept_entry' , dept = dept)}}";
+            }
+        })
+        });
+
+    </script>
+</form>

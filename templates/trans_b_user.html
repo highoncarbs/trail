@@ -149,7 +149,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="cut_qty[0]"></td>
-                                    <td><input class="input" name="cut_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select id="cut_loc[0]" class="unit_loc" name="cut_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
 
                                     <td><input class="input" name="cut_rem[0]"></td>
 
@@ -162,9 +166,13 @@
                                         var wrapper_fab = $(".input_fields_wrap_cut"); //Fields wrapper
                                         var add_button_cut = $("#add_field_button_cut"); //Add button ID
 
+
                                         var x = 0; //initlal text box count
+
+
+
                                         $(add_button_cut).click(function (e) { //on add input button click
-                                            
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -181,7 +189,9 @@
                                                                             </div>
                                                                         </td>
                                                                         <td><input class="input" name="cut_qty[`+ x + `]"></td>
-                                                                        <td><input class="input" name="cut_loc[`+ x + `]"></td>
+                                                                                                    <td>  <div class="select"><select id="cut_loc[`+ x + `]" class="unit_loc" name="cut_loc[` + x + `]">
+                                                                        </select>
+                                                                    </div></td>
                 
                                                                         <td><input class="input" name="cut_rem[`+ x + `]"></td>
                                                                         
@@ -268,7 +278,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="sth_qty[0]"></td>
-                                    <td><input class="input" name="sth_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select class="unit_loc" name="sth_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
                                     <td><input class="input" name="sth_rem[0]"></td>
 
                                 </tr>
@@ -280,7 +294,7 @@
 
                                         var x = 0; //initlal text box count
                                         $(add_button_cut).click(function (e) { //on add input button click
-                                            
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -297,7 +311,9 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td><input class="input" name="sth_qty[`+ x + `]"></td>
-                                                                            <td><input class="input" name="sth_loc[`+ x + `]"></td>
+                                                                            <td> <div class="select"><select class="unit_loc" name="sth_loc[0]">
+                                            </select>
+                                        </div></td>
                     
                                                                             <td><input class="input" name="sth_rem[`+ x + `]"></td>
                                                                             
@@ -383,7 +399,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="val_qty[0]"></td>
-                                    <td><input class="input" name="val_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select class="unit_loc" name="val_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
 
                                     <td><input class="input" name="val_rem[0]"></td>
 
@@ -396,7 +416,7 @@
 
                                         var x = 0; //initlal text box count
                                         $(add_button_cut).click(function (e) { //on add input button click
-                                            
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -413,7 +433,9 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td><input class="input" name="val_qty[`+ x + `]"></td>
-                                                                            <td><input class="input" name="val_loc[`+ x + `]"></td>
+                                                                            <td><div class="select"><select  class="unit_loc" name="val_loc[`+ x + `]">
+                                    </select>
+                                </div></td>
                     
                                                                             <td><input class="input" name="val_rem[`+ x + `]"></td>
                                                                             
@@ -500,7 +522,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="kaj_qty[0]"></td>
-                                    <td><input class="input" name="kaj_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select class="unit_loc" name="kaj_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
 
                                     <td><input class="input" name="kaj_rem[0]"></td>
 
@@ -513,7 +539,7 @@
 
                                         var x = 0; //initlal text box count
                                         $(add_button_cut).click(function (e) { //on add input button click
-                                            
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -530,7 +556,9 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td><input class="input" name="kaj_qty[`+ x + `]"></td>
-                                                                            <td><input class="input" name="kaj_loc[`+ x + `]"></td>
+                                                                            <td><div class="select"><select  class="unit_loc" name="kaj_loc[`+ `]">
+                                    </select>
+                                </div></td>
                     
                                                                             <td><input class="input" name="kaj_rem[`+ x + `]"></td>
                                                                             
@@ -616,7 +644,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="tes_qty[0]"></td>
-                                    <td><input class="input" name="tes_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select class="unit_loc" name="tes_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
 
                                     <td><input class="input" name="tes_rem[0]"></td>
 
@@ -629,7 +661,7 @@
 
                                         var x = 0; //initlal text box count
                                         $(add_button_cut).click(function (e) { //on add input button click
-                                            
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -646,7 +678,9 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td><input class="input" name="tes_qty[`+ x + `]"></td>
-                                                                            <td><input class="input" name="tes_loc[`+ x + `]"></td>
+                                                                            <td><div class="select"><select  class="unit_loc" name="tes_loc[`+ x + `]">
+                                    </select>
+                                </div></td>
                     
                                                                             <td><input class="input" name="tes_rem[`+ x + `]"></td>
                                                                             
@@ -730,7 +764,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="thr_qty[0]"></td>
-                                    <td><input class="input" name="thr_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select class="unit_loc" name="thr_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
 
                                     <td><input class="input" name="thr_rem[0]"></td>
 
@@ -743,7 +781,7 @@
 
                                         var x = 0; //initlal text box count
                                         $(add_button_cut).click(function (e) { //on add input button click
-                                            
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -760,7 +798,9 @@
                                                                                     </div>
                                                                                 </td>
                                                                                 <td><input class="input" name="thr_qty[`+ x + `]"></td>
-                                                                                <td><input class="input" name="thr_loc[`+ x + `]"></td>
+                                                                                <td><div class="select"><select  class="unit_loc" name="thr_loc[`+ x + `]">
+                                    </select>
+                                </div></td>
                         
                                                                                 <td><input class="input" name="thr_rem[`+ x + `]"></td>
                                                                                 
@@ -845,7 +885,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="qc_qty[0]"></td>
-                                    <td><input class="input" name="qc_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select class="unit_loc" name="qc_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
 
                                     <td><input class="input" name="qc_rem[0]"></td>
 
@@ -858,7 +902,7 @@
 
                                         var x = 0; //initlal text box count
                                         $(add_button_cut).click(function (e) { //on add input button click
-                                            
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -875,7 +919,9 @@
                                                                                     </div>
                                                                                 </td>
                                                                                 <td><input class="input" name="qc_qty[`+ x + `]"></td>
-                                                                                <td><input class="input" name="qc_loc[`+ x + `]"></td>
+                                                                                <td><div class="select"><select  class="unit_loc" name="qc_loc[`+ x + `]">
+                                    </select>
+                                </div></td>
                         
                                                                                 <td><input class="input" name="qc_rem[`+ x + `]"></td>
                                                                                 
@@ -960,7 +1006,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="pre_qty[0]"></td>
-                                    <td><input class="input" name="pre_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select class="unit_loc" name="pre_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
 
                                     <td><input class="input" name="pre_rem[0]"></td>
 
@@ -973,6 +1023,7 @@
 
                                         var x = 0; //initlal text box count
                                         $(add_button_cut).click(function (e) { //on add input button click
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -989,7 +1040,9 @@
                                                                                     </div>
                                                                                 </td>
                                                                                 <td><input class="input" name="pre_qty[`+ x + `]"></td>
-                                                                                <td><input class="input" name="pre_loc[`+ x + `]"></td>
+                                                                                <td><div class="select"><select  class="unit_loc" name="pre_loc[`+ x + `]">
+                                    </select>
+                                </div></td>
                         
                                                                                 <td><input class="input" name="pre_rem[`+ x + `]"></td>
                                                                                 
@@ -1074,7 +1127,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="tag_qty[0]"></td>
-                                    <td><input class="input" name="tag_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select class="unit_loc" name="tag_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
 
                                     <td><input class="input" name="tag_rem[0]"></td>
 
@@ -1087,6 +1144,7 @@
 
                                         var x = 0; //initlal text box count
                                         $(add_button_cut).click(function (e) { //on add input button click
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -1103,7 +1161,9 @@
                                                                                     </div>
                                                                                 </td>
                                                                                 <td><input class="input" name="tag_qty[`+ x + `]"></td>
-                                                                                <td><input class="input" name="tag_loc[`+ x + `]"></td>
+                                                                                <td><div class="select"><select  class="unit_loc" name="tag_loc[`+ x + `]">
+                                    </select>
+                                </div></td>
                         
                                                                                 <td><input class="input" name="tag_rem[`+ x + `]"></td>
                                                                                 
@@ -1188,7 +1248,11 @@
                                         </div>
                                     </td>
                                     <td><input class="input" name="tra_qty[0]"></td>
-                                    <td><input class="input" name="tra_loc[0]"></td>
+                                    <td>
+                                        <div class="select"><select class="unit_loc" name="tra_loc[0]">
+                                            </select>
+                                        </div>
+                                    </td>
 
                                     <td><input class="input" name="tra_rem[0]"></td>
 
@@ -1201,6 +1265,7 @@
 
                                         var x = 0; //initlal text box count
                                         $(add_button_cut).click(function (e) { //on add input button click
+                                            console.log("clicked");
                                             e.preventDefault();
                                             if (x < max_fields) { //max input box allowed
                                                 x++; //text box increment
@@ -1217,7 +1282,9 @@
                                                                                     </div>
                                                                                 </td>
                                                                                 <td><input class="input" name="tra_qty[`+ x + `]"></td>
-                                                                                <td><input class="input" name="tra_loc[`+ x + `]"></td>
+                                                                                <td><div class="select"><select  class="unit_loc" name="tra_loc[`+ x + `]">
+                                    </select>
+                                </div></td>
                         
                                                                                 <td><input class="input" name="tra_rem[`+ x + `]"></td>
                                                                                 
@@ -1490,7 +1557,7 @@
                                                 class="icon icon-btn-in-x"><i data-feather="printer"></i></span>
                                         </a>
                                     </div>
-                                   
+                                  
                             </td>
 
                         </tr>
@@ -1502,6 +1569,7 @@
 
                                     // Prod Sel
                                     $.getJSON('/get/fin_product/' + part_a['prod_sel'], function (result) {
+                                        console.log(result);
                                         $('#order_name_{{loop.index}}').html(result).hide().fadeIn();
 
                                     });
@@ -1526,11 +1594,12 @@
                                     e.preventDefault();
                                     // var pp_num = $('#pp_sel').val();
 
+
                                     $.getJSON("/get/trans_pp_b?pp_num={{row.id}}", function (result) {
                                         $('.trans_b_id_set').html('{{ row.id }}');
-                                        
-                                        
-                                        console.log(result)
+
+                                        console.log(result);
+
                                         if ($.isEmptyObject(result)) {
 
                                             $('#show_noti').show();
@@ -1568,143 +1637,159 @@
                                             var extra_fld_tag = Object.keys(result['tag_datefilter']).length;
                                             var extra_fld_tra = Object.keys(result['tra_datefilter']).length;
 
-                                            // , loaded) === -1
-                                            // if ($.inArray('{{ row.id }}') {
-                                                for (i = 1; i < extra_fld; i++) {
-                                                    $("#add_field_button_fg").trigger('click');
-                                                }
+
+                                            // if ($.inArray('{{ row.id }}', loaded) === -1) {
+                                            var loc_loaded = $.Deferred();
+
+                                            for (i = 1; i < extra_fld; i++) {
+                                                $("#add_field_button_fg").trigger('click');
+                                            }
 
 
-                                                for (i = 1; i < extra_fld_cut; i++) {
-                                                    $("#add_field_button_cut").trigger('click');
+                                            for (i = 1; i < extra_fld_cut; i++) {
+                                                $("#add_field_button_cut").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_sth; i++) {
+                                                $("#add_field_button_sth").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_val; i++) {
+                                                $("#add_field_button_val").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_kaj; i++) {
+                                                $("#add_field_button_kaj").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tes; i++) {
+                                                $("#add_field_button_tes").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_thr; i++) {
+                                                $("#add_field_button_thr").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_qc; i++) {
+                                                $("#add_field_button_qc").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_pre; i++) {
+                                                $("#add_field_button_pre").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tag; i++) {
+                                                $("#add_field_button_tag").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tra; i++) {
+                                                $("#add_field_button_tra").trigger('click');
+                                            }
+                                            // loaded.push('{{ row.id }}');
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_location')}}", function (result) {
+                                                var leng = Object.keys(result).length
+                                                for (var i = 0; i < leng; i++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[i], '">',
+                                                        Object.values(result)[i], '</option>');
                                                 }
-                                                for (i = 1; i < extra_fld_sth; i++) {
-                                                    $("#add_field_button_sth").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_val; i++) {
-                                                    $("#add_field_button_val").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_kaj; i++) {
-                                                    $("#add_field_button_kaj").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tes; i++) {
-                                                    $("#add_field_button_tes").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_thr; i++) {
-                                                    $("#add_field_button_thr").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_qc; i++) {
-                                                    $("#add_field_button_qc").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_pre; i++) {
-                                                    $("#add_field_button_pre").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tag; i++) {
-                                                    $("#add_field_button_tag").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tra; i++) {
-                                                    $("#add_field_button_tra").trigger('click');
-                                                }
-                                                // loaded.push('{{ row.id }}');
-                                        // }
+                                                $(".unit_loc").html(options.join(''));
+                                            }).done(function(){
+                                                loc_loaded.resolve();
+                                            });
                                             
-                                            populate('#trans_b_form', json2html_name_list(result));
+                                            $.when( loc_loaded).then(function(){
+                                                populate('#trans_b_form', json2html_name_list(result));
+                                            }) ; 
 
                                             function formattedData(data) {
                                                 dataarr = []
 
-                                                // console.log(data)
-                                                try{
-                                                var check_data = JSON.parse(data)
+
+                                                try {
+                                                    var check_data = JSON.parse(data)
                                                 }
-                                                catch(err){
+                                                catch (err) {
                                                     console.log("Random JSON error")
                                                     check_data = data
                                                 }
-                                                
-                                                // console.log("PArsed JSON")
-                                                // console.log(check_data)
                                                 var action_key = ""
 
-                                                
-                                                if (check_data.hasOwnProperty("$replace")){
-                                                    action_key= "Addded"
+
+
+                                                if (check_data.hasOwnProperty("$replace")) {
+                                                    action_key = "Addded"
                                                     check_data = check_data["$replace"]
                                                 }
-                                                if (check_data.hasOwnProperty("$delete")){
-                                                    action_key= "Deleted"
+                                                if (check_data.hasOwnProperty("$delete")) {
+                                                    action_key = "Deleted"
                                                     check_data = check_data["$delete"]
                                                 }
-                                                if(check_data.hasOwnProperty("")){
+                                                if (check_data.hasOwnProperty("")) {
                                                     check_data = check_data[""]
                                                     action_key = "Added"
                                                 }
-                                                else{
+                                                else {
                                                     action_key = "Added"
 
                                                 }
                                                 new_data = json2html_name_list(check_data)
 
-                                                
+                                                // check_data = JSON.parse(json2html_name_list(check_data))
+                                                console.log(check_data)
 
                                                 $.each(new_data, function (k, v) {
 
                                                     if (k.toString().includes("cut") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("sth") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Stitching #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Stitching #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("val") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Value Addn #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Value Addn #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("kaj") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Kaj-Button #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Kaj-Button #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("tes") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Test Checking #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Test Checking #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("thr") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Thread Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Thread Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("qc") && v != "") {
-                                                        dataarr.push(action_key+ "Q.C #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push(action_key + "Q.C #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
 
                                                     if (k.toString().includes("pre") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Press #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Press #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
                                                     if (k.toString().includes("tag") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Tag/Pack #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Tag/Pack #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
                                                     if (k.toString().includes("tra") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
                                                     if (k.toString().includes("fg") && v != "") {
-                                                        dataarr.push( "<strong>"+action_key+"</strong> Detail Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                        dataarr.push("<strong>" + action_key + "</strong> Detail Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
                                                 })
                                                 return dataarr;
                                             }
 
                                             $.getJSON("/get/trans_pp/meta?pp_num={{row.id}}", function (result) {
+                                                console.log(result)
                                                 $(result).each(function (index, value) {
-                                                    // console.log(index , value["diff"])
+
                                                     var formatted_data = formattedData(value["diff"])
                                                     $('#meta_view_content').append($('<tr>')
                                                         .append($('<td>').append(value["username"]))
                                                         .append($('<td>').append(moment(value["timestamp"], "YYYY-MM-DD HH:mm:ssZZ").local().format("LLL")))
-                                                        .append($('<td>').append($("<p>").append(formatted_data                                                        
+                                                        .append($('<td>').append($("<p>").append(formatted_data
                                                         ))
 
+                                                        )
                                                     )
-                                                )})
+                                                })
 
                                             })
 
@@ -1764,6 +1849,7 @@
         var x = 0; //initlal text box count
         var y = 11; // datefilter count
         $(add_button_fg).click(function (e) { //on add input button click
+            console.log("clicked")
             e.preventDefault();
             if (x < max_fields) { //max input box allowed
                 x++; //text box increment
@@ -1994,6 +2080,7 @@
             function onlyStart() {
                 $('[id*=start]').each(function () {
                     var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    console.log(dt._i);
                     if (dt.isBetween(st_dt_0, st_dt_1) !== true) {
                         $(this).parent().fadeOut();
                     }
@@ -2005,6 +2092,7 @@
             function onlyTarget() {
                 $('[id*=target]').each(function () {
                     var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    console.log(dt._i);
                     if (dt.isBetween(tr_dt_0, tr_dt_1) !== true) {
                         $(this).parent().fadeOut();
                     }

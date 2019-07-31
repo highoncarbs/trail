@@ -22,18 +22,29 @@
     </div>
     {% endif %}
     <section class="has-background-white-bis">
+          
         <nav class="navbar is-spaced has-shadow has-background-white-bis" style="z-index:auto !important;">
             <div class="container">
                 <div class="navbar-brand">
                     <div class="navbar-left">
                         <p class="is-size-3 brand-trail">Trail</p>
                     </div>
+                    <div class="navbar-burger burger" data-target="navMenu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
                 </div>
+            
+                    <!-- Mobile Nav -->
+                {% include 'mobile_nav.html' %}
+
+                <!-- Desktop Nav  -->
                 <div class="navbar-menu">
                     <div class="navbar-end">
                         <a class="navbar-item button is-text" href="{{url_for('home')}}"
                             style="text-decoration: none; margin-right: 1rem;">
-                            Dashboard
+                            Reports
                         </a>
                         <div class="navbar-item has-dropdown is-hoverable" style="margin-right: 1rem;">
 
@@ -41,22 +52,59 @@
 
                             <div class="navbar-dropdown">
                                 <a class="navbar-item"><strong>Stitching</strong></a>
-                                <a class="navbar-item"  href="{{url_for('trans_a')}}">
+                                <a class="navbar-item" href="{{url_for('trans_a')}}">
                                     Part A
                                 </a>
-                                <a class="navbar-item"  href="{{url_for('trans_b')}}">
+                                <a class="navbar-item" href="{{url_for('trans_b')}}">
                                     Part B
                                 </a>
                                 <hr class="navbar-divider">
                                 <a class="navbar-item"><strong>Printing</strong></a>
                                 <a class="navbar-item" href="">
-                                        Part A
-                                    </a>
-                                    <a class="navbar-item" href="">
-                                        Part B
-                                    </a>
+                                    Part A
+                                </a>
+                                <a class="navbar-item" href="">
+                                    Part B
+                                </a>
 
                             </div>
+                        </div>
+                        <div class="navbar-item has-dropdown is-hoverable" style="margin-right: 1rem;">
+
+                            <a class="navbar-link">Entry By Dept</a>
+
+                            <div class="navbar-dropdown">
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='cut' )}}">
+                                    Cutting
+                                </a>
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='sth' )}}">
+                                    Stitching
+                                </a>
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='val' )}}">
+                                    Value Addition </a>
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='kaj' )}}">
+                                    Kaj - Button
+                                </a>
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='tes' )}}">
+                                    Test Checking
+                                </a>
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='thr' )}}">
+                                    Thread Cutting
+                                </a>
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='qc' )}}">
+                                    Q.C /Measurement
+                                </a>
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='pre' )}}">
+                                    Press
+                                </a>
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='tag' )}}">
+                                    Tagging / Packing
+                                </a>
+                                <a class="navbar-item" href="{{ url_for('dept_entry' , dept='tra' )}}">
+                                    Transfer to F.G Dept
+                                </a>
+                            </div>
+
                         </div>
                         <div class="navbar-item has-dropdown is-hoverable" style="margin-right: 1rem;">
 

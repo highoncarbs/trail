@@ -108,6 +108,7 @@
                             <th>Order No.</th>
                             <th hidden>status</th>
                             <th>Start Date</th>
+                            <th>Target Date</th>
                             <th>Product</th>
                             <th>Prog. Qty</th>
                             <th>U.O.M</th>
@@ -124,15 +125,15 @@
 
 
 
-                            <th>Actions</th>
+                            <th></th>
                         </thead>
                         <tbody>
                             {% for row in trans_list %}
                             <tr id="data_{{row.id}}">
-                                <td class="robo"><span class="icon icon-btn has-text-grey" style="padding:3px;"><i
-                                            data-feather="hash"></i></span>{{ row.id }}</td>
+                                <td class="robo">{{ row.id }}</td>
                                 <td hidden id="status_{{row.id}}">{{ row.flag}}</td>
                                 <td id="start_{{loop.index}}"></td>
+                                <td id="target_{{loop.index}}"></td>
                                 <td id="order_name_{{loop.index}}"></td>
                                 <td id="prog_qty_{{loop.index}}"></td>
                                 <td id="uom_{{loop.index}}"></td>
@@ -146,9 +147,7 @@
                                 <td id="press_{{loop.index}}"></td>
                                 <td id="tag_{{loop.index}}"></td>
                                 <td id="transfer_{{loop.index}}"></td>
-
-
-                                <td>
+                                <td class="is-hidden-desktop">
                                     <div class="field is-grouped">
                                         <div class="control">
                                             <a href="{{ url_for('trans_a_view_by_id' , trans_id = row.id)}}"
@@ -172,80 +171,116 @@
                                                 class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
                                                         data-feather="x"></i></span>
                                             </button>
+                                </td>
+                                <td class="is-hidden-mobile">
+                                    <div class="dropdown is-hoverable is-right" style="z-index:auto; ">
+                                        <div class="dropdown-trigger">
+                                            <span aria-haspopup="true" aria-controls="dropdown-menu"
+                                                class="icon icon-btn-in-x"><i data-feather="more-vertical"></i></span>
 
-                                            <!-- Delete Modal -->
-                                            <div class="modal" id="delete_trans_modal_{{loop.index}}">
-                                                <div class="modal-background"></div>
-                                                <div class="modal-content">
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu"
+                                            style="min-width:7rem;">
+                                            <div class="dropdown-content">
+                                                <a href="{{ url_for('trans_a_view_by_id' , trans_id = row.id)}}"
+                                                    class="navbar-item"><span class="icon icon-btn-in"><i
+                                                            data-feather="eye"></i></span>View
+                                                </a>
+                                                <a href="{{ url_for('trans_a_view_by_id' , trans_id = row.id , edit= True)}}"
+                                                    id="edit_fin_btn_{{loop.index}}" class="navbar-item"><span
+                                                        class="icon icon-btn-in"><i data-feather="edit-2"></i></span>
+                                                    Edit
+                                                </a>
+                                                <a id="edit_fin_btn_{{loop.index}}" class="navbar-item"><span
+                                                        class="icon icon-btn-in"><i
+                                                            data-feather="printer"></i></span>Print
+                                                </a>
 
-                                                    <div class="box">
-                                                        <p>Are you sure you want to delete <span class="robo">Product
-                                                                Order
-                                                                - {{row.id}}</span> ?</p>
-                                                        <br>
-                                                        <div class="field is-grouped">
-                                                            <p class="control">
-                                                                <a id="delete_trans_confirm_{{loop.index}}"
-                                                                    class="button is-danger"><span
-                                                                        class="icon icon-btn-in"><i
-                                                                            data-feather="trash-2"></i></span>Delete
-                                                                </a>
-                                                            </p>
-                                                            <p class="control">
-                                                                <a class="button"
-                                                                    onclick="$('.modal-close').trigger('click')"><span
-                                                                        class="icon icon-btn-in"><i
-                                                                            data-feather="x"></i></span>Cancel
-                                                                </a>
-                                                            </p>
+                                                <hr class="dropdown-divider">
+                                                <a id="delete_trans_{{loop.index}}"
+                                                    class="navbar-item has-text-danger"><span
+                                                        class="icon icon-btn-in"><i data-feather="x"></i></span>Delete
+                                                </a>
+                                                <!-- Delete Modal -->
+                                                <div class="modal" id="delete_trans_modal_{{loop.index}}">
+                                                    <div class="modal-background"></div>
+                                                    <div class="modal-content">
 
-                                                            <script>
-                                                                $('#delete_trans_confirm_{{loop.index}}').on('click', function () {
-                                                                    var req = $.ajax({
-                                                                        method: "POST",
-                                                                        url: "{{ url_for('delete_trans' , trans_id = row.id) }}",
-                                                                    });
-                                                                    req.done(function (mssg) {
-                                                                        $('#data_{{row.id}}').remove().fadeOut();
-                                                                        $('.modal-close').trigger('click')
+                                                        <div class="box">
+                                                            <p>Are you sure you want to delete <span
+                                                                    class="robo">Product
+                                                                    Order
+                                                                    - {{row.id}}</span> ?</p>
+                                                            <br>
+                                                            <div class="field is-grouped">
+                                                                <p class="control">
+                                                                    <a id="delete_trans_confirm_{{loop.index}}"
+                                                                        class="button is-danger"><span
+                                                                            class="icon icon-btn-in"><i
+                                                                                data-feather="trash-2"></i></span>Delete
+                                                                    </a>
+                                                                </p>
+                                                                <p class="control">
+                                                                    <a class="button"
+                                                                        onclick="$('.modal-close').trigger('click')"><span
+                                                                            class="icon icon-btn-in"><i
+                                                                                data-feather="x"></i></span>Cancel
+                                                                    </a>
+                                                                </p>
 
+                                                                <script>
+                                                                    $('#delete_trans_confirm_{{loop.index}}').on('click', function () {
+                                                                        var req = $.ajax({
+                                                                            method: "POST",
+                                                                            url: "{{ url_for('delete_trans' , trans_id = row.id) }}",
+                                                                        });
+                                                                        req.done(function (mssg) {
+                                                                            $('#data_{{row.id}}').remove().fadeOut();
+                                                                            $('.modal-close').trigger('click')
+
+                                                                        })
                                                                     })
-                                                                })
-                                                            </script>
+                                                                </script>
 
+                                                            </div>
                                                         </div>
+                                                        <button class="modal-close is-large"
+                                                            aria-label="close"></button>
+
                                                     </div>
-                                                    <button class="modal-close is-large" aria-label="close"></button>
+                                                    <script>
+                                                        document.querySelector('#delete_trans_{{loop.index}}').addEventListener('click', function (event) {
+                                                            event.preventDefault();
+                                                            var modal = document.querySelector('#delete_trans_modal_{{loop.index}}');  // assuming you have only 1
+                                                            var html = document.querySelector('html');
+                                                            modal.classList.add('is-active');
+                                                            html.classList.add('is-clipped');
+
+                                                            document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                                                e.preventDefault();
+                                                                modal.classList.remove('is-active');
+                                                                html.classList.remove('is-clipped');
+                                                            });
+
+                                                            modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                                                e.preventDefault();
+                                                                modal.classList.remove('is-active');
+                                                                html.classList.remove('is-clipped');
+
+
+                                                            });
+
+                                                        });
+
+                                                    </script>
 
                                                 </div>
-                                                <script>
-                                                    document.querySelector('#delete_trans_{{loop.index}}').addEventListener('click', function (event) {
-                                                        event.preventDefault();
-                                                        var modal = document.querySelector('#delete_trans_modal_{{loop.index}}');  // assuming you have only 1
-                                                        var html = document.querySelector('html');
-                                                        modal.classList.add('is-active');
-                                                        html.classList.add('is-clipped');
-
-                                                        document.querySelector('.modal-close').addEventListener('click', function (e) {
-                                                            e.preventDefault();
-                                                            modal.classList.remove('is-active');
-                                                            html.classList.remove('is-clipped');
-                                                        });
-
-                                                        modal.querySelector('.modal-background').addEventListener('click', function (e) {
-                                                            e.preventDefault();
-                                                            modal.classList.remove('is-active');
-                                                            html.classList.remove('is-clipped');
-
-
-                                                        });
-
-                                                    });
-
-                                                </script>
-
                                             </div>
                                         </div>
+                                    </div>
+
+
+
                                 </td>
 
                             </tr>
@@ -264,6 +299,8 @@
                                         });
 
                                         $('#start_{{loop.index}}').html(part_a['start-dates']).hide().fadeIn();
+                                        $('#target_{{loop.index}}').html(part_a['target-dates']).hide().fadeIn();
+
 
                                         $('#prog_qty_{{loop.index}}').html(part_a['prog_qty']).hide().fadeIn();
                                         $('#uom_{{loop.index}}').html(part_a['prod_uom']).hide().fadeIn();
@@ -325,96 +362,96 @@
     </div>
 </div>
 
-    <script>
-        $(document).ready(function () {
-            $('input[name*="dates"]').attr('autocomplete', 'off');
+<script>
+    $(document).ready(function () {
+        $('input[name*="dates"]').attr('autocomplete', 'off');
 
-            $('input[name*="dates"]').daterangepicker({
-                "locale": {
-                    "format": "DD/Month/YYYY"
-                },
-                buttonClasses: 'button',
-                applyButtonClasses: 'is-black',
-                autoUpdateInput: false,
-                locale: {
-                    cancelLabel: 'Clear'
-                }
-            });
+        $('input[name*="dates"]').daterangepicker({
+            "locale": {
+                "format": "DD/Month/YYYY"
+            },
+            buttonClasses: 'button',
+            applyButtonClasses: 'is-black',
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
 
-            $('input[name*="dates"]').on('apply.daterangepicker', function (ev, picker) {
-                $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
-            });
+        $('input[name*="dates"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
+        });
 
-            $('input[name*="dates"]').on('cancel.daterangepicker', function (ev, picker) {
-                $(this).val('');
-            });
-
-
-
-            $('#filter_update').click(function () {
-                var st_date = $('input[name="start-dates"]').val().split("-");
-                var st_dt_0 = moment(st_date[0], "DD/MM/YYYY");
-                var st_dt_1 = moment(st_date[1], "DD/MM/YYYY");
-
-                var tr_date = $('input[name="target-dates"]').val().split("-");
-                var tr_dt_0 = moment(tr_date[0], "DD/MM/YYYY");
-                var tr_dt_1 = moment(tr_date[1], "DD/MM/YYYY");
-
-                // var dates
-                // compareDate.isBetween(startDate, endDate); //false in this case
+        $('input[name*="dates"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
 
 
-                function onlyStart() {
-                    $('[id*=start]').each(function () {
-                        var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
-                        console.log(dt._i);
-                        if (dt.isBetween(st_dt_0, st_dt_1) !== true) {
-                            $(this).parent().fadeOut();
-                        }
+
+        $('#filter_update').click(function () {
+            var st_date = $('input[name="start-dates"]').val().split("-");
+            var st_dt_0 = moment(st_date[0], "DD/MM/YYYY");
+            var st_dt_1 = moment(st_date[1], "DD/MM/YYYY");
+
+            var tr_date = $('input[name="target-dates"]').val().split("-");
+            var tr_dt_0 = moment(tr_date[0], "DD/MM/YYYY");
+            var tr_dt_1 = moment(tr_date[1], "DD/MM/YYYY");
+
+            // var dates
+            // compareDate.isBetween(startDate, endDate); //false in this case
 
 
-                    })
-                }
-
-                function onlyTarget() {
-                    $('[id*=target]').each(function () {
-                        var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
-                        console.log(dt._i);
-                        if (dt.isBetween(tr_dt_0, tr_dt_1) !== true) {
-                            $(this).parent().fadeOut();
-                        }
-
-
-                    })
-                }
-
-                if ($('input[name="target-dates"]').val() === "") {
-                    onlyStart()
-
-                }
-
-                if ($('input[name="start-dates"]').val() === "") {
-                    onlyTarget()
-                }
-
-                if ($('input[name="start-dates"]').val() !== "" && $('input[name="target-dates"]').val() !== "") {
-
-                    onlyStart();
-                    onlyTarget();
-
-
-                }
-            })
-
-            $('#filter_reset').click(function () {
-                $('input[name="start-dates"]').val("");
-                $('input[name="target-dates"]').val("");
-
+            function onlyStart() {
                 $('[id*=start]').each(function () {
-                    $(this).parent().fadeIn();
-                });
+                    var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    console.log(dt._i);
+                    if (dt.isBetween(st_dt_0, st_dt_1) !== true) {
+                        $(this).parent().fadeOut();
+                    }
+
+
+                })
+            }
+
+            function onlyTarget() {
+                $('[id*=target]').each(function () {
+                    var dt = moment($(this)[0].innerHTML, "DD/MM/YYYY");
+                    console.log(dt._i);
+                    if (dt.isBetween(tr_dt_0, tr_dt_1) !== true) {
+                        $(this).parent().fadeOut();
+                    }
+
+
+                })
+            }
+
+            if ($('input[name="target-dates"]').val() === "") {
+                onlyStart()
+
+            }
+
+            if ($('input[name="start-dates"]').val() === "") {
+                onlyTarget()
+            }
+
+            if ($('input[name="start-dates"]').val() !== "" && $('input[name="target-dates"]').val() !== "") {
+
+                onlyStart();
+                onlyTarget();
+
+
+            }
+        })
+
+        $('#filter_reset').click(function () {
+            $('input[name="start-dates"]').val("");
+            $('input[name="target-dates"]').val("");
+
+            $('[id*=start]').each(function () {
+                $(this).parent().fadeIn();
             });
         });
-    </script>
+    });
+</script>
 
-    {% endblock %}
+{% endblock %}

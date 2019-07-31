@@ -314,6 +314,15 @@ def trans_a_api(trans_id):
     res = trans_schema.dump(pp_num).data
     return jsonify({'trans_data': res})
 
+@app.route('/trans_a_view_data/last' , methods = ['POST' , 'GET'])
+@login_required
+def trans_a_api_last():
+    pp_num = db.session.query(Trans).filter( Trans.flag != int(2) ).all()[-1]
+    trans_schema = TransSchema()
+    res = trans_schema.dump(pp_num).data
+    print(res)
+    return jsonify({'trans_data': res})
+
 @app.route('/trans_b/view/<trans_id>' , methods = ['POST' , 'GET'])
 @login_required
 def trans_b_view_by_id(trans_id):
@@ -410,6 +419,11 @@ def trans_b_user_view(trans_id):
     view = 'true'
     return render_template('trans_b_user.html' ,open_trans = all_num , trans_num = pp_num.id , mssg = session['mssg'] , view = view) ,200
 
+# Entry dept Routes 
+@app.route('/dept_entry/<dept>' ,methods = ['GET' , 'POST'])
+@login_required
+def dept_entry(dept):
+    return render_template('dept_entry.html' , dept = dept , mssg = session['mssg']) ,200
 
 # Basic Master Views
 #
@@ -2153,6 +2167,19 @@ def get_detail_pp_a(trans_id):
     payload = json.loads(res.part_a)
     return jsonify(payload)
    
+@app.route('/get/unit/locations' , methods=["GET"])
+@login_required
+def get_location():
+    res  = db.session.query(UnitLoc).all()
+    data = []
+    for r in res:
+        p_id = str(r.id)
+        p_name = str(r.unit)
+        temp_tup = (p_id , p_name)
+        data.append(temp_tup)
+    obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
+    return obj
+
 @app.route('/close_trans' , methods = ['POST'])
 @login_required
 def close_trans():
@@ -2171,3 +2198,231 @@ def delete_trans(trans_id):
     trans.flag = 2 # flag for soft delete
     db.session.commit()
     return jsonify("success")
+
+@app.route('/save/dept/cut' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_cut():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["cut_datefilter"])
+            part_b["cut_datefilter"][str(key_len)] = payload["cut_datefilter"][str(k)]
+            part_b["cut_qty"][str(key_len)] = payload["cut_qty"][str(k)]
+            part_b["cut_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["cut_rem"][str(key_len)] = payload["cut_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
+
+@app.route('/save/dept/stitch' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_sth():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["sth_datefilter"])
+            part_b["sth_datefilter"][str(key_len)] = payload["sth_datefilter"][str(k)]
+            part_b["sth_qty"][str(key_len)] = payload["sth_qty"][str(k)]
+            part_b["sth_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["sth_rem"][str(key_len)] = payload["sth_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
+
+
+@app.route('/save/dept/val' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_val():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["val_datefilter"])
+            part_b["val_datefilter"][str(key_len)] = payload["val_datefilter"][str(k)]
+            part_b["val_qty"][str(key_len)] = payload["val_qty"][str(k)]
+            part_b["val_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["val_rem"][str(key_len)] = payload["val_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
+
+@app.route('/save/dept/kaj' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_kaj():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["kaj_datefilter"])
+            part_b["kaj_datefilter"][str(key_len)] = payload["kaj_datefilter"][str(k)]
+            part_b["kaj_qty"][str(key_len)] = payload["kaj_qty"][str(k)]
+            part_b["kaj_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["kaj_rem"][str(key_len)] = payload["kaj_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        print(str(e))
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
+
+@app.route('/save/dept/tes' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_tes():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["tes_datefilter"])
+            part_b["tes_datefilter"][str(key_len)] = payload["tes_datefilter"][str(k)]
+            part_b["tes_qty"][str(key_len)] = payload["tes_qty"][str(k)]
+            part_b["tes_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["tes_rem"][str(key_len)] = payload["tes_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        print(str(e))
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
+
+@app.route('/save/dept/thr' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_thr():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["thr_datefilter"])
+            part_b["thr_datefilter"][str(key_len)] = payload["thr_datefilter"][str(k)]
+            part_b["thr_qty"][str(key_len)] = payload["thr_qty"][str(k)]
+            part_b["thr_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["thr_rem"][str(key_len)] = payload["thr_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        print(str(e))
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
+
+@app.route('/save/dept/qc' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_qc():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["qc_datefilter"])
+            part_b["qc_datefilter"][str(key_len)] = payload["qc_datefilter"][str(k)]
+            part_b["qc_qty"][str(key_len)] = payload["qc_qty"][str(k)]
+            part_b["qc_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["qc_rem"][str(key_len)] = payload["qc_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        print(str(e))
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
+
+@app.route('/save/dept/pre' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_pre():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["pre_datefilter"])
+            part_b["pre_datefilter"][str(key_len)] = payload["pre_datefilter"][str(k)]
+            part_b["pre_qty"][str(key_len)] = payload["pre_qty"][str(k)]
+            part_b["pre_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["pre_rem"][str(key_len)] = payload["pre_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        print(str(e))
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
+
+@app.route('/save/dept/tag' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_tag():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["tag_datefilter"])
+            part_b["tag_datefilter"][str(key_len)] = payload["tag_datefilter"][str(k)]
+            part_b["tag_qty"][str(key_len)] = payload["tag_qty"][str(k)]
+            part_b["tag_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["tag_rem"][str(key_len)] = payload["tag_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        print(str(e))
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
+
+@app.route('/save/dept/tra' , methods = ['GET' , 'POST'])
+@login_required
+def add_dept_tra():
+    payload = request.json
+    print(payload)
+    try:
+        for k,v in payload["pp_sel"].items():
+            pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
+            part_b = json.loads(pp_num.part_b)
+            key_len = len(part_b["tra_datefilter"])
+            part_b["tra_datefilter"][str(key_len)] = payload["tra_datefilter"][str(k)]
+            part_b["tra_qty"][str(key_len)] = payload["tra_qty"][str(k)]
+            part_b["tra_loc"][str(key_len)] = payload["unit_loc"][str(k)]
+            part_b["tra_rem"][str(key_len)] = payload["tra_rem"][str(k)]
+            pp_num.part_b = json.dumps(part_b)
+            db.session.commit()
+        session['mssg'] = "Data successfully added."
+        return jsonify("success")
+    except Exception as e:
+        print(str(e))
+        session['mssg'] = "Somethign unexpected happened - "+str(e)
+        return jsonify("success")
