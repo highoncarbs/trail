@@ -9,7 +9,7 @@ from wtforms_alchemy.fields import QuerySelectField ,SelectMultipleField ,Select
 from wtforms.validators import InputRequired, Email, Length , DataRequired ,Regexp , Optional
 
 from app import db
-
+from app import ma 
 
 def uom_choice():
     return db.session.query(Uom)
@@ -496,8 +496,6 @@ class Trans(db.Model):
     part_b = db.Column( db.JSON ,nullable =False , default = [] )
     flag = db.Column( db.Integer , default = 0)
     meta=  db.Column( db.JSON , default = [])
-
-from app import ma 
 
 class TransSchema(ma.ModelSchema):
     class Meta:
