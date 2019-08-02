@@ -2,27 +2,19 @@
 <html>
 {% include 'base_head.html' %}
 
-<body class="">
+<body class="has-navbar-fixed-bottom">
     {% if mssg %}
     <div class="snackbar">
-        <div class="box has-background-black animated fadeInUp">
-            <div class=" level is-mobile container">
-                <div class="level-left" style="padding-right: 1rem;">
-                    <div class="level-item is-size-6 has-text-white">
-                        <p>{{mssg}}</p>
+        <div class=" has-background-grey-dark animated fadeInUp">
 
-                    </div>
-                </div>
-                <div class="level-right">
-                    <div class="level-item delete">
-                    </div>
-                </div>
-            </div>
+            <p class="has-text-white is-size-5 has-text-centered"><span class="icon icon-btn"><i data-feather="alert-circle"></i></span>{{mssg}}</p>
+
         </div>
+
     </div>
     {% endif %}
     <section class="has-background-white-bis">
-          
+
         <nav class="navbar is-spaced has-shadow has-background-white-bis" style="z-index:auto !important;">
             <div class="container">
                 <div class="navbar-brand">
@@ -33,10 +25,10 @@
                         <span></span>
                         <span></span>
                         <span></span>
-                      </div>
+                    </div>
                 </div>
-            
-                    <!-- Mobile Nav -->
+
+                <!-- Mobile Nav -->
                 {% include 'mobile_nav.html' %}
 
                 <!-- Desktop Nav  -->

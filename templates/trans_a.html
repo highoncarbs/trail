@@ -35,7 +35,7 @@
                     <script>
                         {% if  trans_semi %}
                         $('#view_trans_draft').click(function () {
-                            document.location.href = "/trans_a_view/" + {{ trans_semi.id }}+ "?edit=True&semi=True";
+                            document.location.href = "/trans_a_view/" + "{{ trans_semi.id }}" + "?edit=True&semi=True";
 
 
                         });
@@ -182,13 +182,10 @@
                                                 Object.values(result)[i], '</option>');
                                         }
                                         $("#prod_sel").html(options.join(''));
-                                        $("#prod_sel").prop("selectedIndex", 0);
+                                        $("#prod_sel").prop("selectedIndex", -1);
 
                                         var pp_sel = $("#prod_sel").val()
-                                        $.getJSON("/get/uom/" + pp_sel, function (result) {
-                                            console.log(result)
-                                            $("#prod_uom").val(result);
-                                        });
+
 
                                     });
                                 })
@@ -243,7 +240,7 @@
                             <div class="field-body">
                                 <div class="field">
                                     <p class="control is-expanded has-icons-left">
-                                        <input class="input" type="text" placeholder="Name" name="prog_by">
+                                        <input class="input" type="TEXT" placeholder="Name" name="prog_by">
                                         <span class="icon  is-left">
                                             <i data-feather="user"></i>
                                         </span>
@@ -255,6 +252,10 @@
                         <div id="qty_check_noti" class="notification is-warning" style="display: none">
                             <p><span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Entered quanity
                                 exceeds program quantity by <span id="qty_exceed" class="robo"></span> </p>
+                        </div>
+                        <div id="qty_check_noti_less" class="notification is-info" style="display: none">
+                            <p><span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Entered quanity
+                                less than program quantity by <span id="qty_exceed_less" class="robo"></span> </p>
                         </div>
 
                         <div class="field is-horizontal">
@@ -301,32 +302,32 @@
                             <div class="field-body" id="qty_fld">
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" class="sub_qty" name="q_0" placeholder="Qty">
+                                        <input class="input" type="number" class="sub_qty" name="q_0" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" class="sub_qty" name="q_1" placeholder="Qty">
+                                        <input class="input" type="number" class="sub_qty" name="q_1" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" class="sub_qty" name="q_2" placeholder="Qty">
+                                        <input class="input" type="number" class="sub_qty" name="q_2" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" class="sub_qty" name="q_3" placeholder="Qty">
+                                        <input class="input" type="number" class="sub_qty" name="q_3" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" class="sub_qty" name="q_4" placeholder="Qty">
+                                        <input class="input" type="number" class="sub_qty" name="q_4" placeholder="Qty">
                                     </p>
                                 </div>
                                 <div class="field">
                                     <p class="control is-expanded">
-                                        <input class="input" type="text" class="sub_qty" name="q_5" placeholder="Qty">
+                                        <input class="input" type="number" class="sub_qty" name="q_5" placeholder="Qty">
                                     </p>
                                 </div>
                             </div>
@@ -358,11 +359,12 @@
                                             </div>
                                         </td>
                                         <td><input type="text" class="input" name="fab_sel_uom[0]" readonly></td>
-                                        <td><input type="text" class="input" name="fab_pr_pc[0]" /></td>
-                                        <td><input type="text" class="input" name="fab_qty_req[0]" /></td>
-                                        <td><input type="text" class="input" name="fab_qty_iss[0]" /></td>
-                                        <td><input type="text" class="input" name="fab_qty_ret[0]" /></td>
-                                        <td><input type="text" class="input" name="fab_net_con[0]" /></td>
+                                        <td><input type="number" class="input" name="fab_pr_pc[0]" /></td>
+                                        <td><input type="number" class="input" name="fab_qty_req[0]" readonly
+                                                readonly /></td>
+                                        <td><input type="number" class="input" name="fab_qty_iss[0]" /></td>
+                                        <td><input type="number" class="input" name="fab_qty_ret[0]" /></td>
+                                        <td><input type="number" class="input" name="fab_net_con[0]" /></td>
                                         <td></td>
                                     </tr>
                                     <script>
@@ -376,11 +378,11 @@
                                                         Object.values(result)[i], '</option>');
                                                 }
                                                 $(".fab_sel_cls").html(options.join(''));
-                                                $(".fab_sel_cls").prop("selectedIndex", 0);
-                                                var pp_sel = $("select[name='fab_sel[0]']").val()
-                                                $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
-                                                    $("input[name='fab_sel_uom[0]']").val(result);
-                                                });
+                                                $(".fab_sel_cls").prop("selectedIndex", -1);
+                                                // var pp_sel = $("select[name='fab_sel[0]']").val()
+                                                // $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
+                                                //     $("input[name='fab_sel_uom[0]']").val(result);
+                                                // });
 
                                             });
                                         });
@@ -406,67 +408,68 @@
                         <hr>
                         <div class="table-container">
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Finished Goods - Fabric</th>
-                                    <th>U.O.M</th>
-                                    <th>Per Pc. Consum.</th>
-                                    <th>Qty Required</th>
-                                    <th>Qty Issued</th>
-                                    <th>Qty Return</th>
-                                    <th>Net Consum.</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="input_fields_wrap_fin">
-                                <tr>
-                                    <td>
-                                        <div class="select"><select id="fin_selector" class="fin_sel_cls"
-                                                name="fin_sel[0]">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Finished Goods - Fabric</th>
+                                        <th>U.O.M</th>
+                                        <th>Per Pc. Consum.</th>
+                                        <th>Qty Required</th>
+                                        <th>Qty Issued</th>
+                                        <th>Qty Return</th>
+                                        <th>Net Consum.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="input_fields_wrap_fin">
+                                    <tr>
+                                        <td>
+                                            <div class="select"><select id="fin_selector" class="fin_sel_cls"
+                                                    name="fin_sel[0]">
 
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" class="input" name="fin_sel_uom[0]" readonly></td>
-                                    <td><input type="text" class="input" name="fin_pr_pc[0]" /></td>
-                                    <td><input type="text" class="input" name="fin_qty_req[0]" /></td>
-                                    <td><input type="text" class="input" name="fin_qty_iss[0]" /></td>
-                                    <td><input type="text" class="input" name="fin_qty_ret[0]" /></td>
-                                    <td><input type="text" class="input" name="fin_net_con[0]" /></td>
-                                    <td></td>
-                                </tr>
-                                <script>
-                                    $(document).ready(function () {
-                                        var options = [];
-                                        $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
-                                            var leng = Object.keys(result).length
-                                            for (var i = 0; i < leng; i++) {
-                                                options.push('<option value="',
-                                                    Object.keys(result)[i], '">',
-                                                    Object.values(result)[i], '</option>');
-                                            }
-                                            $(".fin_sel_cls").html(options.join(''));
-                                            $(".fin_sel_cls").prop("selectedIndex", 0);
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td><input type="text" class="input" name="fin_sel_uom[0]" readonly></td>
+                                        <td><input type="number" class="input" name="fin_pr_pc[0]" /></td>
+                                        <td><input type="number" class="input" name="fin_qty_req[0]" readonly
+                                                readonly /></td>
+                                        <td><input type="number" class="input" name="fin_qty_iss[0]" /></td>
+                                        <td><input type="number" class="input" name="fin_qty_ret[0]" /></td>
+                                        <td><input type="number" class="input" name="fin_net_con[0]" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
+                                                var leng = Object.keys(result).length
+                                                for (var i = 0; i < leng; i++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[i], '">',
+                                                        Object.values(result)[i], '</option>');
+                                                }
+                                                $(".fin_sel_cls").html(options.join(''));
+                                                $(".fin_sel_cls").prop("selectedIndex", -1);
+                                                // var pp_sel = $("select[name='fin_sel[0]']").val()
+                                                // $.getJSON("/get/uom/" + pp_sel, function (result) {
+                                                //     $("input[name='fin_sel_uom[0]']").val(result);
+                                                // });
+
+                                            });
+                                        });
+
+                                    </script>
+                                    <script>
+                                        $("select[name='fin_sel[0]']").on('change', function () {
                                             var pp_sel = $("select[name='fin_sel[0]']").val()
                                             $.getJSON("/get/uom/" + pp_sel, function (result) {
                                                 $("input[name='fin_sel_uom[0]']").val(result);
                                             });
-
-                                        });
-                                    });
-
-                                </script>
-                                <script>
-                                    $("select[name='fin_sel[0]']").on('change', function () {
-                                        var pp_sel = $("select[name='fin_sel[0]']").val()
-                                        $.getJSON("/get/uom/" + pp_sel, function (result) {
-                                            $("input[name='fin_sel_uom[0]']").val(result);
-                                        });
-                                    })
-                                </script>
-                            </tbody>
-                        </table>
+                                        })
+                                    </script>
+                                </tbody>
+                            </table>
                         </div>
                         <button id="add_field_button_fin" class=" button is-primary"><span class="icon icon-btn-in"><i
                                     data-feather="plus"></i></span>Add More</button>
@@ -477,60 +480,65 @@
                         <hr>
                         <div class="table-container">
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Accessories</th>
-                                    <th>U.O.M</th>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Accessories</th>
+                                        <th>U.O.M</th>
 
-                                    <th>Per Pc. Consum.</th>
-                                    <th>Qty Required</th>
-                                    <th>Qty Issued</th>
-                                    <th>Qty Return</th>
-                                    <th>Net Consum.</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="input_fields_wrap_acc">
-                                <tr>
-                                    <td>
-                                        <div class="select"><select id="acc_seletion" class="acc_selector"
-                                                name="acc_sel[0]">
+                                        <th>Per Pc. Consum.</th>
+                                        <th>Qty Required</th>
+                                        <th>Qty Issued</th>
+                                        <th>Qty Return</th>
+                                        <th>Net Consum.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="input_fields_wrap_acc">
+                                    <tr>
+                                        <td>
+                                            <div class="select"><select id="acc_selection" class="acc_selector"
+                                                    name="acc_sel[0]">
 
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" class="input" name="acc_sel_uom[0]" readonly></td>
-                                    <td><input type="text" class="input" name="acc_pr_pc[0]" /></td>
-                                    <td><input type="text" class="input" name="acc_qty_req[0]" /></td>
-                                    <td><input type="text" class="input" name="acc_qty_iss[0]" /></td>
-                                    <td><input type="text" class="input" name="acc_qty_ret[0]" /></td>
-                                    <td><input type="text" class="input" name="acc_net_con[0]" /></td>
-                                    <td></td>
-                                </tr>
-                                <script>
-                                    $(document).ready(function () {
-                                        var options = [];
-                                        $.getJSON("{{url_for('get_acc')}}", function (result) {
-                                            for (var j = 0; j < Object.keys(result).length; j++) {
-                                                options.push('<option value="',
-                                                    Object.keys(result)[j], '">',
-                                                    Object.values(result)[j], '</option>');
-                                            }
-                                            $(".acc_selector").html(options.join(''));
-                                            $(".acc_selector").prop("selectedIndex", 0);
-                                            var pp_sel = $("select[name='acc_sel[0]']").val()
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td><input type="text" class="input" name="acc_sel_uom[0]" readonly></td>
+                                        <td><input type="number" class="input" name="acc_pr_pc[0]" /></td>
+                                        <td><input type="number" class="input" name="acc_qty_req[0]" readonly
+                                                readonly /></td>
+                                        <td><input type="number" class="input" name="acc_qty_iss[0]" /></td>
+                                        <td><input type="number" class="input" name="acc_qty_ret[0]" /></td>
+                                        <td><input type="number" class="input" name="acc_net_con[0]" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_acc')}}", function (result) {
+                                                for (var j = 0; j < Object.keys(result).length; j++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[j], '">',
+                                                        Object.values(result)[j], '</option>');
+                                                }
+                                                $(".acc_selector").html(options.join(''));
+                                                $(".acc_selector").prop("selectedIndex", -1);
+                                                var pp_sel = $("select[name='acc_sel[0]']").val()
 
-                                            // TODO:  Fix theses UOM for Other and acces
-                                            $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
-                                                $("input[name='acc_sel_uom[0]']").val(result);
+
                                             });
-                                        });
 
-                                    })
-                                </script>
-                            </tbody>
-                        </table>
+                                            $("select[name='acc_sel[0]']").on('change', function () {
+                                                var acc_pp_sel = $("select[name='acc_sel[0]']").val()
+                                                $.getJSON("/get/uom/acc/" + acc_pp_sel, function (result) {
+                                                    $("input[name='acc_sel_uom[0]']").val(result);
+                                                });
+                                            })
+
+                                        })
+                                    </script>
+                                </tbody>
+                            </table>
                         </div>
                         <button id="add_field_button_acc" class=" button is-primary"><span class="icon icon-btn-in"><i
                                     data-feather="plus"></i></span>Add More</button>
@@ -540,58 +548,61 @@
                         <hr>
                         <div class="table-container">
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Other Materials</th>
-                                    <th>U.O.M</th>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Other Materials</th>
+                                        <th>U.O.M</th>
 
-                                    <th>Per Pc. Consum.</th>
-                                    <th>Qty Required</th>
-                                    <th>Qty Issued</th>
-                                    <th>Qty Return</th>
-                                    <th>Net Consum.</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="input_fields_wrap_oth">
-                                <tr>
-                                    <td>
-                                        <div class="select"><select class="oth_selector" name="oth_sel[0]">
+                                        <th>Per Pc. Consum.</th>
+                                        <th>Qty Required</th>
+                                        <th>Qty Issued</th>
+                                        <th>Qty Return</th>
+                                        <th>Net Consum.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="input_fields_wrap_oth">
+                                    <tr>
+                                        <td>
+                                            <div class="select"><select class="oth_selector" name="oth_sel[0]">
 
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" class="input" name="oth_pr_uom[0]" readonly></td>
-                                    <td><input type="text" class="input" name="oth_pr_pc[0]" /></td>
-                                    <td><input type="text" class="input" name="oth_qty_req[0]" /></td>
-                                    <td><input type="text" class="input" name="oth_qty_iss[0]" /></td>
-                                    <td><input type="text" class="input" name="oth_qty_ret[0]" /></td>
-                                    <td><input type="text" class="input" name="oth_net_con[0]" /></td>
-                                    <td></td>
-                                </tr>
-                                <script>
-                                    $(document).ready(function () {
-                                        var options = [];
-                                        $.getJSON("{{url_for('get_oth_mat')}}", function (result) {
-                                            for (var j = 0; j < Object.keys(result).length; j++) {
-                                                options.push('<option value="',
-                                                    Object.keys(result)[j], '">',
-                                                    Object.values(result)[j], '</option>');
-                                            }
-                                            $(".oth_selector").html(options.join(''));
-                                            $(".oth_selector").prop("selectedIndex", 0);
-                                            var pp_sel = $("select[name='oth_sel[0]']").val()
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td><input type="text" class="input" name="oth_sel_uom[0]" readonly></td>
+                                        <td><input type="number" class="input" name="oth_pr_pc[0]" /></td>
+                                        <td><input type="number" class="input" name="oth_qty_req[0]" readonly /></td>
+                                        <td><input type="number" class="input" name="oth_qty_iss[0]" /></td>
+                                        <td><input type="number" class="input" name="oth_qty_ret[0]" /></td>
+                                        <td><input type="number" class="input" name="oth_net_con[0]" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_oth_mat')}}", function (result) {
+                                                for (var j = 0; j < Object.keys(result).length; j++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[j], '">',
+                                                        Object.values(result)[j], '</option>');
+                                                }
+                                                $(".oth_selector").html(options.join(''));
+                                                $(".oth_selector").prop("selectedIndex", -1);
+                                                var pp_sel = $("select[name='oth_sel[0]']").val()
 
-                                            // TODO:  Fix theses UOM for Other and acces
-                                            $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
-                                                $("input[name='oth_pr_uom[0]']").val(result);
                                             });
-                                        });
-                                    })
-                                </script>
-                            </tbody>
-                        </table>
+
+                                            $("select[name='oth_sel[0]']").on('change', function () {
+                                                oth_pp_sel = $("select[name='oth_sel[0]']").val()
+                                                $.getJSON("/get/uom/oth/" + oth_pp_sel, function (result) {
+                                                    $("input[name='oth_sel_uom[0]']").val(result);
+                                                });
+                                            })
+                                        })
+                                    </script>
+                                </tbody>
+                            </table>
                         </div>
                         <button id="add_field_button_oth" class=" button is-primary"><span class="icon icon-btn-in"><i
                                     data-feather="plus"></i></span>Add More</button>
@@ -605,25 +616,17 @@
                         <div id="drag-drop-area">
                         </div>
                         <script>
-                            var uppy = Uppy.Core({ autoProceed: false })
+                            var uppy = Uppy.Core({ autoProceed: true })
                             var pp_num = '{{pp_num}}'
-                            uppy.use(Uppy.Dashboard, { target: '#drag-drop-area', inline: true, width: '100%', height: 100 })
+                            uppy.use(Uppy.Dashboard, {
+                                target: '#drag-drop-area', autoProceed: true,
+                                inline: true, width: '100%', height: 100
+                            })
                             uppy.use(Uppy.XHRUpload, { endpoint: '/trans_a/uploads/' + pp_num, formData: true, method: 'POST', fieldName: 'files[]' })
                         </script>
 
                         <hr>
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <button id="submit_btn_trans_a" class="button is-black"><span
-                                        class="icon icon-btn-in"><i data-feather="check"></i></span>Save</button>
-                            </div>
-                            <div class="control">
-                            </div>
-                            <div class="control ">
-                                <a class="button is-text">Clear Fields</a>
-                            </div>
 
-                        </div>
 
                     </form>
                 </div>
@@ -634,6 +637,25 @@
     </div>
 
 </div>
+<nav class="navbar is-fixed-bottom " id="form-cta">
+    <div class="container">
+        <div class="columns is-mobile is-centered">
+            <div class="column is-three-quarters">
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button id="submit_btn_trans_a" class="button is-black"><span class="icon icon-btn-in"><i
+                                    data-feather="check"></i></span>Save</button>
+                    </div>
+
+                    <div class="control ">
+                        <a class="button is-text">Clear Fields</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nav>
 
 <br>
 <br>
@@ -644,12 +666,16 @@
         e.preventDefault();
 
         var data = $("#trans_a_form").serializeJSON();
-
+        var formData = $("#trans_a_form :input")
+            .filter(function (index, element) {
+                return $(element).val() != '';
+            })
+            .serializeJSON();
 
         $.ajax({
             url: "{{url_for('trans_a')}}",
             type: 'POST',
-            data: JSON.stringify(data),
+            data: JSON.stringify(formData),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             async: false,
@@ -665,13 +691,18 @@
 
         var get_data = $.Deferred();
         var data = $("#trans_a_form").serializeJSON();
+        var formData = $("#trans_a_form :input")
+            .filter(function (index, element) {
+                return $(element).val() != '';
+            })
+            .serializeJSON();
         get_data.resolve();
         console.log(data);
         get_data.done(function () {
             $.ajax({
                 url: "{{url_for('save_trans')}}",
                 type: 'POST',
-                data: JSON.stringify(data),
+                data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 async: false,
@@ -795,11 +826,11 @@
                 $(wrapper_fab).append('<tr> \
                         <td><div class="select"><select  class="fab_sel_cls" name="fab_sel['+ x + ']"></select></div></td>\
                         <td><input type="text" class="input" name="fab_sel_uom['+ x + ']" readonly></td>\
-                        <td><input type="text" class="input" name="fab_pr_pc['+ x + ']"/></td>\
-                        <td><input type="text" class="input" name="fab_qty_req['+ x + ']"/></td> \
-                        <td><input type = "text" class= "input" name = "fab_qty_iss['+ x + ']" /></td>\
-                        <td><input type="text" class="input" name="fab_qty_ret['+ x + ']" /></td>\
-                        <td><input type="text" class="input" name="fab_net_con['+ x + ']" /></td>\
+                        <td><input type="number" class="input" name="fab_pr_pc['+ x + ']"/></td>\
+                        <td><input type="number" class="input" name="fab_qty_req['+ x + ']" readonly/></td> \
+                        <td><input type = "number" class= "input" name = "fab_qty_iss['+ x + ']" /></td>\
+                        <td><input type="number" class="input" name="fab_qty_ret['+ x + ']" /></td>\
+                        <td><input type="number" class="input" name="fab_net_con['+ x + ']" /></td>\
                         <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
                                         data-feather="x"></i></span></a></td></tr> ');
                 feather.replace();
@@ -812,7 +843,7 @@
                             Object.values(result)[j], '</option>');
                     }
                     $("select[name='fab_sel[" + x + "]']").html(options.join(''));
-                    $("select[name='fab_sel[" + x + "]']").prop("selectedIndex", 0);
+                    $("select[name='fab_sel[" + x + "]']").prop("selectedIndex", -1);
                     var pp_sel = $("select[name='fab_sel[" + x + "]']").val()
                     $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
                         $("input[name='fab_sel_uom[" + x + "]']").val(result);
@@ -844,11 +875,11 @@
                 $(wrapper_acc).append('<tr> \
                         <td><div class="select"><select class="acc_selector" name="acc_sel['+ x + ']"></select></div></td>\
                         <td><input type="text" class="input" name="acc_sel_uom['+ x + ']" readonly></td> \
-                        <td><input type="text" class="input" name="acc_pr_pc['+ x + ']"/></td>\
-                        <td><input type="text" class="input" name="acc_qty_req['+ x + ']"/></td> \
-                        <td><input type = "text" class= "input" name = "acc_qty_iss['+ x + ']" /></td>\
-                        <td><input type="text" class="input" name="acc_qty_ret['+ x + ']" /></td>\
-                        <td><input type="text" class="input" name="acc_net_con['+ x + ']" /></td>\
+                        <td><input type="number" class="input" name="acc_pr_pc['+ x + ']"/></td>\
+                        <td><input type="number" class="input" name="acc_qty_req['+ x + ']" readonly/></td> \
+                        <td><input type = "number" class= "input" name = "acc_qty_iss['+ x + ']" /></td>\
+                        <td><input type="number" class="input" name="acc_qty_ret['+ x + ']" /></td>\
+                        <td><input type="number" class="input" name="acc_net_con['+ x + ']" /></td>\
                         <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
                                 data-feather="x"></i></span></a></td></tr> ');
                 feather.replace();
@@ -864,10 +895,10 @@
                     $(".acc_selector_" + x + "").html(options.join(''));
 
                     $("select[name='acc_sel[" + x + "]']").html(options.join(''));
-                    $("select[name='acc_sel[" + x + "]']").prop("selectedIndex", 0);
-                    var pp_sel = $("select[name='acc_sel[" + x + "]']").val();
+                    $("select[name='acc_sel[" + x + "]']").prop("selectedIndex", -1);
+                    var acc_pp_sel = $("select[name='acc_sel[" + x + "]']").val();
 
-                    $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
+                    $.getJSON("/get/uom/acc/" + acc_pp_sel, function (result) {
                         $("input[name='acc_sel_uom[" + x + "]']").val(result);
                     });
                 });
@@ -899,11 +930,11 @@
                 $(wrapper_oth).append('<tr> \
                         <td><div class="select"><select class="oth_selector" name="oth_sel['+ x + ']"></select></div></td>\
                         <td><input type="text" class="input" name="oth_pr_uom['+ x + ']" readonly></td>\
-                        <td><input type="text" class="input" name="oth_pr_pc['+ x + ']"/></td>\
-                        <td><input type="text" class="input" name="oth_qty_req['+ x + ']"/></td> \
-                        <td><input type = "text" class= "input" name = "oth_qty_iss['+ x + ']" /></td>\
-                        <td><input type="text" class="input" name="oth_qty_ret['+ x + ']" /></td>\
-                        <td><input type="text" class="input" name="oth_net_con['+ x + ']" /></td>\
+                        <td><input type="number" class="input" name="oth_pr_pc['+ x + ']"/></td>\
+                        <td><input type="number" class="input" name="oth_qty_req['+ x + ']" readonly/></td> \
+                        <td><input type = "number" class= "input" name = "oth_qty_iss['+ x + ']" /></td>\
+                        <td><input type="number" class="input" name="oth_qty_ret['+ x + ']" /></td>\
+                        <td><input type="number" class="input" name="oth_net_con['+ x + ']" /></td>\
                         <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
                                         data-feather="x"></i></span></a></td></tr> ');
                 feather.replace();
@@ -918,11 +949,9 @@
                     }
                     $("select[name='oth_sel[" + x + "]']").html(options.join(''));
 
-                    var pp_sel = $("select[name='oth_sel[" + x + "]']").val();
-                    $("select[name='oth_sel[" + x + "]']").prop("selectedIndex", 0);
-                    $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
-                        $("input[name='oth_pr_uom[" + x + "]']").val(result);
-                    });
+                    var oth_pp_sel = $("select[name='oth_sel[" + x + "]']").val();
+                    $("select[name='oth_sel[" + x + "]']").prop("selectedIndex", -1);
+                  
                 });
 
                 $("select[name='oth_sel[" + x + "]']").on('change', function () {
@@ -951,11 +980,11 @@
                 $(wrapper_fin).append('<tr> \
                     <td><div class="select"><select  class="fin_sel_cls" name="fin_sel['+ x + ']"></select></div></td>\
                     <td><input type="text" class="input" name="fin_sel_uom['+ x + ']" readonly></td>\
-                    <td><input type="text" class="input" name="fin_pr_pc['+ x + ']"/></td>\
-                    <td><input type="text" class="input" name="fin_qty_req['+ x + ']"/></td> \
-                    <td><input type = "text" class= "input" name = "fin_qty_iss['+ x + ']" /></td>\
-                    <td><input type="text" class="input" name="fin_qty_ret['+ x + ']" /></td>\
-                    <td><input type="text" class="input" name="fin_net_con['+ x + ']" /></td>\
+                    <td><input type="number" class="input" name="fin_pr_pc['+ x + ']"/></td>\
+                    <td><input type="number" class="input" name="fin_qty_req['+ x + ']" readonly/></td> \
+                    <td><input type = "number" class= "input" name = "fin_qty_iss['+ x + ']" /></td>\
+                    <td><input type="number" class="input" name="fin_qty_ret['+ x + ']" /></td>\
+                    <td><input type="number" class="input" name="fin_net_con['+ x + ']" /></td>\
                     <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i \
                                         data-feather="x"></i></span></a></td></tr> ');
                 feather.replace();
@@ -967,7 +996,7 @@
                             Object.values(result)[j], '</option>');
                     }
                     $("select[name='fin_sel[" + x + "]']").html(options.join(''));
-                    $("select[name='fin_sel[" + x + "]']").prop("selectedIndex", 0);
+                    $("select[name='fin_sel[" + x + "]']").prop("selectedIndex", -1);
                     var pp_sel = $("select[name='fin_sel[" + x + "]']").val()
                     $.getJSON("/get/uom/" + pp_sel, function (result) {
                         $("input[name='fin_sel_uom[" + x + "]']").val(result);
@@ -1242,7 +1271,6 @@
                     $(".oth_selector").html(options.join(''));
                 }).done(function () {
 
-                    console.log('Resolves - oth add');
                     oth_sel_load.resolve();
                 })
 
@@ -1250,17 +1278,7 @@
 
                     var rs = json2html_name_list(part_a);
                     populate('#trans_a_form', rs);
-                    console.log("eh kai")
-                    // if (edit == "True") {
-                    //     $("#trans_a_form_id :input").prop("disabled", false);
-                    //     $("#drag-drop-area").fadeIn();
-                    //     $("#edit_form").addClass('is-static');
-                    //     $('.add_flds').show();
-                    // }
-                    // else {
-                    //     $("#trans_a_form_id :input").prop("disabled", true).fadeIn();
-                    //     $('.add_flds').hide();
-                    // }
+
                 });
 
 
@@ -1310,11 +1328,22 @@
         if (sum > prog_qty) {
             $("#qty_check_noti").addClass("animated shake").fadeIn();
             $("#qty_exceed").html('' + sum - prog_qty + '');
+            $("#submit_btn_trans_a").attr('disabled', true);
 
+
+        }
+        else if (sum < prog_qty) {
+            $("#qty_check_noti_less").addClass("animated shake").fadeIn();
+            $("#qty_exceed_less").html('' + prog_qty - sum + '');
+            $("#submit_btn_trans_a").attr('disabled', true);
 
         }
         else {
             $("#qty_check_noti").removeClass("animated shake").fadeOut();
+            $("#qty_check_noti_less").removeClass("animated shake").fadeOut();
+            $("#submit_btn_trans_a").attr('disabled', false);
+
+
         }
     }
 

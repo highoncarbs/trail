@@ -30,128 +30,131 @@
                     <p>No Other Materials available. <br> Create a new one.</p>
                     <hr>
                 </div>
-                {% endif %}
+                {% else %}
 
                 <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th class="has-text-grey">Other Material</th>
-                                <th class="has-text-grey">U.O.M</th>
-                                <th class="has-text-grey"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                                {% for mat in mat_list %}
-    
-                            <tr>
-                                <td>
-                                    <p>{{mat.mat}}</p>
-                                </td>
-                                <td>
-                                    <p>{{mat.uom[0].measure}}</p>
-                                </td>
-                                <td>
-                                        <div class="field is-grouped">
+                    <thead>
+                        <tr>
+                            <th class="has-text-grey">Other Material</th>
+                            <th class="has-text-grey">U.O.M</th>
+                            <th class="has-text-grey"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mat in mat_list %}
+
+                        <tr>
+                            <td>
+                                <p>{{mat.mat}}</p>
+                            </td>
+                            <td>
+                                <p>{{mat.uom[0].measure}}</p>
+                            </td>
+                            <td>
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <a id="edit_mat_btn_{{loop.index}}" class="button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="control">
+                                        <a href="{{ url_for('mat_delete' , id = mat.id)}}"
+                                            class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                    data-feather="x"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                        <!-- City Edit Modal -->
+
+                        <div class="modal " id="edit_mat_modal_{{loop.index}}">
+                            <div class="modal-background animated fadeIn"></div>
+                            <div class="modal-content animated fadeInUp">
+                                <div class="box has-background-light">
+                                    <h3 class="is-size-5 robo">Edit Other Materials</h3>
+                                    <br>
+                                    <br>
+                                    <div class="form">
+                                        <form method="POST" action="{{ url_for('mat_edit' , id = mat.id)}}">
+                                            {{ mat_form.hidden_tag()}}
+                                            <div class="field-body is-horizontal">
+
+                                                <div class="field">
+                                                    <label class="label">Other Materials</label>
+                                                    <div class="control">
+                                                        {{ mat_form.mat(class="input" , value=mat.mat)}}
+                                                    </div>
+                                                </div>
+                                                <div class="field">
+                                                    <label class="label">U.O.M</label>
+                                                    <div class="control select " id="mat_uom_sel_{{loop.index}}">
+                                                        {{mat_form.uom()}}
+                                                    </div>
+                                                    <script>
+                                                        $(document).ready(function () {
+                                                            $('#mat_uom_sel_{{loop.index}} > #uom').val('{{ mat.uom[0].id }}')
+
+                                                        })
+                                                    </script>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <div class="field level">
                                                 <div class="control">
-                                            <a id="edit_mat_btn_{{loop.index}}" class="button is-small"><span
-                                                    class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
-                                            </a>
-                                        </div>
-                                        <div class="control">
-                                            <a href="{{ url_for('mat_delete' , id = mat.id)}}"
-                                                class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
-                                                        data-feather="x"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-    
-                                </td>
-    
-                            </tr>
-                
+                                                    {{ mat_form.mat_update(class="button is-black" , value="Save")}}
+                                                </div>
+                                                <div class="control ">
+                                                    <a class="button is-text">Clear Fields</a>
+                                                </div>
 
-                <!-- City Edit Modal -->
-
-                <div class="modal " id="edit_mat_modal_{{loop.index}}">
-                    <div class="modal-background animated fadeIn"></div>
-                    <div class="modal-content animated fadeInUp">
-                        <div class="box has-background-light">
-                            <h3 class="is-size-5 robo">Edit Other Materials</h3>
-                            <br>
-                            <br>
-                            <div class="form">
-                                <form method="POST" action="{{ url_for('mat_edit' , id = mat.id)}}">
-                                    {{ mat_form.hidden_tag()}}
-                                    <div class="field-body is-horizontal">
-
-                                        <div class="field">
-                                            <label class="label">Other Materials</label>
-                                            <div class="control">
-                                                {{ mat_form.mat(class="input" , value=mat.mat)}}
                                             </div>
-                                        </div>
-                                        <div class="field">
-                                            <label class="label">U.O.M</label>
-                                            <div class="control select " id="mat_uom_sel_{{loop.index}}">
-                                                {{mat_form.uom()}}
-                                            </div>
-                                            <script>
-                                                $(document).ready(function () {
-                                                    $('#mat_uom_sel_{{loop.index}} > #uom').val('{{ mat.uom[0].id }}')
 
-                                                })
-                                            </script>
-                                        </div>
+                                        </form>
                                     </div>
-                                    <br>
-                                    <br>
-                                    <div class="field level">
-                                        <div class="control">
-                                            {{ mat_form.mat_update(class="button is-black" , value="Save")}}
-                                        </div>
-                                        <div class="control ">
-                                            <a class="button is-text">Clear Fields</a>
-                                        </div>
-
-                                    </div>
-
-                                </form>
+                                </div>
                             </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+
+                            <script>
+                                document.querySelector('#edit_mat_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                    event.preventDefault();
+                                    var modal = document.querySelector('#edit_mat_modal_{{loop.index}}');  // assuming you have only 1
+                                    var html = document.querySelector('html');
+                                    modal.classList.add('is-active');
+                                    html.classList.add('is-clipped');
+
+                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+                                    });
+
+                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+
+
+                                    });
+
+                                });
+
+                            </script>
                         </div>
-                    </div>
-                    <button class="modal-close is-large" aria-label="close"></button>
-
-                    <script>
-                        document.querySelector('#edit_mat_btn_{{loop.index}}').addEventListener('click', function (event) {
-                            event.preventDefault();
-                            var modal = document.querySelector('#edit_mat_modal_{{loop.index}}');  // assuming you have only 1
-                            var html = document.querySelector('html');
-                            modal.classList.add('is-active');
-                            html.classList.add('is-clipped');
-
-                            document.querySelector('.modal-close').addEventListener('click', function (e) {
-                                e.preventDefault();
-                                modal.classList.remove('is-active');
-                                html.classList.remove('is-clipped');
-                            });
-
-                            modal.querySelector('.modal-background').addEventListener('click', function (e) {
-                                e.preventDefault();
-                                modal.classList.remove('is-active');
-                                html.classList.remove('is-clipped');
-
-
-                            });
-
-                        });
-
-                    </script>
-                </div>
 
 
 
 
-                {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
             </div>
         </div>
     </div>

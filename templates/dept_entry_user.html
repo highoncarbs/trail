@@ -1,0 +1,130 @@
+{% extends 'base_user.html' %}
+{% block content %}
+<!-- Date picker Script -->
+
+<!-- End imports -->
+<div class="container" style="margin-top: 5rem;">
+
+    <div class="columns is-mobile is-centered">
+        <div class="column is-three-quarters">
+            <nav class="level is-mobile">
+                <div class="level-left">
+
+                    <div class="level-item">
+                        <p class="is-size-5 ">
+                            <span class="robo ">Entry by Department </p>
+                    </div>
+
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <p class=" control">
+                            <button style="display: none;" class="button is-black" id="trans_view_b"><span
+                                    class="icon icon-btn-in ">
+                                    <i data-feather="corner-up-left"></i>
+                                </span>Back</button>
+                        </p>
+                    </div>
+
+                </div>
+
+            </nav>
+            <hr>
+            <div id="cut_form" style="display: none !important">
+                {% if dept == "cut" %}
+                {% include 'entry_dept/entry_cut.html'  %}
+                {% endif %}
+            </div>
+            <div id="stitch_form" style="display: none !important">
+                {% if dept == "sth" %}
+
+                {% include 'entry_dept/entry_stitch.html' %}                {% endif %}
+
+            </div>
+            <div id="val_addn_form" style="display: none !important">
+                {% if dept == "val" %}
+
+                {% include 'entry_dept/entry_val_addn.html' %}                {% endif %}
+
+            </div>
+            <div id="kaj_form" style="display: none !important">
+                {% if dept == "kaj" %}
+
+                {% include 'entry_dept/entry_kaj.html' %}                {% endif %}
+
+            </div>
+            <div id="tes_form" style="display: none !important">
+                {% if dept == "tes" %}
+
+                {% include 'entry_dept/entry_tes.html' %}                {% endif %}
+
+            </div>
+            <div id="thr_form" style="display: none !important">
+                {% if dept == "thr" %}
+
+                {% include 'entry_dept/entry_thr.html' %}                {% endif %}
+
+            </div>
+            <div id="qc_form" style="display: none !important">
+                {% if dept == "qc" %}
+
+                {% include 'entry_dept/entry_qc.html' %}                {% endif %}
+
+            </div>
+            <div id="pre_form" style="display: none !important">
+                {% if dept == "pre" %}
+
+                {% include 'entry_dept/entry_pre.html' %}                {% endif %}
+
+            </div>
+            <div id="tag_form" style="display: none !important">
+                {% if dept == "tag" %}
+
+                {% include 'entry_dept/entry_tag.html' %}                {% endif %}
+
+            </div>
+            <div id="tra_form" style="display: none !important">
+                {% if dept == "tra" %}
+
+                {% include 'entry_dept/entry_tra.html' %}                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        if ('{{dept}}' == "cut") {
+            $("#cut_form").fadeIn();
+        }
+        else if ('{{dept}}' == "sth") {
+            $("#stitch_form").fadeIn();
+        }
+        else if ('{{dept}}' == "val") {
+            $("#val_addn_form").fadeIn();
+        }
+        else if ('{{dept}}' == "kaj") {
+            $("#kaj_form").fadeIn();
+        }
+        else if ('{{dept}}' == "tes") {
+            $("#tes_form").fadeIn();
+        }
+        else if ('{{dept}}' == "thr") {
+            $("#thr_form").fadeIn();
+        }
+        else if ('{{dept}}' == "qc") {
+            $("#qc_form").fadeIn();
+        }
+        else if ('{{dept}}' == "pre") {
+            $("#pre_form").fadeIn();
+        }
+        else if ('{{dept}}' == "tag") {
+            $("#tag_form").fadeIn();
+        }
+        else if ('{{dept}}' == "tra") {
+            $("#tra_form").fadeIn();
+        }
+    })
+</script>
+{% endblock %}

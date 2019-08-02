@@ -1,268 +1,321 @@
 <form id="entry_form_qc">
-    <h2 class="is-size-5 robo ">Q.C / Measurement Form</h2><br>
-
-    <div class="control has-icons-left">
-        <input class="input" name="qc_date" value="">
-        <span class="icon is-small is-left">
-            <i data-feather="calendar"></i>
-        </span>
-    </div> <br>
-    <br>
-    <div class="table-container box">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Particulars</th>
-                    <th>Date</th>
-                    <th>Qty</th>
-                    <th>Location</th>
-                    <th>Remark</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody class="input_fields_wrap_qc">
-                <tr>
-                    <td>
-                        <div class="select"><select class="qc_pp_sel_cls" name="pp_sel[0]">
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="control has-icons-left">
-                            <input class="input" name="qc_datefilter[0]" value="" readonly>
-                            <span class="icon is-small is-left">
-                                <i data-feather="calendar"></i>
-                            </span>
-                        </div>
-                    </td>
-                    <td><input class="input" name="qc_qty[0]" class="qc_qty"></td>
-                    <td>
-                        <div class="select"><select name=unit_loc[0] class="unit_loc">
-                            </select>
-                        </div>
-                    </td>
-
-                    <td><input class="input" name=qc_rem[0] class="qc_rem"></td>
-
-                    <td>
-                    </td>
-
-                </tr>
-
-                <script>
-                    $(document).ready(function () {
-
-                        var date_set;
-                        $(".qc_pp_sel_cls").on('change', function () {
-
-                            date_set = $("[name='qc_date']").val()
-                            console.log(date_set);
-                            $("[name*='datefilter']").val(date_set)
-
-
-                        })
-
-                        $(function () {
-
-                            $('input[name="qc_date"]').daterangepicker({
-                                "locale": {
-                                    "format": "DD/MM/YYYY"
-                                },
-                                singleDatePicker: true,
-                                autoUpdateInput: false,
-                                locale: {
-                                    cancelLabel: 'Clear'
-                                }
-                            });
-
-                            $('input[name="qc_date"]').on('apply.daterangepicker', function (ev, picker) {
-                                $(this).val(picker.startDate.format('DD/MM/YYYY'));
-                            });
-
-                            $('input[name="qc_date"]').on('cancel.daterangepicker', function (ev, picker) {
-                                $(this).val('');
-                            });
-
-                        });
-
-                        feather.replace();
-
-                        // Location load
-                        var loc_loaded = $.Deferred()
-
-                        var options = [];
-                        $.getJSON("{{url_for('get_location')}}", function (result) {
-                            var leng = Object.keys(result).length
-                            for (var i = 0; i < leng; i++) {
-                                options.push('<option value="',
-                                    Object.keys(result)[i], '">',
-                                    Object.values(result)[i], '</option>');
-                            }
-                            $('[name="unit_loc[0]"]').html(options.join(''));
-                            $('[name="unit_loc[0]"]').prop("selectedIndex", -1)
-
-                        }).done(function () {
-                            loc_loaded.resolve();
-                        });
-
-                        $.when(loc_loaded).then(function () {
-                            $("unit_loc").html(options.join(''));
-                        });
-
-                        // End location load
-
-                        // PP_sel load
-
-                        var pp_options = [];
-                        $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
-                            var leng = Object.keys(result).length
-                            for (var i = 0; i < leng; i++) {
-                                pp_options.push('<option value="',
-                                    Object.keys(result)[i], '">',
-                                    Object.values(result)[i], '</option>');
-                            }
-                            $('[name="pp_sel[0]"]').html(pp_options.join(''));
-                            $('[name="pp_sel[0]"]').prop("selectedIndex", -1)
-                        })
-
-
-                        var max_fields = 10; //maximum input boxes allowed
-                        var wrapper_fab = $(".input_fields_wrap_qc"); //Fields wrapper
-                        var add_button_qc = $("#add_field_button_qc"); //Add button ID
-
-
-                        var x = 0; //initlal text box count
-
-                        $(add_button_qc).click(function (e) { //on add input button click
-                            console.log("clicked");
-                            e.preventDefault();
-                            date_set = $("[name='qc_date']").val()
-
-                            if (x < max_fields) { //max input box allowed
-                                x++; //text box increment
-                                $(wrapper_fab).append(`
-                                                    
-                                                        <tr>
-                                                            <td ><div class="select"><select class="qc_pp_sel_cls" name="pp_sel[` + x + `]">
-                            </select>
-                        </div></td>
+        <h2 class="is-size-5 robo ">Q.C / Measurement Form</h2><br>
+        <nav class="level">
+            <!-- Left side -->
+            <div class="level-left">
+                <div class="level-item is-size-5 tag">
+                    <label class="is-size-5  ">Date</label>
+                </div>
+                <div class="level-item">
+                    <div class="control has-icons-left">
+                        <input class="input" name="qc_date" value="" placeholder="Enter Date">
+                        <span class="icon is-small is-left">
+                            <i data-feather="calendar"></i>
+                        </span>
+                    </div>
+                </div>
+        </nav>
+        <br>
+        <div class="table-container box">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product Order No.</th>
+                        <th hidden>Date</th>
+                        <th>Prog. Qty.</th>
+                        <th>Rem. Qty.</th>
+                        <th>Qty</th>
+                        <th>Location</th>
+                        <th>Remark</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="input_fields_wrap_qc">
+                    <tr>
                         <td>
-                                                                <div class="control has-icons-left">
-                                                                    <input class="input" name="qc_datefilter[` + x + `]" value="" readonly>
-                                                                    <span class="icon is-small is-left">
-                                                                        <i data-feather="calendar"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td><input class="input" name="qc_qty[` + x + `]" class="qc_qty"></td>
-                                                                                        <td>  <div class="select"><select name=unit_loc[` + x + `] class="unit_loc" >
-                                                            </select>
-                                                        </div></td>
+                            <div class="select"><select class="pp_sel_cls" name="pp_sel[0]">
+                                </select>
+                            </div>
+                        </td>
+                        <td hidden>
+                            <div class="control has-icons-left">
+                                <input class="input" name="qc_datefilter[0]" value="" readonly>
+                                <span class="icon is-small is-left">
+                                    <i data-feather="calendar"></i>
+                                </span>
+                            </div>
+                        </td>
+                        <td name="qc_total[0]"></td>
+                        <td name="qc_rem_qty[0]"></td>
+                        <td><input class="input" name="qc_qty[0]" class="qc_qty"></td>
+                        <td>
+                            <div class="select"><select name=unit_loc[0] class="unit_loc">
+                                </select>
+                            </div>
+                        </td>
     
-                                                            <td><input class="input" name=qc_rem[` + x + `] class="qc_rem"></td>
-                                                            
-                                                            <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
-                                                            </td>
-   
-                                                        </tr>
+                        <td><input class="input" name=qc_rem[0] class="qc_rem"></td>
     
-                                                    
-                                                    `);
-
-                                // Date picekr init
-
-
-                                feather.replace();
-
-                                $("[name*='qc_datefilter']").val(date_set)
-
-                                // Location load
-                                var loc_loaded = $.Deferred()
-
-                                var options = [];
-                                $.getJSON("{{url_for('get_location')}}", function (result) {
-                                    var leng = Object.keys(result).length
-                                    for (var i = 0; i < leng; i++) {
-                                        options.push('<option value="',
-                                            Object.keys(result)[i], '">',
-                                            Object.values(result)[i], '</option>');
+                        <td>
+                        </td>
+    
+                    </tr>
+    
+                    <script>
+                        $(document).ready(function () {
+    
+                            var date_set;
+                            $(".pp_sel_cls").on('change', function () {
+    
+                                date_set = $("[name='qc_date']").val()
+                                console.log(date_set);
+                                $("[name*='datefilter']").val(date_set)
+    
+    
+                            })
+    
+                            $(function () {
+    
+                                $('input[name="qc_date"]').daterangepicker({
+                                    "locale": {
+                                        "format": "DD/MM/YYYY"
+                                    },
+                                    singleDatePicker: true,
+                                    autoUpdateInput: false,
+                                    locale: {
+                                        cancelLabel: 'Clear'
                                     }
-                                    $('[name="unit_loc[' + x + ']"]').html(options.join(''));
-                                    $('[name="unit_loc[' + x + ']"]').prop("selectedIndex", -1)
-
-                                }).done(function () {
-                                    loc_loaded.resolve();
                                 });
-
-                                $.when(loc_loaded).then(function () {
-                                    $("unit_loc").html(options.join(''));
+    
+                                $('input[name="qc_date"]').on('apply.daterangepicker', function (ev, picker) {
+                                    $(this).val(picker.startDate.format('DD/MM/YYYY'));
                                 });
-
-                                // End location load
-
-                                // PP_sel load
-
-                                var pp_options = [];
-                                $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
-                                    var leng = Object.keys(result).length
-                                    for (var i = 0; i < leng; i++) {
-                                        pp_options.push('<option value="',
-                                            Object.keys(result)[i], '">',
-                                            Object.values(result)[i], '</option>');
+    
+                                $('input[name="qc_date"]').on('cancel.daterangepicker', function (ev, picker) {
+                                    $(this).val('');
+                                });
+    
+                            });
+    
+                            feather.replace();
+    
+                            // Location load
+                            var loc_loaded = $.Deferred()
+    
+                            var options = [];
+                            $.getJSON("{{url_for('get_location')}}", function (result) {
+                                var leng = Object.keys(result).length
+                                for (var i = 0; i < leng; i++) {
+                                    options.push('<option value="',
+                                        Object.keys(result)[i], '">',
+                                        Object.values(result)[i], '</option>');
+                                }
+                                $('[name="unit_loc[0]"]').html(options.join(''));
+                                $('[name="unit_loc[0]"]').prop("selectedIndex", -1)
+    
+                            }).done(function () {
+                                loc_loaded.resolve();
+                            });
+    
+                            $.when(loc_loaded).then(function () {
+                                $("unit_loc").html(options.join(''));
+                            });
+    
+                            // End location load
+    
+                            // PP_sel load
+    
+                            var pp_options = [];
+                            $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
+                                var leng = Object.keys(result).length
+                                for (var i = 0; i < leng; i++) {
+                                    pp_options.push('<option value="',
+                                        Object.keys(result)[i], '">',
+                                        Object.values(result)[i], '</option>');
+                                }
+                                $('[name="pp_sel[0]"]').html(pp_options.join(''));
+                                $('[name="pp_sel[0]"]').prop("selectedIndex", -1)
+                            })
+    
+    
+                            // Qty Total And rem add
+    
+                            $('[name="pp_sel[0]"]').on('change', function () {
+                                pp_sel = $(this).val();
+                                $.getJSON('/trans_a_view_data/' + pp_sel, function (result) {
+                                    pp_a = JSON.parse(result["trans_data"]["part_a"])
+                                    pp_b = JSON.parse(result["trans_data"]["part_b"])
+                                    pp_qty = pp_a["prog_qty"]
+                                    sum = 0;
+                                    for (var i in pp_b["qc_qty"]) {
+                                        sum += parseFloat(pp_b["qc_qty"][i])
                                     }
-                                    $('[name="pp_sel[' + x + ']"]').html(pp_options.join(''));
-                                    $('[name="pp_sel[' + x + ']"]').prop("selectedIndex", -1)
+                                    console.log(sum);
+                                    $("[name='qc_total[0]']").html(pp_qty);
+                                    $("[name='qc_rem_qty[0]']").html(sum);
+    
                                 })
-
-                            }
-
-                            // End pp_sel load
-
-
-                        })
-
-                        $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
-                            e.preventDefault();
-                            $(this).parent('td').parent('tr').remove(); x--;
-                        })
-                    });
-
-
-                </script>
-
-            </tbody>
-        </table>
-
-        <a class="button is-primary" id="add_field_button_qc"><span class="icon icon-btn-in"><i
-                    data-feather="plus"></i></span>Add More</a>
-    </div>
-    <br>
-    <div class="field is-grouped">
-        <div class="control">
-            <button id="submit_qc_data" class="is-black button"><span class="icon icon-btn-in"><i
-                        data-feather="check"></i></span>Save</button>
+                            })
+    
+                            var max_fields = 10; //maximum input boxes allowed
+                            var wrapper_fab = $(".input_fields_wrap_qc"); //Fields wrapper
+                            var add_button_qc = $("#add_field_button_qc"); //Add button ID
+    
+    
+                            var x = 0; //initlal text box count
+    
+                            $(add_button_qc).click(function (e) { //on add input button click
+                                console.log("clicked");
+                                e.preventDefault();
+                                date_set = $("[name='qc_date']").val()
+    
+                                if (x < max_fields) { //max input box allowed
+                                    x++; //text box increment
+                                    $(wrapper_fab).append(`
+                                                        
+                                                            <tr>
+                                                                <td ><div class="select"><select class="pp_sel_cls" name="pp_sel[` + x + `]">
+                                </select>
+                            </div></td>
+                            <td hidden>
+                            <div class="control has-icons-left">
+                                <input class="input" name="qc_datefilter[`+x+`]" value="" readonly>
+                                <span class="icon is-small is-left">
+                                    <i data-feather="calendar"></i>
+                                </span>
+                            </div>
+                        </td>
+                            <td name="qc_total[`+x+`]"></td>
+                        <td name="qc_rem_qty[`+x+`]"></td>
+                                                                <td><input class="input" name="qc_qty[` + x + `]" class="qc_qty"></td>
+                                                                                            <td>  <div class="select"><select name=unit_loc[` + x + `] class="unit_loc" >
+                                                                </select>
+                                                            </div></td>
+        
+                                                                <td><input class="input" name=qc_rem[` + x + `] class="qc_rem"></td>
+                                                                
+                                                                <td><a class="button is-danger remove_field"><span class="icon icon-btn-in-x"><i data-feather="x"></i></span></a>
+                                                                </td>
+       
+                                                            </tr>
+        
+                                                        
+                                                        `);
+    
+                                    // Date picekr init
+    
+    
+                                    feather.replace();
+    
+                                    $("[name*='qc_datefilter']").val(date_set)
+    
+                                    // Location load
+                                    var loc_loaded = $.Deferred()
+    
+                                    var options = [];
+                                    $.getJSON("{{url_for('get_location')}}", function (result) {
+                                        var leng = Object.keys(result).length
+                                        for (var i = 0; i < leng; i++) {
+                                            options.push('<option value="',
+                                                Object.keys(result)[i], '">',
+                                                Object.values(result)[i], '</option>');
+                                        }
+                                        $('[name="unit_loc[' + x + ']"]').html(options.join(''));
+                                        $('[name="unit_loc[' + x + ']"]').prop("selectedIndex", -1)
+    
+                                    }).done(function () {
+                                        loc_loaded.resolve();
+                                    });
+    
+                                    $.when(loc_loaded).then(function () {
+                                        $("unit_loc").html(options.join(''));
+                                    });
+    
+                                    // End location load
+    
+                                    // PP_sel load
+    
+                                    var pp_options = [];
+                                    $.getJSON("{{url_for('get_trans_pp')}}", function (result) {
+                                        var leng = Object.keys(result).length
+                                        for (var i = 0; i < leng; i++) {
+                                            pp_options.push('<option value="',
+                                                Object.keys(result)[i], '">',
+                                                Object.values(result)[i], '</option>');
+                                        }
+                                        $('[name="pp_sel[' + x + ']"]').html(pp_options.join(''));
+                                        $('[name="pp_sel[' + x + ']"]').prop("selectedIndex", -1)
+                                    })
+    
+                                    // Qty Total And rem add
+    
+                                    $('[name="pp_sel['+x+']"]').on('change', function () {
+                                        pp_sel = $(this).val();
+                                        console.log(pp_sel)
+                                        $.getJSON('/trans_a_view_data/' + pp_sel, function (result) {
+                                            console.log(result)
+                                            pp_a = JSON.parse(result["trans_data"]["part_a"])
+                                            pp_b = JSON.parse(result["trans_data"]["part_b"])
+                                            pp_qty = pp_a["prog_qty"]
+                                            sum = 0;
+                                            for (var i in pp_b["qc_qty"]) {
+                                                sum += parseFloat(pp_b["qc_qty"][i])
+                                            }
+                                            $("[name='qc_total["+x+"]']").html(pp_qty);
+                                            $("[name='qc_rem_qty["+x+"]']").html(sum);
+    
+                                        })
+                                    })
+    
+                                }
+    
+                                // End pp_sel load
+    
+    
+                            })
+    
+                            $(wrapper_fab).on("click", ".remove_field", function (e) { //user click on remove text
+                                e.preventDefault();
+                                $(this).parent('td').parent('tr').remove(); x--;
+                            })
+                        });
+    
+    
+                    </script>
+    
+                </tbody>
+            </table>
+    
+            <a class="button is-primary" id="add_field_button_qc"><span class="icon icon-btn-in"><i
+                        data-feather="plus"></i></span>Add More</a>
         </div>
-        <div class="control">
-            <button id="filter_reset" class=" button "><span class="icon icon-btn-in"><i
-                        data-feather="x"></i></span>Clear Filter</button>
+        <br>
+        <div class="field is-grouped">
+            <div class="control">
+                <button id="submit_qc_data" class="is-black button"><span class="icon icon-btn-in"><i
+                            data-feather="check"></i></span>Save</button>
+            </div>
+            <div class="control">
+                <button id="filter_reset" class=" button "><span class="icon icon-btn-in"><i
+                            data-feather="x"></i></span>Clear Filter</button>
+            </div>
         </div>
-    </div>
-    <script>
-        $("#submit_qc_data").click( function(e){
-            e.preventDefault();
-            var formdata =  $("#entry_form_qc").serializeJSON()
-        $.ajax({
-            url: '{{ url_for("add_dept_qc")}}',
-            type: 'POST',
-            data: JSON.stringify($("#entry_form_qc").serializeJSON()),
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            async: true,
-            success: function (msg) {
-                window.location.href = "{{url_for('dept_entry' , dept = dept)}}";
-            }
-        })
-        });
-
-    </script>
-</form>
+        <script>
+            $("#submit_qc_data").click(function (e) {
+                e.preventDefault();
+                var formdata = $("#entry_form_qc").serializeJSON()
+                $.ajax({
+                    url: '{{ url_for("add_dept_qc")}}',
+                    type: 'POST',
+                    data: JSON.stringify($("#entry_form_qc").serializeJSON()),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: true,
+                    success: function (msg) {
+                        window.location.href = "{{url_for('dept_entry' , dept = dept)}}";
+                    }
+                })
+            });
+    
+        </script>
+    </form>

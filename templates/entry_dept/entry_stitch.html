@@ -1,19 +1,29 @@
 <form id="entry_form_sth">
         <h2 class="is-size-5 robo ">Stitching Form</h2><br>
-    
-        <div class="control has-icons-left">
-            <input class="input" name="sth_date" value="">
-            <span class="icon is-small is-left">
-                <i data-feather="calendar"></i>
-            </span>
-        </div> <br>
+        <nav class="level">
+            <!-- Left side -->
+            <div class="level-left">
+                <div class="level-item is-size-5 tag">
+                    <label class="is-size-5  ">Date</label>
+                </div>
+                <div class="level-item">
+                    <div class="control has-icons-left">
+                        <input class="input" name="sth_date" value="" placeholder="Enter Date" required>
+                        <span class="icon is-small is-left">
+                            <i data-feather="calendar"></i>
+                        </span>
+                    </div>
+                </div>
+        </nav>
         <br>
         <div class="table-container box">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Particulars</th>
-                        <th>Date</th>
+                        <th>Product Order No.</th>
+                        <th hidden>Date</th>
+                        <th>Prog. Qty.</th>
+                        <th>Rem. Qty.</th>
                         <th>Qty</th>
                         <th>Location</th>
                         <th>Remark</th>
@@ -23,11 +33,11 @@
                 <tbody class="input_fields_wrap_sth">
                     <tr>
                         <td>
-                            <div class="select"><select class="sth_pp_sel_cls" name="pp_sel[0]">
+                            <div class="select"><select class="pp_sel_cls" name="pp_sel[0]">
                                 </select>
                             </div>
                         </td>
-                        <td>
+                        <td hidden>
                             <div class="control has-icons-left">
                                 <input class="input" name="sth_datefilter[0]" value="" readonly>
                                 <span class="icon is-small is-left">
@@ -35,6 +45,8 @@
                                 </span>
                             </div>
                         </td>
+                        <td name="sth_total[0]"></td>
+                        <td name="sth_rem_qty[0]"></td>
                         <td><input class="input" name="sth_qty[0]" class="sth_qty"></td>
                         <td>
                             <div class="select"><select name=unit_loc[0] class="unit_loc">
@@ -53,7 +65,7 @@
                         $(document).ready(function () {
     
                             var date_set;
-                            $(".sth_pp_sel_cls").on('change', function () {
+                            $(".pp_sel_cls").on('change', function () {
     
                                 date_set = $("[name='sth_date']").val()
                                 console.log(date_set);
@@ -126,6 +138,25 @@
                             })
     
     
+                            // Qty Total And rem add
+    
+                            $('[name="pp_sel[0]"]').on('change', function () {
+                                pp_sel = $(this).val();
+                                $.getJSON('/trans_a_view_data/' + pp_sel, function (result) {
+                                    pp_a = JSON.parse(result["trans_data"]["part_a"])
+                                    pp_b = JSON.parse(result["trans_data"]["part_b"])
+                                    pp_qty = pp_a["prog_qty"]
+                                    sum = 0;
+                                    for (var i in pp_b["sth_qty"]) {
+                                        sum += parseFloat(pp_b["sth_qty"][i])
+                                    }
+                                    console.log(sum);
+                                    $("[name='sth_total[0]']").html(pp_qty);
+                                    $("[name='sth_rem_qty[0]']").html(sum);
+    
+                                })
+                            })
+    
                             var max_fields = 10; //maximum input boxes allowed
                             var wrapper_fab = $(".input_fields_wrap_sth"); //Fields wrapper
                             var add_button_sth = $("#add_field_button_sth"); //Add button ID
@@ -143,17 +174,19 @@
                                     $(wrapper_fab).append(`
                                                         
                                                             <tr>
-                                                                <td ><div class="select"><select class="sth_pp_sel_cls" name="pp_sel[` + x + `]">
+                                                                <td ><div class="select"><select class="pp_sel_cls" name="pp_sel[` + x + `]">
                                 </select>
                             </div></td>
-                            <td>
-                                                                    <div class="control has-icons-left">
-                                                                        <input class="input" name="sth_datefilter[` + x + `]" value="" readonly>
-                                                                        <span class="icon is-small is-left">
-                                                                            <i data-feather="calendar"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
+                            <td hidden>
+                            <div class="control has-icons-left">
+                                <input class="input" name="sth_datefilter[`+x+`]" value="" readonly>
+                                <span class="icon is-small is-left">
+                                    <i data-feather="calendar"></i>
+                                </span>
+                            </div>
+                        </td>
+                            <td name="sth_total[`+x+`]"></td>
+                        <td name="sth_rem_qty[`+x+`]"></td>
                                                                 <td><input class="input" name="sth_qty[` + x + `]" class="sth_qty"></td>
                                                                                             <td>  <div class="select"><select name=unit_loc[` + x + `] class="unit_loc" >
                                                                 </select>
@@ -214,6 +247,26 @@
                                         $('[name="pp_sel[' + x + ']"]').prop("selectedIndex", -1)
                                     })
     
+                                    // Qty Total And rem add
+    
+                                    $('[name="pp_sel['+x+']"]').on('change', function () {
+                                        pp_sel = $(this).val();
+                                        console.log(pp_sel)
+                                        $.getJSON('/trans_a_view_data/' + pp_sel, function (result) {
+                                            console.log(result)
+                                            pp_a = JSON.parse(result["trans_data"]["part_a"])
+                                            pp_b = JSON.parse(result["trans_data"]["part_b"])
+                                            pp_qty = pp_a["prog_qty"]
+                                            sum = 0;
+                                            for (var i in pp_b["sth_qty"]) {
+                                                sum += parseFloat(pp_b["sth_qty"][i])
+                                            }
+                                            $("[name='sth_total["+x+"]']").html(pp_qty);
+                                            $("[name='sth_rem_qty["+x+"]']").html(sum);
+    
+                                        })
+                                    })
+    
                                 }
     
                                 // End pp_sel load
@@ -248,20 +301,20 @@
             </div>
         </div>
         <script>
-            $("#submit_sth_data").click( function(e){
+            $("#submit_sth_data").click(function (e) {
                 e.preventDefault();
-                var formdata =  $("#entry_form_sth").serializeJSON()
-            $.ajax({
-                url: '{{ url_for("add_dept_sth")}}',
-                type: 'POST',
-                data: JSON.stringify($("#entry_form_sth").serializeJSON()),
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                async: true,
-                success: function (msg) {
-                    window.location.href = "{{url_for('dept_entry' , dept = dept)}}";
-                }
-            })
+                var formdata = $("#entry_form_sth").serializeJSON()
+                $.ajax({
+                    url: '{{ url_for("add_dept_sth")}}',
+                    type: 'POST',
+                    data: JSON.stringify($("#entry_form_sth").serializeJSON()),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    async: true,
+                    success: function (msg) {
+                        window.location.href = "{{url_for('dept_entry' , dept = dept)}}";
+                    }
+                })
             });
     
         </script>

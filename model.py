@@ -384,6 +384,9 @@ class FinGoods(db.Model):
     uom = db.relationship('Uom' ,cascade="all,delete", secondary='uom_goods' , backref='uom_goods' , lazy = 'joined')
     alt_name = db.Column(db.String(200))
     gen_name = db.Column(db.String(100))
+    # __table_args__ = (db.UniqueConstraint('product_category', 'fabric_combo','print_tech' , 'design', 'uom' , name='fin_goods_unq'),
+    #                  )
+
 
     def get_gen_name(self):
         product_category = self.product_category
@@ -431,6 +434,7 @@ class RawFabMainForm(FlaskForm):
 
 class RawFabMain(db.Model):
     id = db.Column(db.Integer , primary_key = True)
+    
     product_category = db.relationship('RawCat' ,cascade="all,delete", secondary='cat_fab_goods' , backref='cat_fab_goods' , lazy = 'joined')
     yarn = db.relationship('Yarn' ,cascade="all,delete", secondary='yarn_goods' , backref='yarn_goods' , lazy = 'joined')
     fab_const = db.relationship('FabConst' ,cascade="all,delete", secondary='const_goods' , backref='const_goods' , lazy = 'joined')
@@ -440,6 +444,8 @@ class RawFabMain(db.Model):
     dye = db.relationship('FabDye' ,cascade="all,delete", secondary='dye_goods' , backref='dye_goods' , lazy = 'joined')
     alt_name = db.Column(db.String(200))
     gen_name = db.Column(db.String(100))
+    # __table_args__ = (db.UniqueConstraint('product_category', 'yarn','fab_const' , 'proc', 'width','dye' , name='raw_goods_unq'),
+    #                  )
 
     def get_gen_name(self):
         product_category = self.product_category

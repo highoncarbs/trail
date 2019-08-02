@@ -27,11 +27,13 @@ from model import Users, LoginForm, SignupForm, CustomerCategory, CustomerCatego
     FabProc, FabProcForm,  FabWidth, FabWidthForm, FabDye, FabDyeForm, RawCat, RawCatForm , FinCat , FinCatForm ,\
     FabComb , FabCombForm , PrintTech , PrintTechForm , FinDes , FinDesForm , FinSize , FinSizeForm , UnitLoc ,UnitLocForm
 
-# logging.basicConfig(
-#     filename='trail.log',
-#     level=logging.DEBUG,
-#     format='[TRAIL] %(levelname)-7.7s %(message)s'
-# )
+logging.basicConfig(
+    filename='trail.log',
+    level=logging.DEBUG,
+    format='[TRAIL] %(levelname)-7.7s %(message)s'
+)
+
+from model import Role , UserForm
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -78,17 +80,47 @@ def signup():
             hashed_pass = generate_password_hash(
                 form.password.data, method='sha256')
             new_user = Users(username=form.username.data,
-                             email=form.email.data, password=hashed_pass)
-            # user_table = UserTableCreator(form.email.data)
-            # Base.metadata.create_all(engine)
-            db.session.add(new_user)
-            db.session.commit()
-            db.session.close()
-            session['mssg'] = "You're all set. Please Login. "
+                             password=hashed_pass)
+            if str(form.email.data) == "jaitexart":
+                check_role = db.session.query(Role).filter_by(name="ADMIN")
+                if check_role.first() is None:
+                    role = Role(name ="ADMIN")
+                    db.session.add(role)
+                    db.session.commit()
+                    new_user.roles.append(role)
+                else:
+                    role = check_role.first()
+                    new_user.roles.append(role)
+                db.session.add(new_user)
+                db.session.commit()
+                db.session.close()
+                session['mssg'] = "You're all set. Please Login. "
 
-            return redirect(url_for('login'))
+                return redirect(url_for('login'))
+            elif str(form.email.data) == "user_ma":
+                check_role = db.session.query(Role).filter_by(name="USER")
+                if check_role.first() is None:
+                    role = Role(name ="USER")
+                    db.session.add(role)
+                    db.session.commit()
+                    new_user.roles.append(role)
+                else:
+                    role = check_role.first()
+                    new_user.roles.append(role)
+                    db.session.add(new_user)
+                    db.session.commit()
+                    db.session.close()
+                    session['mssg'] = "You're all set. Please Login. "
+
+                    return redirect(url_for('login'))
+            else:
+                session['mssg'] = "Not valid without key."
+                return redirect(url_for('signup'))
+
+
+           
         else:
-            session['mssg'] = "Email ID already in use. Please login"
+            session['mssg'] = "User already in use. Please login"
 
             return render_template('register.html', form=form, subtitle="Signup", mssg=session['mssg'])
 
@@ -112,7 +144,7 @@ def home():
     trans_list = db.session.query(Trans).filter( Trans.flag != 2).all()
     return render_template('dash.html' , trans_list = trans_list) , 200
 
-from model import Role , UserForm
+
 
 @app.route('/user/roles', methods=['GET', 'POST'])
 @login_required
@@ -121,7 +153,6 @@ def user_roles():
     user_list = Users.query.filter(Users.roles.any(Role.name.like('USER'))).all()
     form = UserForm()
     if form.validate_on_submit():
-        print('Somethig up here')
         if form.submit.data:
             user = Users.query.filter_by(username=form.username.data).first()
             if user is None:
@@ -140,7 +171,7 @@ def user_roles():
             else:
                 session['mssg'] = "Username already in use. Please login"
 
-                return redirect('/user-roles')
+                return redirect(url_for('user_roles'))
 
     return render_template('user_roles.html', subtitle="User Roles", mssg=session['mssg'], user_form=form , user_list = user_list), 200
 
@@ -168,10 +199,10 @@ def user_edit(id):
                 check_one.username = user_name
                 db.session.commit()
                 session['mssg'] = "User updated successfully"
-                return redirect('/user-roles')
+                return redirect(url_for('user_roles'))
             else:
                 session['mssg'] = "Something went wrong."
-                return redirect('/user-roles')
+                return redirect(url_for('user_roles'))
 
 
 @app.route("/user-roles/delete/<id>", methods=['POST', 'GET'])
@@ -184,10 +215,10 @@ def user_delete(id):
         check_one.delete()
         db.session.commit()
         session['mssg'] = "User deleted successfully"
-        return redirect('/user-roles')
+        return redirect(url_for('user_roles'))
     else:
         session['mssg'] = "Something went wrong."
-        return redirect('/user-roles')
+        return redirect(url_for('user_roles'))
 
 
 # Transaction Views 
@@ -206,10 +237,8 @@ def trans_a():
         pp_new = int(pp_num[-1].id) + 1
 
     if request.method == "POST":
-        print(request.json)
         payload = json.dumps(request.json)
         payload = json.loads(payload)
-        print(payload)
         if 'pp_num' in payload :
 
             check_trans = db.session.query(Trans).filter_by(id= int(payload['pp_num'])).first()
@@ -269,17 +298,14 @@ def trans_a_view_by_id(trans_id):
     pp_num = db.session.query(Trans).filter_by(id= int(trans_id)).all()
     trans_schema = TransSchema()
     res = trans_schema.dump(pp_num).data
-    print(res)
     img_list = []
     UPLOAD_FOLDER = os.path.abspath('./static/images/uploads/'+str(trans_id))
     if not os.path.exists(UPLOAD_FOLDER):
         pass
     else:
         for r , d ,f in os.walk(UPLOAD_FOLDER):
-            print(r ,d ,f)
             for file in f:
                 img_list.append(str(trans_id)+'/'+str(file))
-        print(img_list)
 
     return render_template('trans_a_view_id.html' , pp_num = trans_id , mssg = session['mssg'] , img_list = img_list) , 200
 
@@ -289,17 +315,14 @@ def trans_a_user_view(trans_id):
     pp_num = db.session.query(Trans).filter_by(id= int(trans_id)).all()
     trans_schema = TransSchema()
     res = trans_schema.dump(pp_num).data
-    print(res)
     img_list = []
     UPLOAD_FOLDER = os.path.abspath('./static/images/uploads/'+str(trans_id))
     if not os.path.exists(UPLOAD_FOLDER):
         pass
     else:
         for r , d ,f in os.walk(UPLOAD_FOLDER):
-            print(r ,d ,f)
             for file in f:
                 img_list.append(str(trans_id)+'/'+str(file))
-        print(img_list)
 
     return render_template('trans_a_user_view.html' , pp_num = trans_id , mssg = session['mssg'] , img_list = img_list) , 200
 
@@ -320,7 +343,6 @@ def trans_a_api_last():
     pp_num = db.session.query(Trans).filter( Trans.flag != int(2) ).all()[-1]
     trans_schema = TransSchema()
     res = trans_schema.dump(pp_num).data
-    print(res)
     return jsonify({'trans_data': res})
 
 @app.route('/trans_b/view/<trans_id>' , methods = ['POST' , 'GET'])
@@ -362,7 +384,7 @@ def trans_b():
             session['mssg'] = "Transaction - Part B with PP No. " + str( pp_num.id) + " updated."
             return jsonify("success")
         except Exception as e:
-            print(str(e))
+            logging.error(str(e))
     return render_template('trans_b.html' ,open_trans = pp_num , mssg = session['mssg']) ,200
 
 
@@ -423,7 +445,10 @@ def trans_b_user_view(trans_id):
 @app.route('/dept_entry/<dept>' ,methods = ['GET' , 'POST'])
 @login_required
 def dept_entry(dept):
-    return render_template('dept_entry.html' , dept = dept , mssg = session['mssg']) ,200
+    if current_user.roles[0].name == 'ADMIN' :
+        return render_template('dept_entry.html' , dept = dept , mssg = session['mssg']) ,200
+    elif user.roles[0].name == 'USER' :
+        return render_template('dept_entry_user.html' , dept = dept , mssg = session['mssg']) ,200
 
 # Basic Master Views
 #
@@ -1083,7 +1108,7 @@ def main_master(fin_id):
             return redirect('/main_master?showTab=14')
         except Exception as e:
             session['mssg'] = "Something unexpected happened."
-            print(str(e))
+            logging.error(str(e))
             return redirect('/main_master?showTab=14')
     
     if fin_goods_form.fin_update.data:
@@ -1108,7 +1133,7 @@ def main_master(fin_id):
             return redirect('/main_master?showTab=14&view=list')
         except Exception as e:
             session['mssg'] = "Something unexpected happened."
-            print(e)
+            logging.error(str(e))
             return redirect('/main_master?showTab=14&view=list')
     
 
@@ -1152,7 +1177,7 @@ def main_master(fin_id):
             return redirect('/main_master?showTab=15&view=list')
         except Exception as e:
             session['mssg'] = "Something unexpected happened."
-            print(e)
+            logging.error(str(e))
             return redirect('/main_master?showTab=15&view=list')
 
     return render_template('main_master.html' ,mssg=session['mssg'], fin_form = fin_goods_form , raw_form = raw_goods_form , fin_goods_list = fin_goods , raw_goods_list = raw_goods ) ,200
@@ -2029,7 +2054,6 @@ def get_raw_prod():
         p_name = str(r.get_gen_name())
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
-        print(temp_tup)
 
     obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     return obj
@@ -2044,7 +2068,6 @@ def get_fin_prod():
         p_name = str(r.get_gen_name())
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
-        print(temp_tup)
     obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
     return obj
 
@@ -2073,14 +2096,12 @@ def get_uom():
 @login_required 
 def get_uom_by_id(fin_id):
     res = db.session.query(FinGoods).filter_by(id = int(fin_id)).first().uom[0].measure
-    print(res)
     return jsonify(res)
     
 @app.route('/get/uom/raw_fab/<fin_id>' , methods=["GET"])
 @login_required 
 def get_uom_by_id_raw_fab(fin_id):
     res = db.session.query(RawFabMain).filter_by(id = int(fin_id)).first().uom[0].measure
-    print(res)
     return jsonify(res)
     
 
@@ -2088,14 +2109,12 @@ def get_uom_by_id_raw_fab(fin_id):
 @login_required 
 def get_uom_by_id_acc(fin_id):
     res = db.session.query(Accessories).filter_by(id = int(fin_id)).first().uom[0].measure
-    print(res)
     return jsonify(res)
 
 @app.route('/get/uom/oth/<fin_id>' , methods=["GET"])
 @login_required 
 def get_uom_by_id_oth(fin_id):
     res = db.session.query(OtherMat).filter_by(id = int(fin_id)).first().uom[0].measure
-    print(res)
     return jsonify(res)
 
 @app.route('/get/acc/' , methods=["GET"])
@@ -2109,7 +2128,6 @@ def get_acc():
         temp_tup = (p_id , p_name)
         data.append(temp_tup)
     obj = '{' + ', '.join('"{}": "{}"'.format(k, v) for k, v in data) + '}'
-    print(obj)
     return obj
 
 @app.route('/get/oth_mat/' , methods=["GET"])
@@ -2184,7 +2202,6 @@ def get_location():
 @login_required
 def close_trans():
     payload = request.json
-    print(payload)
     pp_num = db.session.query(Trans).filter_by(id = str(payload['pp_num'])).first()
     pp_num.flag = 1
     db.session.commit()
@@ -2203,7 +2220,6 @@ def delete_trans(trans_id):
 @login_required
 def add_dept_cut():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2225,7 +2241,6 @@ def add_dept_cut():
 @login_required
 def add_dept_sth():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2248,7 +2263,6 @@ def add_dept_sth():
 @login_required
 def add_dept_val():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2270,7 +2284,6 @@ def add_dept_val():
 @login_required
 def add_dept_kaj():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2285,7 +2298,7 @@ def add_dept_kaj():
         session['mssg'] = "Data successfully added."
         return jsonify("success")
     except Exception as e:
-        print(str(e))
+        logging.error(str(e))
         session['mssg'] = "Somethign unexpected happened - "+str(e)
         return jsonify("success")
 
@@ -2293,7 +2306,6 @@ def add_dept_kaj():
 @login_required
 def add_dept_tes():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2308,7 +2320,7 @@ def add_dept_tes():
         session['mssg'] = "Data successfully added."
         return jsonify("success")
     except Exception as e:
-        print(str(e))
+        logging.error(str(e))
         session['mssg'] = "Somethign unexpected happened - "+str(e)
         return jsonify("success")
 
@@ -2316,7 +2328,6 @@ def add_dept_tes():
 @login_required
 def add_dept_thr():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2331,7 +2342,7 @@ def add_dept_thr():
         session['mssg'] = "Data successfully added."
         return jsonify("success")
     except Exception as e:
-        print(str(e))
+        logging.error(str(e))
         session['mssg'] = "Somethign unexpected happened - "+str(e)
         return jsonify("success")
 
@@ -2339,7 +2350,6 @@ def add_dept_thr():
 @login_required
 def add_dept_qc():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2354,7 +2364,7 @@ def add_dept_qc():
         session['mssg'] = "Data successfully added."
         return jsonify("success")
     except Exception as e:
-        print(str(e))
+        logging.error(str(e))
         session['mssg'] = "Somethign unexpected happened - "+str(e)
         return jsonify("success")
 
@@ -2362,7 +2372,6 @@ def add_dept_qc():
 @login_required
 def add_dept_pre():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2377,7 +2386,7 @@ def add_dept_pre():
         session['mssg'] = "Data successfully added."
         return jsonify("success")
     except Exception as e:
-        print(str(e))
+        logging.error(str(e))
         session['mssg'] = "Somethign unexpected happened - "+str(e)
         return jsonify("success")
 
@@ -2385,7 +2394,6 @@ def add_dept_pre():
 @login_required
 def add_dept_tag():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2400,7 +2408,7 @@ def add_dept_tag():
         session['mssg'] = "Data successfully added."
         return jsonify("success")
     except Exception as e:
-        print(str(e))
+        logging.error(str(e))
         session['mssg'] = "Somethign unexpected happened - "+str(e)
         return jsonify("success")
 
@@ -2408,7 +2416,6 @@ def add_dept_tag():
 @login_required
 def add_dept_tra():
     payload = request.json
-    print(payload)
     try:
         for k,v in payload["pp_sel"].items():
             pp_num = db.session.query(Trans).filter_by(id = int(v)).first()
@@ -2423,6 +2430,6 @@ def add_dept_tra():
         session['mssg'] = "Data successfully added."
         return jsonify("success")
     except Exception as e:
-        print(str(e))
+        logging.error(str(e))
         session['mssg'] = "Somethign unexpected happened - "+str(e)
         return jsonify("success")

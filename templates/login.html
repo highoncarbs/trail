@@ -5,20 +5,13 @@
 <body>
     {% if mssg %}
     <div class="snackbar">
-        <div class="box has-background-black animated fadeInUp">
-            <div class=" level is-mobile container">
-                <div class="level-left" style="padding-right: 1rem;">
-                    <div class="level-item is-size-6 has-text-white">
-                        <p>{{mssg}}</p>
+        <div class=" has-background-grey-dark animated fadeInUp">
 
-                    </div>
-                </div>
-                <div class="level-right">
-                    <div class="level-item delete">
-                    </div>
-                </div>
-            </div>
+            <p class="has-text-white is-size-5 has-text-centered"><span class="icon icon-btn"><i
+                        data-feather="alert-circle"></i></span>{{mssg}}</p>
+
         </div>
+
     </div>
     {% endif %}
     <section class="hero has-background-white-bis is-fullwidth is-fullheight">

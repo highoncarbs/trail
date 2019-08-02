@@ -7,7 +7,7 @@
 
     <div class="columns is-mobile is-centered">
         <div class="column is-three-quarters">
-            <nav class="level is-mobile">
+            <nav class="level">
                 <div class="level-left">
 
                     <div class="level-item">
@@ -57,6 +57,12 @@
                                 <span class=" robo"> Transaction <span class="icon icon-btn"
                                         style="padding:3px; margin-left: 10px;"><i data-feather="hash"></i></span><span
                                         class="trans_b_id_set"></span> </span></span></p>
+                        </div>
+                        <div class="level-item">
+                            <p class="tag is-size-5">
+                                Programme Qty - #
+                                <span id="prog_qty" class="robo"></span>
+                            </p>
                         </div>
                     </div>
                     <div class="level-right">
@@ -1586,47 +1592,54 @@
                             <i data-feather="plus"></i>
                         </span>Add More</button>
                 </form>
-
-
-
                 <hr>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button id="submit_btn_trans_b" class="button is-black "><span class="icon icon-btn-in"><i
-                                    data-feather="check"></i></span>Save</button>
-                    </div>
-
-                    <div class="control ">
-                        <a class="button is-text">Clear Fields</a>
-                    </div>
-
-                    <div class="control">
-                        <button class="button is-danger " id="close_btn_trans_b"><span class="icon icon-btn-in"><i
-                                    data-feather="x"></i></span>Close Report</button>
-                    </div>
-                    <script>
-                        $('#close_btn_trans_b').click(function (e) {
-                            e.preventDefault();
-
-                            var payload = { 'pp_num': $('.trans_b_id_set').html() };
-
-                            $.ajax({
-                                url: "{{url_for('close_trans')}}",
-                                type: 'POST',
-                                data: JSON.stringify(payload),
-                                contentType: 'application/json; charset=utf-8',
-                                dataType: 'json',
-                                async: true,
-                                success: function (msg) {
-                                    window.location.href = "{{url_for('trans_b')}}";
-                                }
-                            });
-
-                        });
-                    </script>
-                </div>
-                <hr>
+                <nav class="navbar is-fixed-bottom" id="form-cta">
+                        <div class="container">
+                            <div class="columns is-mobile is-centered">
+                                <div class="column is-three-quarters">
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            <button id="submit_btn_trans_b" class="button is-black "><span
+                                                    class="icon icon-btn-in"><i data-feather="check"></i></span>Save</button>
+                                        </div>
+        
+                                        <div class="control ">
+                                            <a class="button is-text">Clear Fields</a>
+                                        </div>
+        
+                                        <div class="control">
+                                            <button class="button is-danger " id="close_btn_trans_b"><span
+                                                    class="icon icon-btn-in"><i data-feather="x"></i></span>Close
+                                                Report</button>
+                                        </div>
+                                        <script>
+                                            $('#close_btn_trans_b').click(function (e) {
+                                                e.preventDefault();
+        
+                                                var payload = { 'pp_num': $('.trans_b_id_set').html() };
+        
+                                                $.ajax({
+                                                    url: "{{url_for('close_trans')}}",
+                                                    type: 'POST',
+                                                    data: JSON.stringify(payload),
+                                                    contentType: 'application/json; charset=utf-8',
+                                                    dataType: 'json',
+                                                    async: true,
+                                                    success: function (msg) {
+                                                        window.location.href = "{{url_for('trans_b')}}";
+                                                    }
+                                                });
+        
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+        
+                        </div>
+                    </nav>
             </div>
+
             {% if open_trans|length == 0 %}
             <div class="empty has-text-centered has-text-grey-light">
                 <span class="icon"><i data-feather="info"></i></span><br>
@@ -1691,11 +1704,7 @@
                                                         data-feather="eye"></i></span>
                                             </a>
                                         </div>
-                                        <div class="control">
-                                            <a id="edit_fin_btn_{{loop.index}}" class="button is-small"><span
-                                                    class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
-                                            </a>
-                                        </div>
+
                                         <div class="control">
                                             <a id="edit_fin_btn_{{loop.index}}" class="button is-small"><span
                                                     class="icon icon-btn-in-x"><i data-feather="printer"></i></span>
@@ -1785,9 +1794,30 @@
                             </tr>
                             <script>
                                 $(document).ready(function () {
+
+                                    // Loads the Unit Loation Selectors 
+                                    var loc_pre_options = [];
+                                    $.getJSON("{{url_for('get_location')}}", function (result) {
+                                        var leng = Object.keys(result).length
+                                        for (var i = 0; i < leng; i++) {
+                                            loc_pre_options.push('<option value="',
+                                                Object.keys(result)[i], '">',
+                                                Object.values(result)[i], '</option>');
+                                        }
+                                        $(".unit_loc").html(loc_pre_options.join(''));
+                                    }).done(function () {
+                                        loc_pre_options.resolve();
+                                    });
+
+                                    var prog_qty_dict = {};
                                     $.getJSON("{{url_for('trans_a_api' ,trans_id = row.id)}}", function (result) {
 
                                         var part_a = $.parseJSON(result['trans_data']['part_a']);
+
+                                        var row_id = '{{row.id}}'
+                                        prog_qty_dict[row_id] = part_a['prog_qty']
+
+                                        console.log(part_a['prog_qty']);
 
                                         // Prod Sel
                                         $.getJSON('/get/fin_product/' + part_a['prod_sel'], function (result) {
@@ -1802,12 +1832,9 @@
                                         $('#target_{{loop.index}}').html(part_a['target-dates']).hide().fadeIn();
 
 
-                                    })
-                                });
 
-                            </script>
-                            <script>
-                                $(document).ready(function () {
+                                    })
+
 
                                     // Loading Managerment 
                                     // var loaded = [];
@@ -1815,240 +1842,241 @@
                                     $('#trans_b_form_view_{{row.id}}').click(function (e) {
                                         e.preventDefault();
                                         // var pp_num = $('#pp_sel').val();
+                                        console.log(prog_qty_dict);
+                                        $("#prog_qty").html(prog_qty_dict[{{ row.id }}]);
+
+                                    $.getJSON("/get/trans_pp_b?pp_num={{row.id}}", function (result) {
+                                        $('.trans_b_id_set').html('{{ row.id }}');
+
+                                        console.log(result);
+
+                                        if ($.isEmptyObject(result)) {
+
+                                            $('#show_noti').show();
+                                            $('.tracking_data').show();
+                                            $('#trans_b_form').trigger("reset");
+                                            $('#form_b_table').hide();
+                                            $('#trans_view_b').fadeIn();
+                                            $('#trans_b_meta').fadeIn();
 
 
-                                        $.getJSON("/get/trans_pp_b?pp_num={{row.id}}", function (result) {
-                                            $('.trans_b_id_set').html('{{ row.id }}');
 
-                                            console.log(result);
-
-                                            if ($.isEmptyObject(result)) {
-
-                                                $('#show_noti').show();
-                                                $('.tracking_data').show();
-                                                $('#trans_b_form').trigger("reset");
-                                                $('#form_b_table').hide();
-                                                $('#trans_view_b').fadeIn();
-                                                $('#trans_b_meta').fadeIn();
+                                        }
+                                        else {
+                                            $('#show_noti').hide();
+                                            $('#form_b_table').hide();
+                                            $('.tracking_data').show();
+                                            $('#trans_view_b').fadeIn();
+                                            $('#trans_view_a').show();
+                                            $('#trans_b_meta').fadeIn();
 
 
 
+
+                                            var extra_fld = Object.keys(result['fg_dept_datefilter']).length;
+                                            var extra_fld_cut = Object.keys(result['cut_datefilter']).length;
+                                            var extra_fld_sth = Object.keys(result['sth_datefilter']).length;
+
+                                            var extra_fld_val = Object.keys(result['val_datefilter']).length;
+                                            var extra_fld_kaj = Object.keys(result['kaj_datefilter']).length;
+                                            var extra_fld_tes = Object.keys(result['tes_datefilter']).length;
+                                            var extra_fld_thr = Object.keys(result['thr_datefilter']).length;
+                                            var extra_fld_qc = Object.keys(result['qc_datefilter']).length;
+
+                                            var extra_fld_pre = Object.keys(result['pre_datefilter']).length;
+                                            var extra_fld_tag = Object.keys(result['tag_datefilter']).length;
+                                            var extra_fld_tra = Object.keys(result['tra_datefilter']).length;
+
+
+                                            // if ($.inArray('{{ row.id }}', loaded) === -1) {
+                                            var loc_loaded = $.Deferred();
+
+                                            for (i = 1; i < extra_fld; i++) {
+                                                $("#add_field_button_fg").trigger('click');
                                             }
-                                            else {
-                                                $('#show_noti').hide();
-                                                $('#form_b_table').hide();
-                                                $('.tracking_data').show();
-                                                $('#trans_view_b').fadeIn();
-                                                $('#trans_view_a').show();
-                                                $('#trans_b_meta').fadeIn();
+
+
+                                            for (i = 1; i < extra_fld_cut; i++) {
+                                                $("#add_field_button_cut").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_sth; i++) {
+                                                $("#add_field_button_sth").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_val; i++) {
+                                                $("#add_field_button_val").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_kaj; i++) {
+                                                $("#add_field_button_kaj").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tes; i++) {
+                                                $("#add_field_button_tes").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_thr; i++) {
+                                                $("#add_field_button_thr").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_qc; i++) {
+                                                $("#add_field_button_qc").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_pre; i++) {
+                                                $("#add_field_button_pre").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tag; i++) {
+                                                $("#add_field_button_tag").trigger('click');
+                                            }
+                                            for (i = 1; i < extra_fld_tra; i++) {
+                                                $("#add_field_button_tra").trigger('click');
+                                            }
+                                            // loaded.push('{{ row.id }}');
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_location')}}", function (result) {
+                                                var leng = Object.keys(result).length
+                                                for (var i = 0; i < leng; i++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[i], '">',
+                                                        Object.values(result)[i], '</option>');
+                                                }
+                                                $(".unit_loc").html(options.join(''));
+                                            }).done(function () {
+                                                loc_loaded.resolve();
+                                            });
+
+                                            $.when(loc_loaded).then(function () {
+                                                populate('#trans_b_form', json2html_name_list(result));
+                                            });
+
+                                            function formattedData(data) {
+                                                dataarr = []
+
+
+                                                try {
+                                                    var check_data = JSON.parse(data)
+                                                }
+                                                catch (err) {
+                                                    console.log("Random JSON error")
+                                                    check_data = data
+                                                }
+                                                var action_key = ""
 
 
 
+                                                if (check_data.hasOwnProperty("$replace")) {
+                                                    action_key = "Addded"
+                                                    check_data = check_data["$replace"]
+                                                }
+                                                if (check_data.hasOwnProperty("$delete")) {
+                                                    action_key = "Deleted"
+                                                    check_data = check_data["$delete"]
+                                                }
+                                                if (check_data.hasOwnProperty("")) {
+                                                    check_data = check_data[""]
+                                                    action_key = "Added"
+                                                }
+                                                else {
+                                                    action_key = "Added"
 
-                                                var extra_fld = Object.keys(result['fg_dept_datefilter']).length;
-                                                var extra_fld_cut = Object.keys(result['cut_datefilter']).length;
-                                                var extra_fld_sth = Object.keys(result['sth_datefilter']).length;
+                                                }
+                                                new_data = json2html_name_list(check_data)
 
-                                                var extra_fld_val = Object.keys(result['val_datefilter']).length;
-                                                var extra_fld_kaj = Object.keys(result['kaj_datefilter']).length;
-                                                var extra_fld_tes = Object.keys(result['tes_datefilter']).length;
-                                                var extra_fld_thr = Object.keys(result['thr_datefilter']).length;
-                                                var extra_fld_qc = Object.keys(result['qc_datefilter']).length;
+                                                // check_data = JSON.parse(json2html_name_list(check_data))
+                                                console.log(check_data)
 
-                                                var extra_fld_pre = Object.keys(result['pre_datefilter']).length;
-                                                var extra_fld_tag = Object.keys(result['tag_datefilter']).length;
-                                                var extra_fld_tra = Object.keys(result['tra_datefilter']).length;
+                                                $.each(new_data, function (k, v) {
 
-
-                                                // if ($.inArray('{{ row.id }}', loaded) === -1) {
-                                                var loc_loaded = $.Deferred();
-
-                                                for (i = 1; i < extra_fld; i++) {
-                                                    $("#add_field_button_fg").trigger('click');
-                                                }
-
-
-                                                for (i = 1; i < extra_fld_cut; i++) {
-                                                    $("#add_field_button_cut").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_sth; i++) {
-                                                    $("#add_field_button_sth").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_val; i++) {
-                                                    $("#add_field_button_val").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_kaj; i++) {
-                                                    $("#add_field_button_kaj").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tes; i++) {
-                                                    $("#add_field_button_tes").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_thr; i++) {
-                                                    $("#add_field_button_thr").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_qc; i++) {
-                                                    $("#add_field_button_qc").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_pre; i++) {
-                                                    $("#add_field_button_pre").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tag; i++) {
-                                                    $("#add_field_button_tag").trigger('click');
-                                                }
-                                                for (i = 1; i < extra_fld_tra; i++) {
-                                                    $("#add_field_button_tra").trigger('click');
-                                                }
-                                                // loaded.push('{{ row.id }}');
-                                                var options = [];
-                                                $.getJSON("{{url_for('get_location')}}", function (result) {
-                                                    var leng = Object.keys(result).length
-                                                    for (var i = 0; i < leng; i++) {
-                                                        options.push('<option value="',
-                                                            Object.keys(result)[i], '">',
-                                                            Object.values(result)[i], '</option>');
+                                                    if (k.toString().includes("cut") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
-                                                    $(".unit_loc").html(options.join(''));
-                                                }).done(function () {
-                                                    loc_loaded.resolve();
-                                                });
 
-                                                $.when(loc_loaded).then(function () {
-                                                    populate('#trans_b_form', json2html_name_list(result));
-                                                });
-
-                                                function formattedData(data) {
-                                                    dataarr = []
-
-
-                                                    try {
-                                                        var check_data = JSON.parse(data)
+                                                    if (k.toString().includes("sth") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Stitching #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
-                                                    catch (err) {
-                                                        console.log("Random JSON error")
-                                                        check_data = data
+
+                                                    if (k.toString().includes("val") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Value Addn #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
-                                                    var action_key = ""
 
-
-
-                                                    if (check_data.hasOwnProperty("$replace")) {
-                                                        action_key = "Addded"
-                                                        check_data = check_data["$replace"]
+                                                    if (k.toString().includes("kaj") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Kaj-Button #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
-                                                    if (check_data.hasOwnProperty("$delete")) {
-                                                        action_key = "Deleted"
-                                                        check_data = check_data["$delete"]
+
+                                                    if (k.toString().includes("tes") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Test Checking #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
-                                                    if (check_data.hasOwnProperty("")) {
-                                                        check_data = check_data[""]
-                                                        action_key = "Added"
+
+                                                    if (k.toString().includes("thr") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Thread Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
-                                                    else {
-                                                        action_key = "Added"
 
+                                                    if (k.toString().includes("qc") && v != "") {
+                                                        dataarr.push(action_key + "Q.C #" + k.slice(-2, -1) + " - " + v + "<br>")
                                                     }
-                                                    new_data = json2html_name_list(check_data)
 
-                                                    // check_data = JSON.parse(json2html_name_list(check_data))
-                                                    console.log(check_data)
+                                                    if (k.toString().includes("pre") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Press #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                    if (k.toString().includes("tag") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Tag/Pack #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                    if (k.toString().includes("tra") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                    if (k.toString().includes("fg") && v != "") {
+                                                        dataarr.push("<strong>" + action_key + "</strong> Detail Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
+                                                    }
+                                                })
+                                                return dataarr;
+                                            }
 
-                                                    $.each(new_data, function (k, v) {
+                                            $.getJSON("/get/trans_pp/meta?pp_num={{row.id}}", function (result) {
+                                                console.log(result)
+                                                $(result).each(function (index, value) {
 
-                                                        if (k.toString().includes("cut") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
+                                                    var formatted_data = formattedData(value["diff"])
+                                                    $('#meta_view_content').append($('<tr>')
+                                                        .append($('<td>').append(value["username"]))
+                                                        .append($('<td>').append(moment(value["timestamp"], "YYYY-MM-DD HH:mm:ssZZ").local().format("LLL")))
+                                                        .append($('<td>').append($("<p>").append(formatted_data
+                                                        ))
 
-                                                        if (k.toString().includes("sth") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Stitching #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-
-                                                        if (k.toString().includes("val") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Value Addn #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-
-                                                        if (k.toString().includes("kaj") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Kaj-Button #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-
-                                                        if (k.toString().includes("tes") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Test Checking #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-
-                                                        if (k.toString().includes("thr") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Thread Cutting #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-
-                                                        if (k.toString().includes("qc") && v != "") {
-                                                            dataarr.push(action_key + "Q.C #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-
-                                                        if (k.toString().includes("pre") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Press #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-                                                        if (k.toString().includes("tag") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Tag/Pack #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-                                                        if (k.toString().includes("tra") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-                                                        if (k.toString().includes("fg") && v != "") {
-                                                            dataarr.push("<strong>" + action_key + "</strong> Detail Transfer to F.G #" + k.slice(-2, -1) + " - " + v + "<br>")
-                                                        }
-                                                    })
-                                                    return dataarr;
-                                                }
-
-                                                $.getJSON("/get/trans_pp/meta?pp_num={{row.id}}", function (result) {
-                                                    console.log(result)
-                                                    $(result).each(function (index, value) {
-
-                                                        var formatted_data = formattedData(value["diff"])
-                                                        $('#meta_view_content').append($('<tr>')
-                                                            .append($('<td>').append(value["username"]))
-                                                            .append($('<td>').append(moment(value["timestamp"], "YYYY-MM-DD HH:mm:ssZZ").local().format("LLL")))
-                                                            .append($('<td>').append($("<p>").append(formatted_data
-                                                            ))
-
-                                                            )
                                                         )
-                                                    })
-
+                                                    )
                                                 })
 
-
-                                            }
-
+                                            })
 
 
-                                        })
-
-                                        // Fucnction for JSON to html fillups
-
-                                        function json2html_name_list(json, result, parent) {
-                                            if (!result) result = {};
-                                            if (!parent) parent = '';
-                                            if ((typeof json) != 'object') {
-                                                result[parent] = json;
-                                            } else {
-                                                for (var key in json) {
-                                                    var value = json[key];
-                                                    if (parent == '') var subparent = key;
-                                                    else var subparent = parent + '[' + key + ']';
-                                                    result = json2html_name_list(value, result, subparent);
-                                                }
-                                            }
-                                            return result;
                                         }
 
-                                        //  Populates all the fields
 
-                                        function populate(frm, data) {
-                                            $.each(data, function (key, value) {
-                                                $('[name="' + key + '"]', frm).val(value);
-                                            });
-                                        }
 
                                     })
+
+                                    // Fucnction for JSON to html fillups
+
+                                    function json2html_name_list(json, result, parent) {
+                                        if (!result) result = {};
+                                        if (!parent) parent = '';
+                                        if ((typeof json) != 'object') {
+                                            result[parent] = json;
+                                        } else {
+                                            for (var key in json) {
+                                                var value = json[key];
+                                                if (parent == '') var subparent = key;
+                                                else var subparent = parent + '[' + key + ']';
+                                                result = json2html_name_list(value, result, subparent);
+                                            }
+                                        }
+                                        return result;
+                                    }
+
+                                    //  Populates all the fields
+
+                                    function populate(frm, data) {
+                                        $.each(data, function (key, value) {
+                                            $('[name="' + key + '"]', frm).val(value);
+                                        });
+                                    }
+
+                                })
                                 });
                             </script>
                             {% endfor %}

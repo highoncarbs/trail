@@ -22,14 +22,25 @@
                             <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
                         </div>
                         <div class="field">
-                                <label class="label">Description</label>
-                                <div class="control is-expanded is-left">
-                                    {{yarn_form.desc(class="input" , value=dup)}}
-    
-                                </div>
+                            <label class="label">Yarn</label>
+                            <div class="control">
+                                {{ yarn_form.yarn(class="input" , value=dup)}}
                             </div>
-                        {% else %}
+                        </div>
+                        <div class="field">
+                            <label class="label">Description</label>
+                            <div class="control is-expanded is-left">
+                                {{yarn_form.desc(class="input" , value=dup)}}
 
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="field">
+                            <label class="label">Yarn</label>
+                            <div class="control">
+                                {{ yarn_form.yarn(class="input" , placeholder="Enter Yarn")}}
+                            </div>
+                        </div>
                         <div class="field">
                             <label class="label">Description</label>
                             <div class="control is-expanded is-left">
@@ -204,8 +215,8 @@
 </div>
 
 <script>
-        $(".yarn_view").click(function () {
-            $('#yarn_data_view , #yarn_data_entry').toggle();
-    
-        });
-    </script>
+    $(".yarn_view").click(function () {
+        $('#yarn_data_view , #yarn_data_entry').toggle();
+
+    });
+</script>

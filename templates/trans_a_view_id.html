@@ -27,7 +27,7 @@
                                 id="trans_b_btn"><span class="icon icon-btn-in"><i data-feather="eye"></i></span>View -
                                 Part B</a>
                         </div>
-                        <div class="level-item" style="display: none" id="save_trans_a">
+                        <div class="control" style="display: none" id="save_trans_a">
                             <a class=" button is-black"><span class="icon icon-btn-in"><i
                                         data-feather="save"></i></span>Save Draft</a>
                         </div>
@@ -232,62 +232,64 @@
                         <br>
                         <div class="table-container">
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Raw Material - Fabric</th>
-                                    <th>U.O.M</th>
-                                    <th>Per Pc. Consum.</th>
-                                    <th>Qty Required</th>
-                                    <th>Qty Issued</th>
-                                    <th>Qty Return</th>
-                                    <th>Net Consum.</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="input_fields_wrap_fab">
-                                <tr>
-                                    <td>
-                                        <div class="select"><select id="fab_selector" class="fab_sel_cls"
-                                                name="fab_sel[0]">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Raw Material - Fabric</th>
+                                        <th>U.O.M</th>
+                                        <th>Per Pc. Consum.</th>
+                                        <th>Qty Required</th>
+                                        <th>Qty Issued</th>
+                                        <th>Qty Return</th>
+                                        <th>Net Consum.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="input_fields_wrap_fab">
+                                    <tr>
+                                        <td>
+                                            <div class="select"><select id="fab_selector" class="fab_sel_cls"
+                                                    name="fab_sel[0]">
 
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" class="input" name="fab_sel_uom[0]" readonly></td>
-                                    <td><input type="text" class="input" name="fab_pr_pc[0]" /></td>
-                                    <td><input type="text" class="input" name="fab_qty_req[0]" /></td>
-                                    <td><input type="text" class="input" name="fab_qty_iss[0]" /></td>
-                                    <td><input type="text" class="input" name="fab_qty_ret[0]" /></td>
-                                    <td><input type="text" class="input" name="fab_net_con[0]" /></td>
-                                    <td></td>
-                                </tr>
-                                <script>
-                                    $(document).ready(function () {
-                                        var options = [];
-                                        $.getJSON("{{url_for('get_raw_prod')}}", function (result) {
-                                            var leng = Object.keys(result).length
-                                            for (var i = 0; i < leng; i++) {
-                                                options.push('<option value="',
-                                                    Object.keys(result)[i], '">',
-                                                    Object.values(result)[i], '</option>');
-                                            }
-                                            $(".fab_sel_cls").html(options.join(''));
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td><input type="text" class="input" name="fab_sel_uom[0]" readonly></td>
+                                        <td><input type="text" class="input" name="fab_pr_pc[0]" /></td>
+                                        <td><input type="text" class="input" name="fab_qty_req[0]" /></td>
+                                        <td><input type="text" class="input" name="fab_qty_iss[0]" /></td>
+                                        <td><input type="text" class="input" name="fab_qty_ret[0]" /></td>
+                                        <td><input type="text" class="input" name="fab_net_con[0]" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_raw_prod')}}", function (result) {
+                                                var leng = Object.keys(result).length
+                                                for (var i = 0; i < leng; i++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[i], '">',
+                                                        Object.values(result)[i], '</option>');
+                                                }
+                                                $(".fab_sel_cls").html(options.join(''));
+                                                $('[name="fab_sel[0]"]').prop('selectedIndex', -1);
 
+
+                                            });
                                         });
-                                    });
 
-                                </script>
-                                <script>
-                                    $("select[name='fab_sel[0]']").on('change', function () {
-                                        var pp_sel = $("select[name='fab_sel[0]']").val()
-                                        $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
-                                            $("input[name='fab_sel_uom[0]']").val(result);
-                                        });
-                                    })
-                                </script>
-                            </tbody>
-                        </table>
+                                    </script>
+                                    <script>
+                                        $("select[name='fab_sel[0]']").on('change', function () {
+                                            var pp_sel = $("select[name='fab_sel[0]']").val()
+                                            $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
+                                                $("input[name='fab_sel_uom[0]']").val(result);
+                                            });
+                                        })
+                                    </script>
+                                </tbody>
+                            </table>
                         </div>
                         <button id="add_field_button_fab" style="display: none;"
                             class=" button is-primary add_flds"><span class="icon icon-btn-in"><i
@@ -299,62 +301,62 @@
                         <br>
                         <div class="table-container">
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Finished Goods - Fabric</th>
-                                    <th>U.O.M</th>
-                                    <th>Per Pc. Consum.</th>
-                                    <th>Qty Required</th>
-                                    <th>Qty Issued</th>
-                                    <th>Qty Return</th>
-                                    <th>Net Consum.</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="input_fields_wrap_fin">
-                                <tr>
-                                    <td>
-                                        <div class="select"><select id="fin_selector" class="fin_sel_cls"
-                                                name="fin_sel[0]">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Finished Goods - Fabric</th>
+                                        <th>U.O.M</th>
+                                        <th>Per Pc. Consum.</th>
+                                        <th>Qty Required</th>
+                                        <th>Qty Issued</th>
+                                        <th>Qty Return</th>
+                                        <th>Net Consum.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="input_fields_wrap_fin">
+                                    <tr>
+                                        <td>
+                                            <div class="select"><select id="fin_selector" class="fin_sel_cls"
+                                                    name="fin_sel[0]">
 
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" class="input" name="fin_sel_uom[0]" readonly></td>
-                                    <td><input type="text" class="input" name="fin_pr_pc[0]" /></td>
-                                    <td><input type="text" class="input" name="fin_qty_req[0]" /></td>
-                                    <td><input type="text" class="input" name="fin_qty_iss[0]" /></td>
-                                    <td><input type="text" class="input" name="fin_qty_ret[0]" /></td>
-                                    <td><input type="text" class="input" name="fin_net_con[0]" /></td>
-                                    <td></td>
-                                </tr>
-                                <script>
-                                    $(document).ready(function () {
-                                        var options = [];
-                                        $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
-                                            var leng = Object.keys(result).length
-                                            for (var i = 0; i < leng; i++) {
-                                                options.push('<option value="',
-                                                    Object.keys(result)[i], '">',
-                                                    Object.values(result)[i], '</option>');
-                                            }
-                                            $(".fin_sel_cls").html(options.join(''));
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td><input type="text" class="input" name="fin_sel_uom[0]" readonly></td>
+                                        <td><input type="text" class="input" name="fin_pr_pc[0]" /></td>
+                                        <td><input type="text" class="input" name="fin_qty_req[0]" /></td>
+                                        <td><input type="text" class="input" name="fin_qty_iss[0]" /></td>
+                                        <td><input type="text" class="input" name="fin_qty_ret[0]" /></td>
+                                        <td><input type="text" class="input" name="fin_net_con[0]" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_fin_prod')}}", function (result) {
+                                                var leng = Object.keys(result).length
+                                                for (var i = 0; i < leng; i++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[i], '">',
+                                                        Object.values(result)[i], '</option>');
+                                                }
+                                                $(".fin_sel_cls").html(options.join(''));
 
+                                            });
                                         });
-                                    });
 
-                                </script>
-                                <script>
-                                    $("select[name='fin_sel[0]']").on('change', function () {
-                                        var pp_sel = $("select[name='fin_sel[0]']").val()
-                                        $.getJSON("/get/uom/" + pp_sel, function (result) {
-                                            $("input[name='fin_sel_uom[0]']").val(result);
-                                        });
-                                    })
-                                </script>
-                            </tbody>
-                        </table>
+                                    </script>
+                                    <script>
+                                        $("select[name='fin_sel[0]']").on('change', function () {
+                                            var pp_sel = $("select[name='fin_sel[0]']").val()
+                                            $.getJSON("/get/uom/" + pp_sel, function (result) {
+                                                $("input[name='fin_sel_uom[0]']").val(result);
+                                            });
+                                        })
+                                    </script>
+                                </tbody>
+                            </table>
                         </div>
                         <button id="add_field_button_fin" style="display: none;"
                             class=" button is-primary add_flds"><span class="icon icon-btn-in"><i
@@ -366,59 +368,61 @@
                         <br>
                         <div class="table-container">
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Accessories</th>
-                                    <th>U.O.M</th>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Accessories</th>
+                                        <th>U.O.M</th>
 
-                                    <th>Per Pc. Consum.</th>
-                                    <th>Qty Required</th>
-                                    <th>Qty Issued</th>
-                                    <th>Qty Return</th>
-                                    <th>Net Consum.</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="input_fields_wrap_acc">
-                                <tr>
-                                    <td>
-                                        <div class="select"><select id="acc_seletion" class="acc_selector"
-                                                name="acc_sel[0]">
+                                        <th>Per Pc. Consum.</th>
+                                        <th>Qty Required</th>
+                                        <th>Qty Issued</th>
+                                        <th>Qty Return</th>
+                                        <th>Net Consum.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="input_fields_wrap_acc">
+                                    <tr>
+                                        <td>
+                                            <div class="select"><select id="acc_seletion" class="acc_selector"
+                                                    name="acc_sel[0]">
 
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" class="input" name="acc_sel_uom[0]" readonly></td>
-                                    <td><input type="text" class="input" name="acc_pr_pc[0]" /></td>
-                                    <td><input type="text" class="input" name="acc_qty_req[0]" /></td>
-                                    <td><input type="text" class="input" name="acc_qty_iss[0]" /></td>
-                                    <td><input type="text" class="input" name="acc_qty_ret[0]" /></td>
-                                    <td><input type="text" class="input" name="acc_net_con[0]" /></td>
-                                    <td></td>
-                                </tr>
-                                <script>
-                                    $(document).ready(function () {
-                                        var options = [];
-                                        $.getJSON("{{url_for('get_acc')}}", function (result) {
-                                            for (var j = 0; j < Object.keys(result).length; j++) {
-                                                options.push('<option value="',
-                                                    Object.keys(result)[j], '">',
-                                                    Object.values(result)[j], '</option>');
-                                            }
-                                            $(".acc_selector").html(options.join(''));
-                                            // $(".acc_selector").prop("selectedIndex", 0);
-                                            // var pp_sel = $("select[name='acc_sel[0]']").val()
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td><input type="text" class="input" name="acc_sel_uom[0]" readonly></td>
+                                        <td><input type="text" class="input" name="acc_pr_pc[0]" /></td>
+                                        <td><input type="text" class="input" name="acc_qty_req[0]" /></td>
+                                        <td><input type="text" class="input" name="acc_qty_iss[0]" /></td>
+                                        <td><input type="text" class="input" name="acc_qty_ret[0]" /></td>
+                                        <td><input type="text" class="input" name="acc_net_con[0]" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_acc')}}", function (result) {
+                                                for (var j = 0; j < Object.keys(result).length; j++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[j], '">',
+                                                        Object.values(result)[j], '</option>');
+                                                }
+                                                $(".acc_selector").html(options.join(''));
+                                                $('[name="acc_sel[0]"]').prop('selectedIndex', -1);
+                                            });
 
-                                            // $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
-                                            //     $("input[name='acc_sel_uom[0]']").val(result);
-                                            // });
-                                        });
+                                            $("select[name='acc_sel[0]']").on('change', function () {
+                                                var pp_sel = $("select[name='acc_sel[0]']").val()
+                                                $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
+                                                    $("input[name='acc_sel_uom[0]']").val(result);
+                                                });
+                                            })
 
-                                    })
-                                </script>
-                            </tbody>
-                        </table>
+                                        })
+                                    </script>
+                                </tbody>
+                            </table>
                         </div>
                         <button id="add_field_button_acc" style="display: none;"
                             class=" button is-primary add_flds"><span class="icon icon-btn-in"><i
@@ -429,51 +433,59 @@
                         <br>
                         <div class="table-container">
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Other Materials</th>
-                                    <th>U.O.M</th>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Other Materials</th>
+                                        <th>U.O.M</th>
 
-                                    <th>Per Pc. Consum.</th>
-                                    <th>Qty Required</th>
-                                    <th>Qty Issued</th>
-                                    <th>Qty Return</th>
-                                    <th>Net Consum.</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="input_fields_wrap_oth">
-                                <tr>
-                                    <td>
-                                        <div class="select"><select class="oth_selector" name="oth_sel[0]">
+                                        <th>Per Pc. Consum.</th>
+                                        <th>Qty Required</th>
+                                        <th>Qty Issued</th>
+                                        <th>Qty Return</th>
+                                        <th>Net Consum.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="input_fields_wrap_oth">
+                                    <tr>
+                                        <td>
+                                            <div class="select"><select class="oth_selector" name="oth_sel[0]">
 
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" class="input" name="oth_pr_uom[0]" readonly></td>
-                                    <td><input type="text" class="input" name="oth_pr_pc[0]" /></td>
-                                    <td><input type="text" class="input" name="oth_qty_req[0]" /></td>
-                                    <td><input type="text" class="input" name="oth_qty_iss[0]" /></td>
-                                    <td><input type="text" class="input" name="oth_qty_ret[0]" /></td>
-                                    <td><input type="text" class="input" name="oth_net_con[0]" /></td>
-                                    <td></td>
-                                </tr>
-                                <script>
-                                    $(document).ready(function () {
-                                        var options = [];
-                                        $.getJSON("{{url_for('get_oth_mat')}}", function (result) {
-                                            for (var j = 0; j < Object.keys(result).length; j++) {
-                                                options.push('<option value="',
-                                                    Object.keys(result)[j], '">',
-                                                    Object.values(result)[j], '</option>');
-                                            }
-                                            $(".oth_selector").html(options.join(''));
-                                        });
-                                    })
-                                </script>
-                            </tbody>
-                        </table>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td><input type="text" class="input" name="oth_sel_uom[0]" readonly></td>
+                                        <td><input type="text" class="input" name="oth_pr_pc[0]" /></td>
+                                        <td><input type="text" class="input" name="oth_qty_req[0]" /></td>
+                                        <td><input type="text" class="input" name="oth_qty_iss[0]" /></td>
+                                        <td><input type="text" class="input" name="oth_qty_ret[0]" /></td>
+                                        <td><input type="text" class="input" name="oth_net_con[0]" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var options = [];
+                                            $.getJSON("{{url_for('get_oth_mat')}}", function (result) {
+                                                for (var j = 0; j < Object.keys(result).length; j++) {
+                                                    options.push('<option value="',
+                                                        Object.keys(result)[j], '">',
+                                                        Object.values(result)[j], '</option>');
+                                                }
+                                                $(".oth_selector").html(options.join(''));
+                                                $('[name="oth_sel[0]"]').prop('selectedIndex', -1);
+                                            });
+
+                                            $("select[name='oth_sel[0]']").on('change', function () {
+                                                var pp_sel = $("select[name='oth_sel[0]']").val()
+                                                $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
+                                                    $("input[name='oth_sel_uom[0]']").val(result);
+                                                });
+                                            })
+                                        })
+                                    </script>
+                                </tbody>
+                            </table>
                         </div>
                         <button id="add_field_button_oth" style="display: none;"
                             class=" button is-primary add_flds"><span class="icon icon-btn-in"><i
@@ -511,7 +523,7 @@
                                 </div>
 
                                 <script>
-                                    $("#image_{{loop.index}}").click(function(){
+                                    $("#image_{{loop.index}}").click(function () {
                                         var modal = document.querySelector('#image_modal_{{loop.index}}');  // assuming you have only 1
                                         var html = document.querySelector('html');
                                         modal.classList.add('is-active');
@@ -725,38 +737,54 @@
             else {
                 console.log('Boy , its full ');
 
+                try {
+                    var extra_fld_fab = Object.keys(part_a['fab_sel']).length;
+                    for (var new_x = 1; new_x < extra_fld_fab; new_x++) {
 
-                var extra_fld_fab = Object.keys(part_a['fab_sel']).length;
-                for (var new_x = 1; new_x < extra_fld_fab; new_x++) {
-
-                    add_fab_fields(new_x);
+                        add_fab_fields(new_x);
+                    }
+                    fab_x = extra_fld_fab;
                 }
-                fab_x = extra_fld_fab;
-
-                var extra_fld_fin = Object.keys(part_a['fin_sel']).length;
-
-
-                for (var new_x = 1; new_x < extra_fld_fin; new_x++) {
-
-                    add_fin_fields(new_x);
+                catch (err) {
+                    console.log("Length error" + err)
+                    fab_x = 1;
                 }
-                fin_x = extra_fld_fin;
 
+                try {
+                    var extra_fld_fin = Object.keys(part_a['fin_sel']).length;
+                    for (var new_x = 1; new_x < extra_fld_fin; new_x++) {
 
-                var extra_fld_acc = Object.keys(part_a['acc_sel']).length;
-
-                for (var new_x = 1; new_x < extra_fld_acc; new_x++) {
-                    add_acc_fields(new_x);
+                        add_fin_fields(new_x);
+                    }
+                    fin_x = extra_fld_fin;
                 }
-                acc_x = extra_fld_acc;
-
-
-                var extra_fld_oth = Object.keys(part_a['oth_sel']).length;
-
-                for (var new_x = 1; new_x < extra_fld_oth; new_x++) {
-                    add_oth_fields(new_x);
+                catch (err) {
+                    fin_x = 1
                 }
-                oth_x = extra_fld_oth;
+
+                try {
+                    var extra_fld_acc = Object.keys(part_a['acc_sel']).length;
+
+                    for (var new_x = 1; new_x < extra_fld_acc; new_x++) {
+                        add_acc_fields(new_x);
+                    }
+                    acc_x = extra_fld_acc;
+                }
+                catch (err) {
+                    acc_x = 1
+                }
+
+                try {
+                    var extra_fld_oth = Object.keys(part_a['oth_sel']).length;
+
+                    for (var new_x = 1; new_x < extra_fld_oth; new_x++) {
+                        add_oth_fields(new_x);
+                    }
+                    oth_x = extra_fld_oth;
+                }
+                catch (err) {
+                    oth_x = 1
+                }
                 console.log('Resolves - row add');
 
             };
@@ -919,7 +947,7 @@
                             Object.values(result)[j], '</option>');
                     }
                     $("select[name='fab_sel[" + x + "]']").html(options.join(''));
-                    $("select[name='fab_sel[" + x + "]']").prop("selectedIndex", 0);
+                    $("select[name='fab_sel[" + x + "]']").prop("selectedIndex", -1);
                     var pp_sel = $("select[name='fab_sel[" + x + "]']").val()
                     $.getJSON("/get/uom/raw_fab/" + pp_sel, function (result) {
                         $("input[name='fab_sel_uom[" + x + "]']").val(result);
@@ -971,7 +999,7 @@
                     $(".acc_selector_" + x + "").html(options.join(''));
 
                     $("select[name='acc_sel[" + x + "]']").html(options.join(''));
-                    $("select[name='acc_sel[" + x + "]']").prop("selectedIndex", 0);
+                    $("select[name='acc_sel[" + x + "]']").prop("selectedIndex", -1);
                     var pp_sel = $("select[name='acc_sel[" + x + "]']").val();
 
                     $.getJSON("/get/uom/acc/" + pp_sel, function (result) {
@@ -1005,7 +1033,7 @@
                 oth_x++; //text box increment
                 $(wrapper_oth).append('<tr> \
                             <td><div class="select"><select class="oth_selector" name="oth_sel['+ x + ']"></select></div></td>\
-                            <td><input type="text" class="input" name="oth_pr_uom['+ x + ']" readonly></td>\
+                            <td><input type="text" class="input" name="oth_sel_uom['+ x + ']" readonly></td>\
                             <td><input type="text" class="input" name="oth_pr_pc['+ x + ']"/></td>\
                             <td><input type="text" class="input" name="oth_qty_req['+ x + ']"/></td> \
                             <td><input type = "text" class= "input" name = "oth_qty_iss['+ x + ']" /></td>\
@@ -1026,16 +1054,14 @@
                     $("select[name='oth_sel[" + x + "]']").html(options.join(''));
 
                     var pp_sel = $("select[name='oth_sel[" + x + "]']").val();
-                    $("select[name='oth_sel[" + x + "]']").prop("selectedIndex", 0);
-                    $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
-                        $("input[name='oth_pr_uom[" + x + "]']").val(result);
-                    });
+                    $("select[name='oth_sel[" + x + "]']").prop("selectedIndex", -1);
+                  
                 });
 
                 $("select[name='oth_sel[" + x + "]']").on('change', function () {
                     var pp_sel = $("select[name='oth_sel[" + x + "]']").val()
                     $.getJSON("/get/uom/oth/" + pp_sel, function (result) {
-                        $("input[name='oth_pr_uom[" + x + "]']").val(result);
+                        $("input[name='oth_sel_uom[" + x + "]']").val(result);
                     });
                 })
 
@@ -1074,7 +1100,7 @@
                             Object.values(result)[j], '</option>');
                     }
                     $("select[name='fin_sel[" + x + "]']").html(options.join(''));
-                    $("select[name='fin_sel[" + x + "]']").prop("selectedIndex", 0);
+                    $("select[name='fin_sel[" + x + "]']").prop("selectedIndex", -1);
                     var pp_sel = $("select[name='fin_sel[" + x + "]']").val()
                     $.getJSON("/get/uom/" + pp_sel, function (result) {
                         $("input[name='fin_sel_uom[" + x + "]']").val(result);
@@ -1183,8 +1209,10 @@
 
 
         function populate(frm, data) {
-            $.each(data, function (key, value) {
+            $(".select").children().each(function () { $(this).prop("selectedIndex", -1) });
 
+            $.each(data, function (key, value) {
+                console.log(key, value)
                 $('[name="' + key + '"]', frm).val(value);
                 if (key === 'samp_iss') {
                     $('input:radio[name=' + key + ']').filter('[value="' + value + '"]').prop('checked', true);

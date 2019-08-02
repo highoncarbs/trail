@@ -7,7 +7,7 @@
 
                     <div class="level-item">
                         <p class="is-size-5 robo ">
-                            New Fabric Design</p>
+                            New Design Number</p>
                     </div>
                 </div>
 
@@ -22,16 +22,16 @@
                             <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
                         </div>
                         <div class="field">
-                            <label class="label">Fabric Design</label>
+                            <label class="label">Design Number</label>
                             <div class="control">
                                 {{des_form.des(class="input" , value= dup)}}
                             </div>
                         </div>
                         {% else %}
                         <div class="field">
-                            <label class="label">Fabric Design</label>
+                            <label class="label">Design Number</label>
                             <div class="control">
-                                {{des_form.des(class="input" , placeholder="Enter Fabric Design Code")}}
+                                {{des_form.des(class="input" , placeholder="Enter Design Number")}}
                             </div>
                         </div>
                         {% endif %}
@@ -126,7 +126,7 @@
                             <div class="modal-background animated fadeIn"></div>
                             <div class="modal-content animated fadeInUp">
                                 <div class="box has-background-light" style="margin-top:15rem;">
-                                    <h3 class="is-size-5 robo">Edit Fabric Design</h3>
+                                    <h3 class="is-size-5 robo">Edit Design Numer</h3>
                                     <br>
                                     <br>
                                     <div class="form">
@@ -134,7 +134,7 @@
                                             {{ des_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Fabric Design</label>
+                                                <label class="label">Design Number</label>
                                                 <div class="control">
                                                     {{ des_form.des(class="input" , value=des.des)}}
                                                 </div>

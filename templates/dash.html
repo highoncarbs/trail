@@ -23,6 +23,7 @@
                             <span class="button st_sel is-black is-selected">All</span>
                             <span class="button st_sel">Open</span>
                             <span class="button st_sel">Closed</span>
+                            <!-- <span class="button st_sel">Draft</span> -->
                         </div>
                     </div>
                     <script>
@@ -56,6 +57,18 @@
                                     $(".xtable tbody tr").each(function (index, value) {
                                         $(this).fadeIn();
                                         if ($(this).children()[1].innerHTML != 1) {
+                                            $(this).fadeOut();
+                                        };
+
+
+
+                                    })
+                                }
+
+                                 if ($(".is-selected")[0].innerText == "Draft") {
+                                    $(".xtable tbody tr").each(function (index, value) {
+                                        $(this).fadeIn();
+                                        if ($(this).children()[1].innerHTML != 2) {
                                             $(this).fadeOut();
                                         };
 
@@ -173,7 +186,7 @@
                                             </button>
                                 </td>
                                 <td class="is-hidden-mobile">
-                                    <div class="dropdown is-hoverable is-right" style="z-index:auto; ">
+                                    <div class="dropdown is-hoverable is-right" >
                                         <div class="dropdown-trigger">
                                             <span aria-haspopup="true" aria-controls="dropdown-menu"
                                                 class="icon icon-btn-in-x"><i data-feather="more-vertical"></i></span>
@@ -346,6 +359,8 @@
                                         $("#transfer_{{loop.index}}").html(tra_qty).hide().fadeIn();
 
                                     })
+
+                                    
                                 });
 
 
