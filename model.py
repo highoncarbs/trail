@@ -271,9 +271,10 @@ class FinCat(db.Model):
     cat = db.Column(db.String(30), unique=True, nullable=False)
     desc = db.Column(db.String(250) , nullable= False)
 
+
 class FinCatForm(FlaskForm):
     cat  = StringField('Category', validators=[InputRequired()])
-    desc = StringField('Desciption')
+    desc = StringField('Top desciption')
     cat_submit = SubmitField('cat_submit')
     cat_update = SubmitField('cat_update') 
 
@@ -282,11 +283,17 @@ class FinCatForm(FlaskForm):
 class FabComb(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     comb = db.Column(db.String(30), unique=True, nullable=False)
-    desc = db.Column(db.String(250) , nullable= False)
+    top_desc = db.Column(db.String(250) , nullable= False)
+    dup_desc = db.Column(db.String(250) , nullable= False)
+    sal_desc = db.Column(db.String(250) , nullable= False)
+    fab_desc = db.Column(db.String(250) , nullable= False)
 
 class FabCombForm(FlaskForm):
     comb  = StringField('Combination', validators=[InputRequired()])
-    desc = StringField('Desciption')
+    top_desc = StringField('Top desciption')
+    dup_desc = StringField('Dupatta desciption')
+    sal_desc = StringField('Salwar desciption')
+    fab_desc = StringField('Fabric desciption')
     comb_submit = SubmitField('comb_submit')
     comb_update = SubmitField('comb_update') 
 

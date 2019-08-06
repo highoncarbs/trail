@@ -36,9 +36,30 @@
                         </div>
                         {% endif %}
                         <div class="field">
-                            <label class="label">Description</label>
+                            <label class="label">Top description</label>
                             <div class="control is-expanded is-left">
-                                {{comb_form.desc(class="input" , placeholder="Description of Fabric Combination")}}
+                                {{comb_form.top_desc(class="input" , placeholder="Description of Top")}}
+
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Dupatta description</label>
+                            <div class="control is-expanded is-left">
+                                {{comb_form.dup_desc(class="input" , placeholder="Description of Dupatta")}}
+
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Salwar description</label>
+                            <div class="control is-expanded is-left">
+                                {{comb_form.sal_desc(class="input" , placeholder="Description of Salwar")}}
+
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Fabric description</label>
+                            <div class="control is-expanded is-left">
+                                {{comb_form.fab_desc(class="input" , placeholder="Description of Fabric")}}
 
                             </div>
                         </div>
@@ -101,7 +122,12 @@
                     <thead>
                         <tr>
                             <th class="has-text-grey">Fabric Combination</th>
-                            <th class="has-text-grey">Description</th>
+                            <th class="has-text-grey">Top Desc.</th>
+                            <th class="has-text-grey">Dup. Desc.</th>
+                            <th class="has-text-grey">Sal. Desc.</th>
+
+                            <th class="has-text-grey">Fab. Desc.</th>
+
                             <th class="has-text-grey"></th>
                         </tr>
                     </thead>
@@ -113,7 +139,18 @@
                                 <p>{{comb.comb}}</p>
                             </td>
                             <td>
-                                <p>{{comb.desc}}</p>
+                                {{comb.top_desc}}
+                                </td>
+                                <td>
+                                        {{comb.dup_desc}}
+
+                                </td>
+                                <td>
+                                        {{comb.sal_desc}}
+
+                                </td>
+                                <td>
+                                    {{comb.fab_desc}}
                             </td>
 
                             <td>
@@ -153,9 +190,31 @@
                                                 </div>
                                             </div>
                                             <div class="field">
-                                                <label class="label">Description</label>
-                                                <div class="control">
-                                                    {{ comb_form.desc(class="input" , value=comb.desc)}}
+                                                <label class="label">Top description</label>
+                                                <div class="control is-expanded is-left">
+                                                    {{comb_form.top_desc(class="input" , value=comb.top_desc)}}
+
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Dupatta description</label>
+                                                <div class="control is-expanded is-left">
+                                                    {{comb_form.dup_desc(class="input" , value=comb.dup_desc)}}
+
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Salwar description</label>
+                                                <div class="control is-expanded is-left">
+                                                    {{comb_form.sal_desc(class="input" , value=comb.sal_desc)}}
+
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label class="label">Fabric description</label>
+                                                <div class="control is-expanded is-left">
+                                                    {{comb_form.fab_desc(class="input" , value=comb.fab_desc)}}
+
                                                 </div>
                                             </div>
                                             <br>

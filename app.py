@@ -150,7 +150,7 @@ def home():
 @login_required
 def user_roles():
 
-    user_list = Users.query.filter(Users.roles.any(Role.name.like('USER'))).all()
+    user_list = Users.query.all()
     form = UserForm()
     if form.validate_on_submit():
         if form.submit.data:
@@ -447,7 +447,7 @@ def trans_b_user_view(trans_id):
 def dept_entry(dept):
     if current_user.roles[0].name == 'ADMIN' :
         return render_template('dept_entry.html' , dept = dept , mssg = session['mssg']) ,200
-    elif user.roles[0].name == 'USER' :
+    elif current_user.roles[0].name == 'USER' :
         return render_template('dept_entry_user.html' , dept = dept , mssg = session['mssg']) ,200
 
 # Basic Master Views
@@ -757,7 +757,8 @@ def fin_goods():
 
             else:
                 new_comb = FabComb(
-                    comb=comb_name, desc=comb_form.desc.data)
+                    comb=comb_name, top_desc=comb_form.top_desc.data, dup_desc=comb_form.dup_desc.data
+                    , sal_desc=comb_form.sal_desc.data, fab_desc=comb_form.fab_desc.data)
                 db.session.add(new_comb)
                 db.session.commit()
                 session['mssg'] = "Fabric Combination - " + \
