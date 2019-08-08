@@ -479,7 +479,7 @@ def customer_category():
                 session['dup'] = check_one.health
                 return redirect(url_for('customer_category'))
 
-    return render_template('customer_Category.html', subtitle="Customer Category", mssg=session['mssg'], dup=session['dup'], cust_form=cust_form), 200
+    return render_template('customer_category.html', subtitle="Customer Category", mssg=session['mssg'], dup=session['dup'], cust_form=cust_form), 200
 
 
 @app.route('/raw_materials/customer_category_view', methods=['GET', 'POST'])
