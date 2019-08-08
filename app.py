@@ -895,7 +895,11 @@ def comb_edit(id):
             FabComb).filter_by(id=id).first()
         if check_one is not None:
             check_one.comb = comb_name
-            check_one.desc = comb_form.desc.data
+            check_one.top_desc = comb_form.top_desc.data
+            check_one.dup_desc = comb_form.dup_desc.data
+            check_one.sal_desc = comb_form.sal_desc.data
+            check_one.fab_desc = comb_form.fab_desc.data
+
             db.session.commit()
             session['mssg'] = "Finished Goods Combination updated successfully"
             return redirect('/finished_goods?showTab=2&view=list')

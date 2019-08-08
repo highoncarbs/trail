@@ -140,32 +140,29 @@
                             </td>
                             <td>
                                 {{comb.top_desc}}
-                                </td>
-                                <td>
-                                        {{comb.dup_desc}}
+                            </td>
+                            <td>
+                                {{comb.dup_desc}}
 
-                                </td>
-                                <td>
-                                        {{comb.sal_desc}}
+                            </td>
+                            <td>
+                                {{comb.sal_desc}}
 
-                                </td>
-                                <td>
-                                    {{comb.fab_desc}}
+                            </td>
+                            <td>
+                                {{comb.fab_desc}}
                             </td>
 
                             <td>
-                                <div class="level">
-                                    <div class="level-item">
-                                        <a id="edit_comb_btn_{{loop.index}}" class="button is-small"><span
-                                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
-                                        </a>
-                                    </div>
-                                    <div class="level-item">
-                                        <a href="{{ url_for('comb_delete' , id = comb.id)}}"
-                                            class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
-                                                    data-feather="x"></i></span>
-                                        </a>
-                                    </div>
+                                <div class="buttons">
+
+                                    <a id="edit_comb_btn_{{loop.index}}" class="button is-small"><span
+                                            class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                    </a>
+                                    <a href="{{ url_for('comb_delete' , id = comb.id)}}"
+                                        class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                data-feather="x"></i></span>
+                                    </a>
                                 </div>
 
                             </td>
