@@ -22,11 +22,11 @@
                             <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
                         </div>
                         <div class="field">
-                                <label class="label">Fabric Dye</label>
-                                <div class="control">
-                                    {{dye_form.dye(class="input" , value = dup)}}
-                                </div>
+                            <label class="label">Fabric Dye</label>
+                            <div class="control">
+                                {{dye_form.dye(class="input" , value = dup)}}
                             </div>
+                        </div>
                         {% else %}
                         <div class="field">
                             <label class="label">Fabric Dye</label>
@@ -69,11 +69,11 @@
                     </div>
                     <div class="level-right">
 
-                            <div class="level-item">
-                                <a class="button is-black dye_view"><span class="icon icon-btn-in"><i
-                                            data-feather="plus"></i></span>Add </a>
-                            </div>
+                        <div class="level-item">
+                            <a class="button is-black dye_view"><span class="icon icon-btn-in"><i
+                                        data-feather="plus"></i></span>Add </a>
                         </div>
+                    </div>
 
 
                 </nav>
@@ -85,98 +85,111 @@
                     <hr>
                 </div>
                 {% endif %}
-                {% for dye in dye_list %}
-                <div class="level is-mobile">
-                    <div class="level-left">
-                        <div class="level-left">
-                            <p>{{dye.dye}}</p>
-                        </div>
-                    </div>
-                    <div class="level-right">
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th class="has-text-grey">Dye</th>
+                            <th class="has-text-grey"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dye in dye_list %}
+                        <tr>
+                            <td>
+                                <p>{{dye.dye}}</p>
+                            </td>
 
-                        <div class="level-item">
-                            <a id="edit_dye_btn_{{loop.index}}" class="button is-small"><span
-                                    class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
-                            </a>
-                        </div>
-                        <div class="level-item">
-                            <a href="{{ url_for('dye_delete' , id = dye.id)}}" class="button is-small is-danger"><span
-                                    class="icon icon-btn-in-x"><i data-feather="x"></i></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <hr>
+                            <td>
+                                <div class="buttons">
+                                   
+                                        <a id="edit_dye_btn_{{loop.index}}" class="button is-small"><span
+                                                class="icon icon-btn-in-x"><i data-feather="edit-2"></i></span>
+                                        </a>
+                                        <a href="{{ url_for('dye_delete' , id = dye.id)}}"
+                                            class="button is-small is-danger"><span class="icon icon-btn-in-x"><i
+                                                    data-feather="x"></i></span>
+                                        </a>
+                                
+                                </div>
 
-                <!-- City Edit Modal -->
+                            </td>
 
-                <div class="modal " id="edit_dye_modal_{{loop.index}}">
-                    <div class="modal-background animated fadeIn"></div>
-                    <div class="modal-content animated fadeInUp">
-                        <div class="box has-background-light" style="margin-top:15rem;">
-                            <h3 class="is-size-5 robo">Edit Fabric Dye</h3>
-                            <br>
-                            <br>
-                            <div class="form">
-                                <form method="POST" action="{{ url_for('dye_edit' , id = dye.id)}}">
-                                    {{ dye_form.hidden_tag()}}
+                        </tr>
 
-                                    <div class="field">
-                                        <label class="label">Dye</label>
-                                        <div class="control">
-                                            {{ dye_form.dye(class="input" , value=dye.dye)}}
-                                        </div>
-                                    </div>
 
+
+                      
+                        <!-- City Edit Modal -->
+
+                        <div class="modal " id="edit_dye_modal_{{loop.index}}">
+                            <div class="modal-background animated fadeIn"></div>
+                            <div class="modal-content animated fadeInUp">
+                                <div class="box has-background-light" style="margin-top:15rem;">
+                                    <h3 class="is-size-5 robo">Edit Fabric Dye</h3>
                                     <br>
                                     <br>
-                                    <div class="field level">
-                                        <div class="control">
-                                            {{ dye_form.dye_update(class="button is-black" , value="Save")}}
-                                        </div>
-                                        <div class="control ">
-                                            <a class="button is-text">Clear Fields</a>
-                                        </div>
+                                    <div class="form">
+                                        <form method="POST" action="{{ url_for('dye_edit' , id = dye.id)}}">
+                                            {{ dye_form.hidden_tag()}}
 
+                                            <div class="field">
+                                                <label class="label">Dye</label>
+                                                <div class="control">
+                                                    {{ dye_form.dye(class="input" , value=dye.dye)}}
+                                                </div>
+                                            </div>
+
+                                            <br>
+                                            <br>
+                                            <div class="field level">
+                                                <div class="control">
+                                                    {{ dye_form.dye_update(class="button is-black" , value="Save")}}
+                                                </div>
+                                                <div class="control ">
+                                                    <a class="button is-text">Clear Fields</a>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
                                     </div>
-
-                                </form>
+                                </div>
                             </div>
+                            <button class="modal-close is-large" aria-label="close"></button>
+
+                            <script>
+                                document.querySelector('#edit_dye_btn_{{loop.index}}').addEventListener('click', function (event) {
+                                    event.preventDefault();
+                                    var modal = document.querySelector('#edit_dye_modal_{{loop.index}}');  // assuming you have only 1
+                                    var html = document.querySelector('html');
+                                    modal.classList.add('is-active');
+                                    html.classList.add('is-clipped');
+
+                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+                                    });
+
+                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                                        e.preventDefault();
+                                        modal.classList.remove('is-active');
+                                        html.classList.remove('is-clipped');
+
+
+                                    });
+
+                                });
+
+                            </script>
                         </div>
-                    </div>
-                    <button class="modal-close is-large" aria-label="close"></button>
-
-                    <script>
-                        document.querySelector('#edit_dye_btn_{{loop.index}}').addEventListener('click', function (event) {
-                            event.preventDefault();
-                            var modal = document.querySelector('#edit_dye_modal_{{loop.index}}');  // assuming you have only 1
-                            var html = document.querySelector('html');
-                            modal.classList.add('is-active');
-                            html.classList.add('is-clipped');
-
-                            document.querySelector('.modal-close').addEventListener('click', function (e) {
-                                e.preventDefault();
-                                modal.classList.remove('is-active');
-                                html.classList.remove('is-clipped');
-                            });
-
-                            modal.querySelector('.modal-background').addEventListener('click', function (e) {
-                                e.preventDefault();
-                                modal.classList.remove('is-active');
-                                html.classList.remove('is-clipped');
-
-
-                            });
-
-                        });
-
-                    </script>
-                </div>
 
 
 
 
-                {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                        </table>
             </div>
         </div>
 
