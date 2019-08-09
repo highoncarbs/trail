@@ -36,6 +36,23 @@
                         </div>
                         {% endif %}
                         <br>
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-outlined is-black" id="copy_from_last_dye_fin"><span
+                                        class="icon icon-btn-in"><i data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                        </div>
+                        <script>
+                            $('#copy_from_last_dye_fin').click(function () {
+                                $('#dye_data_view tr').last().children().each(function (index, value) {
+                                    console.log(index, value)
+                                    if (index == 0) {
+                                        $("#dye_data_entry  #dye").val(value.innerHTML.trim());
+                                    }
+
+                                })
+                            })
+                        </script>
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control is-left">
                                 {{dye_form.dye_submit(class="button is-black" , value="Save")}}
@@ -96,7 +113,7 @@
                         {% for dye in dye_list %}
                         <tr>
                             <td>
-                                <p>{{dye.dye}}</p>
+                                {{dye.dye}}
                             </td>
 
                             <td>

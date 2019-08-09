@@ -42,9 +42,26 @@
 
                             </div>
                         </div>
-
-
                         <br>
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-outlined is-black" id="copy_from_last_prod_fin"><span
+                                        class="icon icon-btn-in"><i data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                        </div>
+                        <script>
+                            $('#copy_from_last_prod_fin').click(function () {
+                                $('#prod_data_view tr').last().children().each(function (index, value) {
+                                    console.log(index, value)
+                                    if (index == 0) {
+                                        $("#prod_data_entry  #cat").val(value.innerHTML.trim());
+                                    }
+                                    if (index == 1) {
+                                        $("#prod_data_entry  #desc").val(value.innerHTML.trim() );
+                                    }
+                                })
+                            })
+                        </script>
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control ">
                                 {{cat_form.cat_submit(class="button is-black" , value="Save")}}
@@ -108,10 +125,10 @@
 
                         <tr>
                             <td>
-                                <p>{{cat.cat}}</p>
+                                {{cat.cat}}
                             </td>
                             <td>
-                                <p>{{cat.desc}}</p>
+                              {{cat.desc}}
                             </td>
 
                             <td>
@@ -174,28 +191,28 @@
                             <button class="modal-close is-large" aria-label="close"></button>
 
                             <script>
-                                document.querySelector('#edit_cate_btn_{{loop.index}}').addEventListener('click', function (event) {
-                                    event.preventDefault();
-                                    var modal = document.querySelector('#edit_cate_modal_{{loop.index}}');  // assuming you have only 1
-                                    var html = document.querySelector('html');
-                                    modal.classList.add('is-active');
-                                    html.classList.add('is-clipped');
+                    document.querySelector('#edit_cate_btn_{{loop.index}}').addEventListener('click', function (event) {
+                        event.preventDefault();
+                        var modal = document.querySelector('#edit_cate_modal_{{loop.index}}');  // assuming you have only 1
+                        var html = document.querySelector('html');
+                        modal.classList.add('is-active');
+                        html.classList.add('is-clipped');
 
-                                    document.querySelector('.modal-close').addEventListener('click', function (e) {
-                                        e.preventDefault();
-                                        modal.classList.remove('is-active');
-                                        html.classList.remove('is-clipped');
-                                    });
+                        document.querySelector('.modal-close').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            modal.classList.remove('is-active');
+                            html.classList.remove('is-clipped');
+                        });
 
-                                    modal.querySelector('.modal-background').addEventListener('click', function (e) {
-                                        e.preventDefault();
-                                        modal.classList.remove('is-active');
-                                        html.classList.remove('is-clipped');
+                        modal.querySelector('.modal-background').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            modal.classList.remove('is-active');
+                            html.classList.remove('is-clipped');
 
 
-                                    });
+                        });
 
-                                });
+                    });
 
                             </script>
                         </div>
@@ -209,8 +226,8 @@
     </div>
 </div>
 <script>
-    $(".cat_view").click(function () {
-        $('#prod_data_view , #prod_data_entry').toggle();
+                    $(".cat_view").click(function () {
+                        $('#prod_data_view , #prod_data_entry').toggle();
 
-    });
+                    });
 </script>

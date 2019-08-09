@@ -38,6 +38,24 @@
 
 
                         <br>
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-outlined is-black" id="copy_from_last_des_fin"><span
+                                        class="icon icon-btn-in"><i data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                        </div>
+                        <script>
+                            $('#copy_from_last_des_fin').click(function () {
+                                $('#des_data_view tr').last().children().each(function (index, value) {
+                                    console.log(index, value)
+                                    if (index == 0) {
+                                        $("#des_data_entry  #des").val(value.innerHTML.trim());
+                                    }
+                                   
+                                    
+                                })
+                            })
+                        </script>
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control ">
                                 {{des_form.des_submit(class="button is-black" , value="Save")}}
@@ -99,7 +117,7 @@
 
                         <tr>
                             <td>
-                                <p>{{des.des}}</p>
+                                {{des.des}}
                             </td>
 
 

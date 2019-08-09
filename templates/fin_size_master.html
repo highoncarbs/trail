@@ -32,12 +32,31 @@
                         <div class="field">
                             <label class="label">Size</label>
                             <div class="control">
-                                {{size_form.size(class="input" , placeholder="Enter Fabric Size Code")}}
+                                {{size_form.size(class="input" , placeholder="Enter Size")}}
                             </div>
                         </div>
                         {% endif %}
 
+                        
                         <br>
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-outlined is-black" id="copy_from_last_size_fin"><span
+                                        class="icon icon-btn-in"><i data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                        </div>
+                        <script>
+                            $('#copy_from_last_size_fin').click(function () {
+                                $('#size_data_view tr').last().children().each(function (index, value) {
+                                    console.log(index, value)
+                                    if (index == 0) {
+                                        $("#size_data_entry  #size").val(value.innerHTML.trim());
+                                    }
+                                   
+                                    
+                                })
+                            })
+                        </script>
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control ">
                                 {{size_form.size_submit(class="button is-black" , value="Save")}}
@@ -100,7 +119,7 @@
 
                         <tr>
                             <td>
-                                <p>{{size.size}}</p>
+                               {{size.size}}
                             </td>
 
 
@@ -127,7 +146,7 @@
                             <div class="modal-background animated fadeIn"></div>
                             <div class="modal-content animated fadeInUp">
                                 <div class="box has-background-light" style="margin-top:15rem;">
-                                    <h3 class="is-size-5 robo">Edit Fabric Size</h3>
+                                    <h3 class="is-size-5 robo">Edit Size</h3>
                                     <br>
                                     <br>
                                     <div class="form">
@@ -135,7 +154,7 @@
                                             {{ size_form.hidden_tag()}}
 
                                             <div class="field">
-                                                <label class="label">Fabric Size</label>
+                                                <label class="label">Size</label>
                                                 <div class="control">
                                                     {{ size_form.size(class="input" , value=size.size)}}
                                                 </div>

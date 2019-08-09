@@ -36,6 +36,24 @@
                         </div>
                         {% endif %}
                         <br>
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-outlined is-black" id="copy_from_last_const_fin"><span
+                                        class="icon icon-btn-in"><i data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                        </div>
+                        <script>
+                            $('#copy_from_last_const_fin').click(function () {
+                                $('#rconst_data_view tr').last().children().each(function (index, value) {
+                                    console.log(index, value)
+                                    if (index == 0) {
+                                        $("#rconst_data_entry  #const").val(value.innerHTML.trim());
+                                    }
+            
+
+                                })
+                            })
+                        </script>
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control is-left">
                                 {{const_form.const_submit(class="button is-black" , value="Save")}}
@@ -96,7 +114,7 @@
 
                         <tr>
                             <td>
-                                <p>{{const.const}}</p>
+                               {{const.const}}
                             </td>
 
                             <td>

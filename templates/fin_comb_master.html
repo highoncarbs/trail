@@ -63,9 +63,29 @@
 
                             </div>
                         </div>
-
+                        <!-- TODO : Convert Fab Comb desc to Seelct fields from Raw Material Main Master -->
 
                         <br>
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-outlined is-black" id="copy_from_last_comb_fin"><span
+                                        class="icon icon-btn-in"><i data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                        </div>
+                        <script>
+                            $('#copy_from_last_comb_fin').click(function () {
+                                $('#comb_data_view tr').last().children().each(function (index, value) {
+                                    console.log(index, value)
+                                    if (index == 0) {
+                                        $("#comb_data_entry  #comb").val(value.innerHTML.trim());
+                                    }
+                                    if (index == 1) {
+                                        $("#comb_data_entry  #top_desc").val(value.innerHTML.trim() );
+                                    }
+                                    
+                                })
+                            })
+                        </script>
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control ">
                                 {{comb_form.comb_submit(class="button is-black" , value="Save")}}
@@ -136,7 +156,7 @@
 
                         <tr>
                             <td>
-                                <p>{{comb.comb}}</p>
+                                {{comb.comb}}
                             </td>
                             <td>
                                 {{comb.top_desc}}

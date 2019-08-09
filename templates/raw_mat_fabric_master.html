@@ -78,16 +78,18 @@
                             </div>
                         </div>
                         <br>
-
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-outlined is-black" id="copy_from_last_raw"><span
+                                        class="icon icon-btn-in"><i data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                        </div>
                         <br>
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control ">
                                 {{raw_form.raw_submit(class="button is-black" , value="Save")}}
                             </div>
-                            <div class="control">
-                                    <a class="button is-outlined is-black" id="copy_from_last_raw"><span class="icon icon-btn-in"><i
-                                        data-feather="copy"></i></span>Copy from last </a>
-                            </div>
+
                             <div class="control">
                                 <a class="button is-info raw_view"><span class="icon icon-btn-in"><i
                                             data-feather="eye"></i></span>View </a>
@@ -276,7 +278,7 @@
                                                 <div class="control">
                                                     <a class="button is-text">Clear Fields</a>
                                                 </div>
-                                               
+
 
                                             </div>
                                             <script>
@@ -359,25 +361,25 @@
                         $("#raw_data_entry  #alt_name").val(value.innerHTML.trim());
                     }
                     if (index == 1) {
-                        $("#raw_data_entry  #product_category option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#raw_data_entry  #product_category option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 2) {
-                        $("#raw_data_entry  #yarn option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#raw_data_entry  #yarn option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 3) {
-                        $("#raw_data_entry  #fab_const option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#raw_data_entry  #fab_const option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 4) {
-                        $("#raw_data_entry  #proc option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#raw_data_entry  #proc option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 5) {
-                        $("#raw_data_entry  #width option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#raw_data_entry  #width option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 6) {
-                        $("#raw_data_entry  #dye option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#raw_data_entry  #dye option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 7) {
-                        $("#raw_data_entry  #uom option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#raw_data_entry  #uom option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
 
 

@@ -22,11 +22,11 @@
                             <span class="icon icon-btn"><i data-feather="alert-circle"></i></span> Data already exists.
                         </div>
                         <div class="field">
-                                <label class="label">Category</label>
-                                <div class="control">
-                                    {{cat_form.cat(class="input" ,value = dup)}}
-                                </div>
+                            <label class="label">Category</label>
+                            <div class="control">
+                                {{cat_form.cat(class="input" ,value = dup)}}
                             </div>
+                        </div>
                         {% else %}
                         <div class="field">
                             <label class="label">Category</label>
@@ -45,6 +45,26 @@
 
 
                         <br>
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-outlined is-black" id="copy_from_last_cat_fin"><span
+                                        class="icon icon-btn-in"><i data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                        </div>
+                        <script>
+                            $('#copy_from_last_cat_fin').click(function () {
+                                $('#rcat_data_view tr').last().children().each(function (index, value) {
+                                    console.log(index, value)
+                                    if (index == 0) {
+                                        $("#rcat_data_entry  #cat").val(value.innerHTML.trim());
+                                    }
+                                    if (index == 1) {
+                                        $("#rcat_data_entry  #desc").val(value.innerHTML.trim());
+                                    }
+
+                                })
+                            })
+                        </script>
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control is-left">
                                 {{cat_form.cat_submit(class="button is-black" , value="Save")}}
@@ -107,10 +127,10 @@
 
                         <tr>
                             <td>
-                                <p>{{cat.cat}}</p>
+                                {{cat.cat}}
                             </td>
                             <td>
-                                <p>{{cat.desc}}</p>
+                                {{cat.desc}}
                             </td>
 
                             <td>

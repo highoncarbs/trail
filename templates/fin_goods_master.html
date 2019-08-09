@@ -15,7 +15,7 @@
             <hr>
             <div class="">
                 <div class="form " id="entry_form">
-                   
+
 
                     <form method="POST" action="{{ url_for('main_master')}}">
                         {{fin_form.hidden_tag()}}
@@ -67,16 +67,18 @@
                             </div>
                         </div>
                         <br>
-
+                        <div class="field">
+                            <div class="control">
+                                <a class="button is-outlined is-black" id="copy_from_last_fin"><span
+                                        class="icon icon-btn-in"><i data-feather="copy"></i></span>Copy from last </a>
+                            </div>
+                        </div>
                         <br>
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control ">
                                 {{fin_form.fin_submit(class="button is-black" , value="Save")}}
                             </div>
-                            <div class="control">
-                                    <a class="button is-outlined is-black" id="copy_from_last_fin"><span class="icon icon-btn-in"><i
-                                        data-feather="copy"></i></span>Copy from last </a>
-                            </div>
+
                             <div class="control">
                                 <a class="button is-info fin_view"><span class="icon icon-btn-in"><i
                                             data-feather="eye"></i></span>View </a>
@@ -240,7 +242,7 @@
                                                 </div>
                                             </div>
                                             <br>
-                                          
+
                                             <br>
                                             <div class="field is-grouped">
                                                 <div class="control ">
@@ -324,9 +326,9 @@
 
 
         $(document).ready(function () {
-    
+
             $("#entry_form  select ").val(0);
-                        
+
             $('#copy_from_last_fin').click(function () {
                 $('#data_view tr').last().children().each(function (index, value) {
                     console.log(index, value)
@@ -334,21 +336,21 @@
                         $("#data_entry  #alt_name").val(value.innerHTML.trim());
                     }
                     if (index == 1) {
-                        $("#data_entry  #product_category option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#data_entry  #product_category option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 2) {
-                        $("#data_entry  #fabric_combo option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#data_entry  #fabric_combo option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 3) {
-                        $("#data_entry  #print_tech option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#data_entry  #print_tech option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 4) {
-                        $("#data_entry  #design option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#data_entry  #design option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
                     if (index == 5) {
-                        $("#data_entry  #uom option:contains("+value.innerHTML.trim()+")").attr("selected", true);
+                        $("#data_entry  #uom option:contains(" + value.innerHTML.trim() + ")").attr("selected", true);
                     }
-                  
+
 
                 });
 
