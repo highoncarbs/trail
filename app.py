@@ -244,12 +244,14 @@ def trans_a():
             check_trans = db.session.query(Trans).filter_by(id= int(payload['pp_num'])).first()
             if check_trans is not None:
                 check_trans.part_a = json.dumps(payload['data'])
+                check_trans.flag = int(0)
                 db.session.commit()
                 session['mssg'] = "Transaction - Part A with PP No. " + str(check_trans.id )+ " has been updated."
                 return jsonify("success")
         else:
             payload = json.dumps(request.json)
             new_trans = Trans(part_a = payload , part_b = "{}" )
+            new_trans.flag = int(0)
             db.session.add(new_trans)
             db.session.commit()
             session['mssg'] = "Transaction - Part A with PP No. " + str(new_trans.id)+ " has been added."
