@@ -1103,7 +1103,10 @@ def main_master(fin_id):
     if fin_goods_form.fin_submit.data :
         new_fin_good = FinGoods(alt_name = str(fin_goods_form.alt_name.data).lower())
         try:
+            # if(fin_goods_form.product_category.data not in fin_good.product_category and .... )
+            #  Then procedd with addition 
             db.session.add(new_fin_good)
+
             new_fin_good.product_category.append(fin_goods_form.product_category.data)
             new_fin_good.fabric_combo.append(fin_goods_form.fabric_combo.data)
             new_fin_good.print_tech.append(fin_goods_form.print_tech.data)
